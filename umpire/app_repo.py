@@ -24,7 +24,7 @@ compose_logger.setLevel("ERROR")
 def load_app_api(api_file):
     with open(api_file, 'r') as fp:
         try:
-            return yaml.load(fp, Loader=yaml.FullLoader)
+            return yaml.safe_load(fp)
         except yaml.YAMLError as exc:
             logger.info(f"Invalid yaml on app api: {api_file}. {exc}")
         except yaml.scanner.ScannerError as exc:
