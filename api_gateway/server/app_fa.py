@@ -7,7 +7,7 @@ from flask import Blueprint
 from flask_swagger_ui import get_swaggerui_blueprint
 from healthcheck import HealthCheck
 from jinja2 import FileSystemLoader
-from yaml import Loader, load
+from yaml import SafeLoader, load
 
 from sqlalchemy import event
 from api_gateway.executiondb.workflow import Workflow
@@ -52,7 +52,7 @@ def __register_blueprint(flaskapp, blueprint, url_prefix):
 def register_swagger_blueprint(flaskapp):
     # register swagger API docs location
     swagger_path = os.path.join(static.API_PATH, 'composed_api.yaml')
-    swagger_yaml = load(open(swagger_path), Loader=Loader)
+    swagger_yaml = load(open(swagger_path), Loader=SafeLoader)
     swaggerui_blueprint = get_swaggerui_blueprint(static.SWAGGER_URL, swagger_yaml,
                                                   config={'spec': swagger_yaml})
     flaskapp.register_blueprint(swaggerui_blueprint, url_prefix=static.SWAGGER_URL)
