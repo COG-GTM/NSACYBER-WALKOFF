@@ -25,7 +25,7 @@ def validate_path_component(component):
     """Whitelist-validate a single path segment (no separators, no traversal)."""
     return (bool(component)
             and component not in (".", "..")
-            and _PATH_COMPONENT_REGEX.match(component) is not None)
+            and _PATH_COMPONENT_REGEX.fullmatch(component) is not None)
 
 
 def validate_app_path(app_name, version, file_path=None):
@@ -57,7 +57,7 @@ def _contained_destination(base_dir, relative_path):
         dest.relative_to(base)
     except ValueError:
         return None
-    return Path(base_dir) / relative_path
+    return dest
 
 
 async def stream_umpire_build_log(log_stream, build_id):
@@ -120,7 +120,7 @@ class MinioApi:
             p_src = Path(obj.object_name)
             if p_src.parts[1] == app_name:
                 hold = str(p_src)
-                p_dst = _contained_destination("rebuilt_apps", hold[hold.find(app_name):])
+                p_dst = _contained_destination("rebuilt_apps", str(Path(*p_src.parts[1:])))
                 if p_dst is None:
                     logger.error(f"Skipping object with unsafe path: {hold}")
                     continue
@@ -212,6 +212,8 @@ class MinioApi:
 
     @staticmethod
     async def save_file(app_name, version):
+        if not validate_app_path(app_name, version):
+            return False
         temp = []
         editing = False
         minio_client = Minio(config.MINIO, access_key=config.get_from_file(config.MINIO_ACCESS_KEY_PATH),
@@ -224,7 +226,7 @@ class MinioApi:
             p_src = Path(obj.object_name)
             if p_src.parts[1] == app_name:
                 hold = str(p_src)
-                p_dst = _contained_destination("apps", hold[hold.find(app_name):])
+                p_dst = _contained_destination("apps", str(Path(*p_src.parts[1:])))
                 if p_dst is None:
                     logger.error(f"Skipping object with unsafe path: {hold}")
                     continue

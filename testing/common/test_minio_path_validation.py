@@ -19,6 +19,7 @@ def test_invalid_path_components():
     assert not validate_path_component("a b")
     assert not validate_path_component("a;b")
     assert not validate_path_component(None)
+    assert not validate_path_component("abc\n")
 
 
 def test_valid_app_paths():
@@ -49,7 +50,7 @@ def test_traversal_app_name_and_version_rejected():
 
 def test_contained_destination_allows_safe_paths():
     dest = _contained_destination("rebuilt_apps", "basics/1.0.0/src/app.py")
-    assert dest == Path("rebuilt_apps") / "basics/1.0.0/src/app.py"
+    assert dest == (Path("rebuilt_apps").resolve() / "basics/1.0.0/src/app.py")
 
 
 def test_contained_destination_blocks_traversal():
