@@ -7,7 +7,7 @@ from fastapi import APIRouter
 from api.server.db.umpire import UploadFile
 from api.server.utils.problems import InvalidInputException, DoesNotExistException
 from common.config import config
-from common.minio_helper import MinioApi
+from common.minio_helper import MinioApi, validate_app_path
 from common.redis_helpers import connect_to_aioredis_pool
 
 BUILD_STATUS_GLOB = "umpire_api_build"
@@ -25,6 +25,9 @@ async def list_all_files(app_name: str, app_version: str):
             response_model=str, response_description="Contents of the specified file.")
 async def get_file_contents(app_name: str, app_version: str, file_path: str):
     full_path = f"{app_name}/{app_version}/{file_path}"
+    if not validate_app_path(app_name, app_version, file_path):
+        raise InvalidInputException("read", "file", full_path,
+                                    errors={"error": "Invalid app name, version, or file path."})
     success, contents = await MinioApi.get_file(app_name, app_version, file_path)
     if success:
         return contents
@@ -38,6 +41,9 @@ async def get_file_contents(app_name: str, app_version: str, file_path: str):
 @router.post("/file_upload")
 async def update_file(body: UploadFile):
     full_path = f"{body.app_name}/{body.app_version}/{body.file_path}"
+    if not validate_app_path(body.app_name, body.app_version, body.file_path):
+        raise InvalidInputException("upload", "file", full_path,
+                                    errors={"error": "Invalid app name, version, or file path."})
     file_data_bytes = body.file_data.encode('utf-8')
     file_size = len(file_data_bytes)
 
@@ -63,6 +69,9 @@ async def get_build_status():
 
 @router.post("/build/{app_name}/{app_version}")
 async def build_image(app_name: str, app_version: str):
+    if not validate_app_path(app_name, app_version):
+        raise InvalidInputException("build", "app", f"{app_name}/{app_version}",
+                                    errors={"error": "Invalid app name or version."})
     build_id = str(uuid.uuid4())
     asyncio.create_task(MinioApi.build_image(app_name, app_version, build_id))
     return {"build_id": build_id}

@@ -1,6 +1,7 @@
 import pathlib
 from pathlib import Path
 import logging
+import re
 import io
 import asyncio
 import os
@@ -16,6 +17,47 @@ from common.docker_helpers import connect_to_aiodocker, docker_context, logger a
 from common.socketio_helpers import connect_to_socketio_async
 
 logger = logging.getLogger("Umpire")
+
+_PATH_COMPONENT_REGEX = re.compile(r"^[A-Za-z0-9._-]+$")
+
+
+def validate_path_component(component):
+    """Whitelist-validate a single path segment (no separators, no traversal)."""
+    return (bool(component)
+            and component not in (".", "..")
+            and _PATH_COMPONENT_REGEX.match(component) is not None)
+
+
+def validate_app_path(app_name, version, file_path=None):
+    """Validate app_name, version, and optional relative file_path.
+
+    Rejects empty segments, '.', '..', absolute paths, backslashes, and any
+    character outside [A-Za-z0-9._-] so constructed MinIO object keys and
+    filesystem paths cannot escape apps/<app_name>/<version>/.
+    """
+    if not validate_path_component(app_name) or not validate_path_component(version):
+        return False
+    if file_path is not None:
+        if not file_path or file_path.startswith(("/", "\\")) or "\\" in file_path:
+            return False
+        for segment in file_path.split("/"):
+            if not validate_path_component(segment):
+                return False
+    return True
+
+
+def _contained_destination(base_dir, relative_path):
+    """Join relative_path under base_dir, ensuring the result stays inside base_dir.
+
+    Returns the destination Path, or None if the resolved path escapes base_dir.
+    """
+    base = Path(base_dir).resolve()
+    dest = (base / relative_path).resolve()
+    try:
+        dest.relative_to(base)
+    except ValueError:
+        return None
+    return Path(base_dir) / relative_path
 
 
 async def stream_umpire_build_log(log_stream, build_id):
@@ -60,6 +102,9 @@ async def push_image(docker_client, repo):
 class MinioApi:
     @staticmethod
     async def build_image(app_name, version, build_id):
+        if not validate_app_path(app_name, version):
+            logger.error(f"Refusing to build image for invalid app path: {app_name}/{version}")
+            return False
         tag_name = f"{static.APP_PREFIX}_{app_name}"
         repo = f"{config.DOCKER_REGISTRY}/{tag_name}:{version}"
         try:
@@ -75,8 +120,10 @@ class MinioApi:
             p_src = Path(obj.object_name)
             if p_src.parts[1] == app_name:
                 hold = str(p_src)
-                p_dst = hold[hold.find(app_name):]
-                p_dst = Path("rebuilt_apps") / p_dst
+                p_dst = _contained_destination("rebuilt_apps", hold[hold.find(app_name):])
+                if p_dst is None:
+                    logger.error(f"Skipping object with unsafe path: {hold}")
+                    continue
                 os.makedirs(p_dst.parent, exist_ok=True)
 
                 data = minio_client.get_object('apps-bucket', hold)
@@ -122,6 +169,8 @@ class MinioApi:
 
     @staticmethod
     async def get_file(app_name, version, path):
+        if not validate_app_path(app_name, version, path):
+            return False, "Invalid app name, version, or file path."
         minio_client = Minio(config.MINIO, access_key=config.get_from_file(config.MINIO_ACCESS_KEY_PATH),
                              secret_key=config.get_from_file(config.MINIO_SECRET_KEY_PATH), secure=False)
         abs_path = f"apps/{app_name}/{version}/{path}"
@@ -135,6 +184,8 @@ class MinioApi:
 
     @staticmethod
     async def update_file(app_name, version, path, file_data, file_size):
+        if not validate_app_path(app_name, version, path):
+            return False, "Invalid app name, version, or file path."
         minio_client = Minio(config.MINIO, access_key=config.get_from_file(config.MINIO_ACCESS_KEY_PATH),
                              secret_key=config.get_from_file(config.MINIO_SECRET_KEY_PATH), secure=False)
         abs_path = f"apps/{app_name}/{version}/{path}"
@@ -171,8 +222,10 @@ class MinioApi:
             p_src = Path(obj.object_name)
             if p_src.parts[1] == app_name:
                 hold = str(p_src)
-                p_dst = hold[hold.find(app_name):]
-                p_dst = Path("apps") / p_dst
+                p_dst = _contained_destination("apps", hold[hold.find(app_name):])
+                if p_dst is None:
+                    logger.error(f"Skipping object with unsafe path: {hold}")
+                    continue
                 os.makedirs(p_dst.parent, exist_ok=True)
                 editing = True
                 try:
