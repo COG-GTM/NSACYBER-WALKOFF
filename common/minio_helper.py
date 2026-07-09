@@ -156,6 +156,8 @@ class MinioApi:
 
     @staticmethod
     async def list_files(app_name, version):
+        if not validate_app_path(app_name, version):
+            return []
         relative_path = []
         minio_client = Minio(config.MINIO, access_key=config.get_from_file(config.MINIO_ACCESS_KEY_PATH),
                              secret_key=config.get_from_file(config.MINIO_SECRET_KEY_PATH), secure=False)

@@ -18,6 +18,9 @@ router = APIRouter()
 @router.get("/files/{app_name}/{app_version}",
             response_model=List[str], response_description="List of file names in specified app")
 async def list_all_files(app_name: str, app_version: str):
+    if not validate_app_path(app_name, app_version):
+        raise InvalidInputException("list", "files", f"{app_name}/{app_version}",
+                                    errors={"error": "Invalid app name or version."})
     return await MinioApi.list_files(app_name, app_version)
 
 
