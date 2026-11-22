@@ -91,16 +91,18 @@ async def auth_check(resource, curr_user_id: UUID, permission: str, walkoff_db):
     curr_roles = curr_user.roles
 
     if resource:
-        permission_model = resource.permissions
-        if permission_model.creator == curr_user_id:
-            return True
-        role_permissions = permission_model.role_permissions
-        for role_perm_elem in role_permissions:
-            if role_perm_elem.role in curr_roles:
-                if permission in role_perm_elem.permissions:
-                    return True
-
-        return False
+        return has_permission(resource.permissions, curr_user_id, curr_roles, permission)
 
     else:
         return False
+
+
+def has_permission(permission_model: PermissionsModel, curr_user_id: UUID, curr_roles: List[UUID], permission: str):
+    if permission_model.creator == curr_user_id:
+        return True
+    for role_perm_elem in permission_model.role_permissions:
+        if role_perm_elem.role in curr_roles:
+            if permission in role_perm_elem.permissions:
+                return True
+
+    return False
