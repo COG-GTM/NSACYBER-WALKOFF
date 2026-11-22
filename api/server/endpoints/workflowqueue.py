@@ -12,7 +12,8 @@ from pydantic import ValidationError
 from starlette.requests import Request
 
 from api.server.db.mongo import get_mongo_d, get_mongo_c
-from api.server.db.permissions import auth_check
+from api.server.db.permissions import auth_check, has_permission, PermissionsModel
+from api.server.db.user import UserModel
 from api.server.db.workflow import WorkflowModel
 from api.server.db.workflowresults import WorkflowStatus, ExecuteWorkflow, ControlWorkflow
 from api.server.security import get_jwt_claims, get_jwt_identity
@@ -62,12 +63,25 @@ async def get_all_workflow_status(*, walkoff_db: AsyncIOMotorDatabase = Depends(
     wf_statuses = await mongo_helpers.get_all_items(wfq_col, WorkflowStatus, page=page, num_per_page=num_per_page,
                                                     projection={"node_statuses": False})
 
+    workflow_ids = list({wf_status.workflow_id for wf_status in wf_statuses if wf_status.workflow_id is not None})
+    wf_permissions = {}
+    if workflow_ids:
+        async for wf in workflow_col.find({"id_": {"$in": workflow_ids}},
+                                          projection={"_id": False, "id_": True, "permissions": True}):
+            wf_permissions[wf["id_"]] = PermissionsModel(**wf["permissions"])
+
+    curr_roles = None
     ret = []
     for wf_status in wf_statuses:
-        wf = await mongo_helpers.get_item(workflow_col, WorkflowModel, wf_status.workflow_id, raise_exc=False)
-        if not wf or await auth_check(wf, curr_user_id, "read", walkoff_db=walkoff_db):
+        permissions = wf_permissions.get(wf_status.workflow_id)
+        if permissions is None:
             ret.append(wf_status)
-
+            continue
+        if curr_roles is None:
+            curr_user = await mongo_helpers.get_item(walkoff_db.users, UserModel, curr_user_id)
+            curr_roles = curr_user.roles
+        if has_permission(permissions, curr_user_id, curr_roles, "read"):
+            ret.append(wf_status)
 
     return ret
 
