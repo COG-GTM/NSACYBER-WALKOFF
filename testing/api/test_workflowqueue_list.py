@@ -4,6 +4,7 @@ import uuid
 from starlette.testclient import TestClient
 
 import api.server.app as app
+from common import async_mongo_helpers
 from api.server.db.workflow import WorkflowModel
 from api.server.db.workflowresults import WorkflowStatus
 
@@ -16,7 +17,8 @@ def insert_status(name, workflow_id):
     app.mongo.reg_client.walkoff_db.workflowqueue.insert_one(dict(status))
 
 
-def test_list_filters_by_workflow_read_permission(api: TestClient, auth_header: dict, unauthorized_header: dict):
+def test_list_filters_by_workflow_read_permission(api: TestClient, auth_header: dict, unauthorized_header: dict,
+                                                  monkeypatch):
     with open('testing/util/workflow.json') as fp:
         private_wf = json.load(fp)
     shared_wf = json.loads(json.dumps(private_wf))
@@ -31,8 +33,19 @@ def test_list_filters_by_workflow_read_permission(api: TestClient, auth_header: 
     insert_status("deleted", uuid.uuid4())
     insert_status("private_again", uuid.UUID(private_wf["id_"]))
 
+    point_reads = []
+    get_item = async_mongo_helpers.get_item
+
+    async def counting_get_item(collection, *args, **kwargs):
+        point_reads.append(collection.name)
+        return await get_item(collection, *args, **kwargs)
+
+    monkeypatch.setattr(async_mongo_helpers, "get_item", counting_get_item)
+
     p = api.get(base_workflowqueue_url, headers=auth_header)
     assert p.status_code == 200
+    assert point_reads.count("workflows") == 0
+    assert point_reads.count("users") <= 1
     assert [s["name"] for s in p.json()] == ["private", "shared", "deleted", "private_again"]
 
     p = api.get(base_workflowqueue_url, headers=unauthorized_header)
