@@ -14,7 +14,6 @@ import { ScheduledTaskDate } from '../models/scheduler/scheduledTaskDate';
 import { GenericObject } from '../models/genericObject';
 import { FormsModule } from '@angular/forms';
 import { OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
-import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'scheduler-modal',
@@ -23,7 +22,7 @@ import { DatePipe } from '@angular/common';
         './scheduler.scss',
     ],
     providers: [SchedulerService, UtilitiesService],
-    imports: [Select2Component, FormsModule, OwlDateTimeModule, DatePipe]
+    imports: [Select2Component, FormsModule, OwlDateTimeModule]
 })
 export class SchedulerModalComponent implements OnInit {
 	private schedulerService = inject(SchedulerService);

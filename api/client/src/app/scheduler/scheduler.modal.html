@@ -38,7 +38,7 @@
         <div class="col-12">
           <div class="form-group">
             <label for="name">Run Datetime</label>
-            <input class="form-control" [value]="workingScheduledTask.task_trigger.args.run_date | date: 'short'" [(ngModel)]="workingScheduledTask.task_trigger.args.run_date"
+            <input class="form-control" [(ngModel)]="workingScheduledTask.task_trigger.args.run_date"
               name="run_date" [owlDateTime]="dtPicker1" [owlDateTimeTrigger]="dtPicker1" [min]="minDate" required/>
             <owl-date-time #dtPicker1></owl-date-time>
           </div>
@@ -52,7 +52,7 @@
           <div class="col-6">
             <div class="form-group">
               <label for="name">Start Datetime</label>
-              <input class="form-control" [value]="workingScheduledTask.task_trigger.args.start_date | date: 'short'" [(ngModel)]="workingScheduledTask.task_trigger.args.start_date"
+              <input class="form-control" [(ngModel)]="workingScheduledTask.task_trigger.args.start_date"
                 name="start_date" [owlDateTime]="dtPicker2" [owlDateTimeTrigger]="dtPicker2" [min]="minDate" required/>
               <owl-date-time #dtPicker2></owl-date-time>
             </div>
@@ -60,7 +60,7 @@
           <div class="col-6">
             <div class="form-group">
               <label for="name">End Datetime</label>
-              <input class="form-control" [value]="workingScheduledTask.task_trigger.args.end_date | date: 'short'" [(ngModel)]="workingScheduledTask.task_trigger.args.end_date"
+              <input class="form-control" [(ngModel)]="workingScheduledTask.task_trigger.args.end_date"
                 name="end_date" [owlDateTime]="dtPicker3" [owlDateTimeTrigger]="dtPicker3" [min]="minDate"/>
               <owl-date-time #dtPicker3></owl-date-time>
             </div>
@@ -112,7 +112,7 @@
           <div class="col-6">
             <div class="form-group">
               <label for="name">Start Datetime</label>
-              <input class="form-control" [value]="workingScheduledTask.task_trigger.args.start_date | date: 'short'" [(ngModel)]="workingScheduledTask.task_trigger.args.start_date"
+              <input class="form-control" [(ngModel)]="workingScheduledTask.task_trigger.args.start_date"
                 name="start_date" [owlDateTime]="dtPicker4" [owlDateTimeTrigger]="dtPicker4" [min]="minDate" required/>
               <owl-date-time #dtPicker4></owl-date-time>
             </div>
@@ -120,7 +120,7 @@
           <div class="col-6">
             <div class="form-group">
               <label for="name">End Datetime</label>
-              <input class="form-control" [value]="workingScheduledTask.task_trigger.args.end_date | date: 'short'" [(ngModel)]="workingScheduledTask.task_trigger.args.end_date"
+              <input class="form-control" [(ngModel)]="workingScheduledTask.task_trigger.args.end_date"
                 name="end_date" [owlDateTime]="dtPicker5" [owlDateTimeTrigger]="dtPicker5" [min]="minDate"/>
               <owl-date-time #dtPicker5></owl-date-time>
             </div>
