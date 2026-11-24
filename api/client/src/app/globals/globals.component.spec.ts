@@ -1,4 +1,4 @@
-import { HttpModule, Http, RequestOptions } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -85,8 +85,8 @@ describe('GlobalsComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			imports: [
-				HttpModule,
-				NgbModule.forRoot(),
+				HttpClientTestingModule,
+				NgbModule,
 				NgxDatatableModule,
 				JwtModule.forRoot({
 					config: {

@@ -1,4 +1,4 @@
-import { HttpModule, Http, RequestOptions } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, fakeAsync, tick, TestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { MainComponent } from './main.component';
 import { MainService } from './main.service';
+import { HasPermissionDirective } from '../permission.directive';
 import { AuthService } from '../auth/auth.service';
 
 // import { Message } from '../models/message/message';
@@ -82,10 +83,10 @@ describe('App', () => {
 		TestBed.configureTestingModule({
 			imports: [
 				//HttpModule,
-				NgbModule.forRoot(),
+				NgbModule,
 				ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
 			],
-			declarations: [MainComponent],
+			declarations: [MainComponent, HasPermissionDirective],
 			schemas: [NO_ERRORS_SCHEMA],
 			providers: [MainService],
 		})
