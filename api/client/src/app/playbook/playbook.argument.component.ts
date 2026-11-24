@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnChanges, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnChanges, ElementRef, ViewChild, input } from '@angular/core';
 import { Select2OptionData, Select2Component } from '../select2/select2.component';
 
 import { Workflow } from '../models/playbook/workflow';
@@ -28,13 +28,13 @@ const AVAILABLE_TYPES = ['string', 'number', 'boolean'];
 export class PlaybookArgumentComponent implements OnChanges {
 	@Input() id: number;
 	@Input() argument: Argument;
-	@Input() parameterApi: ParameterApi;
-	@Input() selectedAction: Action;
+	readonly parameterApi = input<ParameterApi>(undefined);
+	readonly selectedAction = input<Action>(undefined);
 	@Input() loadedWorkflow: Workflow;
-	@Input() users: User[];
-	@Input() roles: Role[];
-	@Input() globals: Global[];
-	@Input() branchCounters: any[];
+	readonly users = input<User[]>(undefined);
+	readonly roles = input<Role[]>(undefined);
+	readonly globals = input<Global[]>(undefined);
+	readonly branchCounters = input<any[]>(undefined);
 
 	@ViewChild('jsonEditor') jsonEditor: JsonEditorComponent;
 
@@ -88,7 +88,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 	}
 
 	initParameterSchema(): void {
-		this.parameterSchema = this.parameterApi.json_schema;
+		this.parameterSchema = this.parameterApi().json_schema;
 		if (this.argument.value == null) {
 			if (this.parameterSchema.type === 'array') { 
 				this.argument.value = [];
@@ -132,7 +132,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 	initUserSelect(): void {
 		if (!this.isUserSelect) { return; }
 
-		this.selectData = this.users.map((user) => {
+		this.selectData = this.users().map((user) => {
 			return { id: user.id.toString(), text: user.username };
 		});
 
@@ -159,7 +159,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 	initRoleSelect(): void {
 		if (!this.isRoleSelect) { return; }
 
-		this.selectData = this.roles.map((role) => {
+		this.selectData = this.roles().map((role) => {
 			return { id: role.id.toString(), text: role.name };
 		});
 
@@ -314,7 +314,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 
 	// TODO: maybe somehow recursively find actions that may occur before. Right now it just returns all of them.
 	getPreviousActions(): WorkflowNode[] {
-		return this.loadedWorkflow.getPreviousActions(this.selectedAction);
+		return this.loadedWorkflow.getPreviousActions(this.selectedAction());
 	}
 
 	/**

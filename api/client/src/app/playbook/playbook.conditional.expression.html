@@ -21,8 +21,8 @@
   <!-- Conditions Component -->
   <div>
     <h4>Conditions</h4>
-    <playbook-conditions-component [conditions]="conditionalExpression.conditions" [appApis]="appApis" [loadedWorkflow]="loadedWorkflow"
-    [selectedAppName]="selectedAppName" (createVariable)="onCreateVariable($event)"></playbook-conditions-component>
+    <playbook-conditions-component [conditions]="conditionalExpression.conditions" [appApis]="appApis()" [loadedWorkflow]="loadedWorkflow()"
+    [selectedAppName]="selectedAppName()" (createVariable)="onCreateVariable($event)"></playbook-conditions-component>
   </div>
   <!-- Add Child Expressions Header -->
   <div class="row">
@@ -62,8 +62,8 @@
           </div>
         </div>
       </div>
-      <playbook-conditional-expression-component [conditionalExpression]="childExpression" [appApis]="appApis" [selectedAppName]="selectedAppName"
-      [loadedWorkflow]="loadedWorkflow" (createVariable)="onCreateVariable($event)"></playbook-conditional-expression-component>
+      <playbook-conditional-expression-component [conditionalExpression]="childExpression" [appApis]="appApis()" [selectedAppName]="selectedAppName()"
+      [loadedWorkflow]="loadedWorkflow()" (createVariable)="onCreateVariable($event)"></playbook-conditional-expression-component>
     </div>
   }
 </div>

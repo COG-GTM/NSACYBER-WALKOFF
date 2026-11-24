@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    @for (condition of conditions; track condition; let id = $index) {
+    @for (condition of conditions(); track condition; let id = $index) {
       <div>
         <div class="row">
           <div class="col-4">
@@ -44,7 +44,7 @@
                   <i class="fa fa-arrow-up"></i>
                 </button>
               }
-              @if (id < conditions.length - 1) {
+              @if (id < conditions().length - 1) {
                 <button class="btn btn-primary" (click)="moveDown(id)" title="Move Down">
                   <i class="fa fa-arrow-down"></i>
                 </button>
@@ -57,13 +57,13 @@
         </div>
         @for (parameterApi of getConditionApi(condition.app_name, condition.action_name).parameters; track parameterApi; let id = $index) {
           <playbook-argument-component
-            [loadedWorkflow]="loadedWorkflow" [argument]="getOrInitializeArgument(condition, parameterApi)" [parameterApi]="parameterApi"
+            [loadedWorkflow]="loadedWorkflow()" [argument]="getOrInitializeArgument(condition, parameterApi)" [parameterApi]="parameterApi"
           [id]="id" (createVariable)="onCreateVariable($event)"></playbook-argument-component>
         }
         <div>
           <h4>Transforms</h4>
-          <playbook-transforms-component [transforms]="condition.transforms" [appApis]="appApis" [selectedAppName]="selectedAppName"
-          [loadedWorkflow]="loadedWorkflow" (createVariable)="onCreateVariable($event)"></playbook-transforms-component>
+          <playbook-transforms-component [transforms]="condition.transforms" [appApis]="appApis()" [selectedAppName]="selectedAppName"
+          [loadedWorkflow]="loadedWorkflow()" (createVariable)="onCreateVariable($event)"></playbook-transforms-component>
         </div>
       </div>
     }

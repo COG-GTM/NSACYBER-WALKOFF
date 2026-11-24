@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, ViewEncapsulation, Input, Output, OnInit, EventEmitter, input } from '@angular/core';
 
 import { AppApi } from '../models/api/appApi';
 import { ConditionalExpression } from '../models/playbook/conditionalExpression';
@@ -16,10 +16,10 @@ import { PlaybookConditionsComponent } from './playbook.conditions.component';
     imports: [FormsModule, PlaybookConditionsComponent]
 })
 export class PlaybookConditionalExpressionComponent implements OnInit {
-	@Input() selectedAppName: string;
+	readonly selectedAppName = input<string>(undefined);
 	@Input() conditionalExpression: ConditionalExpression;
-	@Input() appApis: AppApi[];
-	@Input() loadedWorkflow: Workflow;
+	readonly appApis = input<AppApi[]>(undefined);
+	readonly loadedWorkflow = input<Workflow>(undefined);
 
 	@Output() createVariable = new EventEmitter<Argument>();
 

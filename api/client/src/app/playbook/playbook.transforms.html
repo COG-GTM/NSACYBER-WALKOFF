@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    @for (transform of transforms; track transform; let id = $index) {
+    @for (transform of transforms(); track transform; let id = $index) {
       <div>
         <div class="row">
           <div class="col-6">
@@ -34,7 +34,7 @@
               @if (id > 0) {
                 <button class="btn btn-primary" (click)="moveUp(id)" title="Move Up"><i class="fa fa-arrow-up"></i></button>
               }
-              @if (id < transforms.length - 1) {
+              @if (id < transforms().length - 1) {
                 <button class="btn btn-primary" (click)="moveDown(id)" title="Move Down"><i class="fa fa-arrow-down"></i></button>
               }
               <button class="btn btn-danger" (click)="removeTransform(id)" title="Remove Transform"><i class="fa fa-close"></i></button>
@@ -43,7 +43,7 @@
         </div>
         @for (parameterApi of getTransformApi(transform.app_name, transform.action_name).parameters; track parameterApi; let id = $index) {
           <playbook-argument-component
-            [loadedWorkflow]="loadedWorkflow" [argument]="getOrInitializeArgument(transform, parameterApi)" [parameterApi]="parameterApi"
+            [loadedWorkflow]="loadedWorkflow()" [argument]="getOrInitializeArgument(transform, parameterApi)" [parameterApi]="parameterApi"
           [id]="id" (createVariable)="onCreateVariable($event)"></playbook-argument-component>
         }
       </div>

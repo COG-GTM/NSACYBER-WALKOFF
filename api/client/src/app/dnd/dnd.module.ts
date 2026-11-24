@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Injectable, Input, Output, inject } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Injectable, Input, Output, inject, input } from '@angular/core';
 
 /**
  * Minimal in-app replacement for the abandoned ng2-dnd package (no Ivy build): HTML5 drag and drop
@@ -17,7 +17,7 @@ export class DraggableDirective {
 	private el = inject<ElementRef<HTMLElement>>(ElementRef);
 	private dnd = inject(DragDropService);
 
-	@Input() dragData: any;
+	readonly dragData = input<any>(undefined);
 	@Input() set dragEnabled(enabled: boolean) { this.el.nativeElement.draggable = !!enabled; }
 	@Output() onDragStart = new EventEmitter<DragDropData>();
 	@Output() onDragEnd = new EventEmitter<DragDropData>();
@@ -31,20 +31,20 @@ export class DraggableDirective {
 	@HostListener('dragstart', ['$event'])
 	dragStart(event: DragEvent) {
 		this.dnd.isDragged = true;
-		this.dnd.dragData = this.dragData;
+		this.dnd.dragData = this.dragData();
 		if (event.dataTransfer) {
 			event.dataTransfer.setData('text', '');
 			event.dataTransfer.effectAllowed = 'move';
 		}
 		this.el.nativeElement.classList.add('dnd-drag-start');
-		this.onDragStart.emit({ dragData: this.dragData, mouseEvent: event });
+		this.onDragStart.emit({ dragData: this.dragData(), mouseEvent: event });
 	}
 
 	@HostListener('dragend', ['$event'])
 	dragEnd(event: DragEvent) {
 		this.dnd.isDragged = false;
 		this.el.nativeElement.classList.remove('dnd-drag-start');
-		this.onDragEnd.emit({ dragData: this.dragData, mouseEvent: event });
+		this.onDragEnd.emit({ dragData: this.dragData(), mouseEvent: event });
 	}
 }
 
@@ -53,10 +53,10 @@ export class DroppableDirective {
 	private el = inject<ElementRef<HTMLElement>>(ElementRef);
 	private dnd = inject(DragDropService);
 
-	@Input() dropEnabled = true;
+	readonly dropEnabled = input(true);
 	@Output() onDropSuccess = new EventEmitter<DragDropData>();
 
-	private get active() { return this.dropEnabled && this.dnd.isDragged; }
+	private get active() { return this.dropEnabled() && this.dnd.isDragged; }
 
 	@HostListener('dragenter')
 	dragEnter() { if (this.active) { this.el.nativeElement.classList.add('dnd-drag-enter'); } }

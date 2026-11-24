@@ -2,10 +2,10 @@
   <!-- Label for argument with optional required icon -->
   <label for="{{argument.name}}">
     <b class="text-capitalize">{{argument.name}}</b> ({{parameterSchema.type}})
-    @if (parameterApi.required) {
+    @if (parameterApi().required) {
       <i class="fa fa-asterisk required m-0" title="This field is required."></i>
     }
-    <small class="form-text text-muted">{{ parameterApi.description }}</small>
+    <small class="form-text text-muted">{{ parameterApi().description }}</small>
   </label>
 
   <!-- Columns for allowing users to specify outputs of other action as arguments for this one -->
@@ -24,14 +24,14 @@
           type="text" [attr.minlength]="parameterSchema.minLength > 0 ? parameterSchema.minLength : null"
           [attr.maxlength]="parameterSchema.maxLength > 0 ? parameterSchema.maxLength : null"
           [attr.pattern]="parameterSchema.pattern ? parameterSchema.pattern : null"
-          [attr.required]="parameterApi.required" [attr.placeholder]="parameterApi.placeholder">
+          [attr.required]="parameterApi().required" [attr.placeholder]="parameterApi().placeholder">
       }
 
       <!-- Enum types, make a select box -->
       @if (isEnumSelect) {
         <select class="form-control" name="{{argument.name}}" [(ngModel)]="argument.value"
-          [attr.required]="parameterApi.required">
-          @if (!parameterApi.required) {
+          [attr.required]="parameterApi().required">
+          @if (!parameterApi().required) {
             <option value=""></option>
           }
           @for (i of parameterSchema.enum; track i) {
@@ -45,7 +45,7 @@
         <input class="form-control" name="{{argument.name}}" [(ngModel)]="argument.value"
           type="number" [attr.min]="getMin(parameterSchema)" [attr.max]="getMax(parameterSchema)"
           [attr.step]="parameterSchema.multipleOf > 0 ? parameterSchema.multipleOf : null"
-          [attr.required]="parameterApi.required" [attr.placeholder]="parameterApi.placeholder">
+          [attr.required]="parameterApi().required" [attr.placeholder]="parameterApi().placeholder">
       }
 
       <!-- Checkbox for boolean values -->
@@ -75,15 +75,15 @@
       <!-- Global select -->
       @if (isGlobalSelect) {
         <select class="form-control" [(ngModel)]="argument.value"
-          [disabled]="!globals?.length > 0">
+          [disabled]="!globals()?.length > 0">
           <option [ngValue]="''">
-            @if (!globals?.length > 0) {
+            @if (!globals()?.length > 0) {
               <span>
                 None Created
               </span>
             }
           </option>
-          @for (i of globals; track i) {
+          @for (i of globals(); track i) {
             <option [ngValue]="i.id" [label]="i.name">{{i.name}}</option>
           }
         </select>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnChanges, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild, inject, input } from '@angular/core';
 
 declare const jQuery: any;
 
@@ -22,11 +22,11 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 	private renderer = inject(Renderer2);
 
 	@ViewChild('selector', { static: true }) selector: ElementRef<HTMLSelectElement>;
-	@Input() data: Select2OptionData[];
-	@Input() value: string | string[];
-	@Input() width: string;
-	@Input() disabled = false;
-	@Input() options: any;
+	readonly data = input<Select2OptionData[]>(undefined);
+	readonly value = input<string | string[]>(undefined);
+	readonly width = input<string>(undefined);
+	readonly disabled = input(false);
+	readonly options = input<any>(undefined);
 	@Output() valueChanged = new EventEmitter<{ value: string | string[], data: any }>();
 
 	private element: any;
@@ -43,14 +43,15 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 			this.valueChanged.emit({ value: newValue, data: this.element.select2('data') });
 		}
 		if (changes.disabled && changes.disabled.previousValue !== changes.disabled.currentValue) {
-			this.renderer.setProperty(this.selector.nativeElement, 'disabled', this.disabled);
+			this.renderer.setProperty(this.selector.nativeElement, 'disabled', this.disabled());
 		}
 	}
 
 	async ngAfterViewInit() {
 		this.element = jQuery(this.selector.nativeElement);
 		await this.initPlugin();
-		if (typeof this.value !== 'undefined') { this.setElementValue(this.value); }
+		const value = this.value();
+  if (typeof value !== 'undefined') { this.setElementValue(value); }
 		this.element.on('select2:select select2:unselect', () => {
 			this.valueChanged.emit({ value: this.element.val(), data: this.element.select2('data') });
 		});
@@ -66,17 +67,20 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 			this.element.select2('destroy');
 			this.renderer.setProperty(this.selector.nativeElement, 'innerHTML', '');
 		}
-		const options: any = { data: this.data, width: this.width ? this.width : 'resolve', ...this.options };
+		const width = this.width();
+  const options: any = { data: this.data(), width: width ? width : 'resolve', ...this.options() };
 		if (options.matcher) {
 			const oldMatcher: any = await new Promise(resolve =>
 				jQuery.fn.select2.amd.require(['select2/compat/matcher'], resolve));
 			options.matcher = oldMatcher(options.matcher);
 			this.element.select2(options);
-			if (typeof this.value !== 'undefined') { this.setElementValue(this.value); }
+			const value = this.value();
+   if (typeof value !== 'undefined') { this.setElementValue(value); }
 		} else {
 			this.element.select2(options);
 		}
-		if (this.disabled) { this.renderer.setProperty(this.selector.nativeElement, 'disabled', this.disabled); }
+		const disabled = this.disabled();
+  if (disabled) { this.renderer.setProperty(this.selector.nativeElement, 'disabled', disabled); }
 	}
 
 	private setElementValue(newValue: string | string[]) {

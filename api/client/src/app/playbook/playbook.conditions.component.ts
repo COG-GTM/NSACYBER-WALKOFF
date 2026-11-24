@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnInit, input } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { AppApi } from '../models/api/appApi';
 import { ConditionApi } from '../models/api/conditionApi';
@@ -21,9 +21,9 @@ import { PlaybookTransformsComponent } from './playbook.transforms.component';
 })
 export class PlaybookConditionsComponent implements OnInit {
 	@Input() selectedAppName: string;
-	@Input() conditions: Condition[];
-	@Input() appApis: AppApi[];
-	@Input() loadedWorkflow: Workflow;
+	readonly conditions = input<Condition[]>(undefined);
+	readonly appApis = input<AppApi[]>(undefined);
+	readonly loadedWorkflow = input<Workflow>(undefined);
 
 	@Output() createVariable = new EventEmitter<Argument>();
 
@@ -34,7 +34,7 @@ export class PlaybookConditionsComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit() {
-		const appsWithConditions = this.appApis.filter(app => app.condition_apis && app.condition_apis.length);
+		const appsWithConditions = this.appApis().filter(app => app.condition_apis && app.condition_apis.length);
 
 		// If our selected app doesn't have conditions, just auto select the first one
 		if (!appsWithConditions.find(a => a.name === this.selectedAppName)) {
@@ -52,7 +52,7 @@ export class PlaybookConditionsComponent implements OnInit {
 	 * @param appName App name to reset the conditions for
 	 */
 	resetConditionSelection(appName: string) {
-		const app = this.appApis.find(a => a.name === appName);
+		const app = this.appApis().find(a => a.name === appName);
 
 		if (app.condition_apis && app.condition_apis.length) { this.selectedConditionApi = app.condition_apis[0].name; }
 	}
@@ -68,7 +68,7 @@ export class PlaybookConditionsComponent implements OnInit {
 		newCondition.action_name = this.selectedConditionApi;
 		// newCondition.arguments = [];
 
-		this.conditions.push(newCondition);
+		this.conditions().push(newCondition);
 	}
 
 	/**
@@ -77,10 +77,10 @@ export class PlaybookConditionsComponent implements OnInit {
 	 */
 	moveUp(index: number): void {
 		const idAbove = index - 1;
-		const toBeSwapped = this.conditions[idAbove];
+		const toBeSwapped = this.conditions()[idAbove];
 
-		this.conditions[idAbove] = this.conditions[index];
-		this.conditions[index] = toBeSwapped;
+		this.conditions()[idAbove] = this.conditions()[index];
+		this.conditions()[index] = toBeSwapped;
 	}
 
 	/**
@@ -89,10 +89,10 @@ export class PlaybookConditionsComponent implements OnInit {
 	 */
 	moveDown(index: number): void {
 		const idBelow = index + 1;
-		const toBeSwapped = this.conditions[idBelow];
+		const toBeSwapped = this.conditions()[idBelow];
 
-		this.conditions[idBelow] = this.conditions[index];
-		this.conditions[index] = toBeSwapped;
+		this.conditions()[idBelow] = this.conditions()[index];
+		this.conditions()[index] = toBeSwapped;
 	}
 
 	/**
@@ -100,7 +100,7 @@ export class PlaybookConditionsComponent implements OnInit {
 	 * @param index Index to remove
 	 */
 	removeCondition(index: number): void {
-		this.conditions.splice(index, 1);
+		this.conditions().splice(index, 1);
 	}
 
 	/**
@@ -109,7 +109,7 @@ export class PlaybookConditionsComponent implements OnInit {
 	 * @param conditionName Condition name to find
 	 */
 	getConditionApi(appName: string, conditionName: string): ConditionApi {
-		const conditionApi = this.appApis.find(a => a.name === appName).condition_apis.find(c => c.name === conditionName);
+		const conditionApi = this.appApis().find(a => a.name === appName).condition_apis.find(c => c.name === conditionName);
 		// Filter out the data_in parameter
 		conditionApi.parameters = conditionApi.parameters.filter(p => p.name !== conditionApi.data_in);
 		return conditionApi;
@@ -148,7 +148,7 @@ export class PlaybookConditionsComponent implements OnInit {
 	 * Returns a list of condition names for the selected app name. Used to populate a select.
 	 */
 	getConditionNamesForApp(): string[] {
-		return this.appApis.find(a => a.name === this.selectedAppName).condition_apis.map(c => c.name);
+		return this.appApis().find(a => a.name === this.selectedAppName).condition_apis.map(c => c.name);
 	}
 
 	onCreateVariable(argument: Argument) {

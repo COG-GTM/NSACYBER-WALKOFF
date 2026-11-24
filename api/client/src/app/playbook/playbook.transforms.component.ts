@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnInit, input } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { Workflow } from '../models/playbook/workflow';
 import { AppApi } from '../models/api/appApi';
@@ -19,9 +19,9 @@ import { PlaybookArgumentComponent } from './playbook.argument.component';
 })
 export class PlaybookTransformsComponent implements OnInit {
 	@Input() selectedAppName: string;
-	@Input() transforms: Transform[];
-	@Input() appApis: AppApi[];
-	@Input() loadedWorkflow: Workflow;
+	readonly transforms = input<Transform[]>(undefined);
+	readonly appApis = input<AppApi[]>(undefined);
+	readonly loadedWorkflow = input<Workflow>(undefined);
 
 	@Output() createVariable = new EventEmitter<Argument>();
 
@@ -32,7 +32,7 @@ export class PlaybookTransformsComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit(): void {
-		const appsWithTransforms = this.appApis.filter(app => app.transform_apis && app.transform_apis.length);
+		const appsWithTransforms = this.appApis().filter(app => app.transform_apis && app.transform_apis.length);
 		
 		// If our selected app doesn't have transforms, just auto select the first one
 		if (!appsWithTransforms.find(a => a.name === this.selectedAppName)) {
@@ -50,7 +50,7 @@ export class PlaybookTransformsComponent implements OnInit {
 	 * @param appName App name to reset the transforms for
 	 */
 	resetTransformSelection(appName: string): void {
-		const app = this.appApis.find(a => a.name === appName);
+		const app = this.appApis().find(a => a.name === appName);
 
 		if (app.transform_apis && app.transform_apis.length) { this.selectedTransformApi = app.transform_apis[0].name; }
 	}
@@ -66,7 +66,7 @@ export class PlaybookTransformsComponent implements OnInit {
 		newTransform.action_name = this.selectedTransformApi;
 		// newTransform.arguments = args;
 
-		this.transforms.push(newTransform);
+		this.transforms().push(newTransform);
 	}
 
 	/**
@@ -75,10 +75,10 @@ export class PlaybookTransformsComponent implements OnInit {
 	 */
 	moveUp(index: number): void {
 		const idAbove = index - 1;
-		const toBeSwapped = this.transforms[idAbove];
+		const toBeSwapped = this.transforms()[idAbove];
 
-		this.transforms[idAbove] = this.transforms[index];
-		this.transforms[index] = toBeSwapped;
+		this.transforms()[idAbove] = this.transforms()[index];
+		this.transforms()[index] = toBeSwapped;
 	}
 
 	/**
@@ -87,10 +87,10 @@ export class PlaybookTransformsComponent implements OnInit {
 	 */
 	moveDown(index: number): void {
 		const idBelow = index + 1;
-		const toBeSwapped = this.transforms[idBelow];
+		const toBeSwapped = this.transforms()[idBelow];
 
-		this.transforms[idBelow] = this.transforms[index];
-		this.transforms[index] = toBeSwapped;
+		this.transforms()[idBelow] = this.transforms()[index];
+		this.transforms()[index] = toBeSwapped;
 	}
 
 	/**
@@ -98,7 +98,7 @@ export class PlaybookTransformsComponent implements OnInit {
 	 * @param index Index to remove
 	 */
 	removeTransform(index: number): void {
-		this.transforms.splice(index, 1);
+		this.transforms().splice(index, 1);
 	}
 
 	/**
@@ -107,7 +107,7 @@ export class PlaybookTransformsComponent implements OnInit {
 	 * @param transformName Transform name to find
 	 */
 	getTransformApi(appName: string, transformName: string): TransformApi {
-		const transformApi = this.appApis.find(a => a.name === appName).transform_apis.find(t => t.name === transformName);
+		const transformApi = this.appApis().find(a => a.name === appName).transform_apis.find(t => t.name === transformName);
 		// Filter out the data_in parameter
 		transformApi.parameters = transformApi.parameters.filter(p => p.name !== transformApi.data_in);
 		return transformApi;
@@ -146,7 +146,7 @@ export class PlaybookTransformsComponent implements OnInit {
 	 * Returns a list of transform names for the selected app name. Used to populate a select.
 	 */
 	getTransformNamesForApp(): string[] {
-		return this.appApis.find(a => a.name === this.selectedAppName).transform_apis.map(c => c.name);
+		return this.appApis().find(a => a.name === this.selectedAppName).transform_apis.map(c => c.name);
 	}
 
 	onCreateVariable(argument: Argument) {
