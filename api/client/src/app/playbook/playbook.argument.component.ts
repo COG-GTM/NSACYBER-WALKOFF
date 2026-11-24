@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, OnChanges, ElementRef, ViewChild, input, output } from '@angular/core';
+import { Component, ViewEncapsulation, Input, OnChanges, ElementRef, input, output, viewChild } from '@angular/core';
 import { Select2OptionData, Select2Component } from '../select2/select2.component';
 
 import { Workflow } from '../models/playbook/workflow';
@@ -36,7 +36,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 	readonly globals = input<Global[]>(undefined);
 	readonly branchCounters = input<any[]>(undefined);
 
-	@ViewChild('jsonEditor') jsonEditor: JsonEditorComponent;
+	readonly jsonEditor = viewChild<JsonEditorComponent>('jsonEditor');
 
 	readonly createVariable = output<Argument>();
 

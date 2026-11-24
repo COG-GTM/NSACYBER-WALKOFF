@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit, OnDestroy, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -27,7 +27,7 @@ export class StatusModalComponent implements OnInit, OnDestroy {
     toastrService = inject(ToastrService);
     authService = inject(AuthService);
 
-    @ViewChild('consoleArea') consoleArea: CodemirrorComponent;
+    readonly consoleArea = viewChild<CodemirrorComponent>('consoleArea');
     @Input() buildId: string;
     @Input() appApi: AppApi;
     statusEventSource: any;
@@ -52,7 +52,7 @@ export class StatusModalComponent implements OnInit, OnDestroy {
                 })
             )
             .subscribe(i => {
-                const cm = this.consoleArea.codeMirror;
+                const cm = this.consoleArea().codeMirror;
                 const $scroller = $(cm.getScrollerElement());
                 const atBottom = $scroller[0].scrollHeight - $scroller.scrollTop() - $scroller.outerHeight() <= 0;
                 cm.getDoc().setValue(i);

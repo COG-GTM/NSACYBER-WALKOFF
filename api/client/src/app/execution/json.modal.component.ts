@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit, OnDestroy, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -24,7 +24,7 @@ export class JsonModalComponent implements OnInit, OnDestroy {
     authService = inject(AuthService);
 
     @Input() results: string;
-    @ViewChild('jsonEditor') jsonEditor: JsonEditorComponent;
+    readonly jsonEditor = viewChild<JsonEditorComponent>('jsonEditor');
 
     editorOptionsData: any = {
 		mode: 'code',

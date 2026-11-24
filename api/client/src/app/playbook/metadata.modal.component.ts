@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, inject } from '@angular/core';
+import { Component, Input, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Workflow, WorkflowPermission } from '../models/playbook/workflow';
@@ -32,11 +32,9 @@ export class MetadataModalComponent {
     systemRoles: Role[] = [];
     newPermission: any = { role: '', permissions: '' };
 
-    @ViewChild('myForm', { static: true })
-    myForm: NgForm;
+    readonly myForm = viewChild<NgForm>('myForm');
 
-    @ViewChild('workflowName', { static: true }) 
-    workflowNameModel: NgModel;
+    readonly workflowNameModel = viewChild<NgModel>('workflowName');
 
     tagSelectOptions = {
         multiple: true,
@@ -59,13 +57,13 @@ export class MetadataModalComponent {
             w.name.toLocaleLowerCase() == this.workflow.name.toLocaleLowerCase() && w.id != this.workflow.id;
 
         if (!this.workflow.name) {
-            this.workflowNameModel.control.setErrors({'required': true});
+            this.workflowNameModel().control.setErrors({'required': true});
         }
         else if (this.existingWorkflows.find(compareWorkflow)) {
-            this.workflowNameModel.control.setErrors({'unique': true});
+            this.workflowNameModel().control.setErrors({'unique': true});
         }
 
-        if (this.myForm.valid) {
+        if (this.myForm().valid) {
             if (this.workflow.permissions.access_level != 2) this.workflow.permissions.permissions = [];
             
             this.activeModal.close(this.workflow);

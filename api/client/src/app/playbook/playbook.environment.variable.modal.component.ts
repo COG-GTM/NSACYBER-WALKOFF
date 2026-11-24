@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, inject } from '@angular/core';
+import { Component, Input, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentVariable } from '../models/playbook/environmentVariable';
@@ -15,7 +15,7 @@ export class PlaybookEnvironmentVariableModalComponent {
 
   @Input() variable: EnvironmentVariable = new EnvironmentVariable();
   @Input() existing: boolean = false;
-  @ViewChild('jsonEditor', { static: true }) jsonEditor: JsonEditorComponent;
+  readonly jsonEditor = viewChild<JsonEditorComponent>('jsonEditor');
 
   initialValue: string;
   editorOptionsData: any = {
@@ -30,10 +30,10 @@ export class PlaybookEnvironmentVariableModalComponent {
 		enableTransform: false,
 		onChange: () => {
 			try {
-			  	this.variable.value = this.jsonEditor.get() as any;
+			  	this.variable.value = this.jsonEditor().get() as any;
 			}
 			catch(e) {
-				this.variable.value = this.jsonEditor.getText();
+				this.variable.value = this.jsonEditor().getText();
 			}
 		}
 	}

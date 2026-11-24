@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewChild, ElementRef, ChangeDetectorRef, OnInit, AfterViewChecked, OnDestroy, inject } from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, ChangeDetectorRef, OnInit, AfterViewChecked, OnDestroy, inject, viewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 import { UUID } from 'angular2-uuid';
@@ -88,15 +88,15 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 	private router = inject(Router);
 	private globalsService = inject(GlobalsService);
 
-	@ViewChild('cyRef', { static: true }) cyRef: ElementRef;
-	@ViewChild('workflowResultsTable') workflowResultsTable: DatatableComponent;
-	@ViewChild('consoleContainer') consoleContainer: ElementRef;
-	@ViewChild('consoleTable') consoleTable: DatatableComponent;
-	@ViewChild('errorLogTable') errorLogTable: DatatableComponent;
-	@ViewChild('environmentVariableTable') environmentVariableTable: DatatableComponent;
-	@ViewChild('importFile') importFile: ElementRef;
-	@ViewChild('accordion', { static: true }) apps_actions: ElementRef;
-	@ViewChild('consoleArea') consoleArea: CodemirrorComponent;
+	readonly cyRef = viewChild<ElementRef>('cyRef');
+	readonly workflowResultsTable = viewChild<DatatableComponent>('workflowResultsTable');
+	readonly consoleContainer = viewChild<ElementRef>('consoleContainer');
+	readonly consoleTable = viewChild<DatatableComponent>('consoleTable');
+	readonly errorLogTable = viewChild<DatatableComponent>('errorLogTable');
+	readonly environmentVariableTable = viewChild<DatatableComponent>('environmentVariableTable');
+	readonly importFile = viewChild<ElementRef>('importFile');
+	readonly apps_actions = viewChild<ElementRef>('accordion');
+	readonly consoleArea = viewChild<CodemirrorComponent>('consoleArea');
 
 	globals: Variable[] = [];
 	relevantGlobals: Variable[] = [];
@@ -336,8 +336,9 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 
 	updateConsole() {
 		this.consoleLog = this.consoleLog.slice();
-		if (!this.consoleArea || !this.consoleArea.codeMirror) return;
-		const cm = this.consoleArea.codeMirror;
+		const consoleArea = this.consoleArea();
+  if (!consoleArea || !consoleArea.codeMirror) return;
+		const cm = consoleArea.codeMirror;
 		const $scroller = $(cm.getScrollerElement());
 		const atBottom = $scroller[0].scrollHeight - $scroller.scrollTop() - $scroller.outerHeight() <= 0;
 		cm.getDoc().setValue(this.consoleContent);
@@ -502,7 +503,8 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 
 		// Refresh the console log so that it displays correctly after being hidden
 		setTimeout(() => {
-			if (this.consoleArea && this.consoleArea.codeMirror) this.consoleArea.codeMirror.refresh();
+			const consoleArea = this.consoleArea();
+   if (consoleArea && consoleArea.codeMirror) consoleArea.codeMirror.refresh();
 		});
 
 		const defaults = {
@@ -1317,8 +1319,9 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		this.clearExecutionHighlighting();
 		this.consoleLog = [];
 		this.nodeStatuses = [];
-		if (this.consoleArea && this.consoleArea.codeMirror) 
-			this.consoleArea.codeMirror.getDoc().setValue('');
+		const consoleArea = this.consoleArea();
+  if (consoleArea && consoleArea.codeMirror) 
+			consoleArea.codeMirror.getDoc().setValue('');
 	}
 
 	/**
@@ -1510,16 +1513,16 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		setImmediate(() => {
 			switch($e.nextId) {
 				case 'console-tab':
-					table = this.consoleTable;
+					table = this.consoleTable();
 					break;
 				case 'execution-tab':
-					table = this.workflowResultsTable;
+					table = this.workflowResultsTable();
 					break;
 				case 'error-tab':
-					table = this.errorLogTable;
+					table = this.errorLogTable();
 					break;
 				case 'variable-tab':
-					table = this.environmentVariableTable;
+					table = this.environmentVariableTable();
 					break;
 			}
 
@@ -1646,10 +1649,13 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		// setTimeout(() => this.setupGraph(options), 255);
 		let height, width;
 		timer(0, 50).pipe(
-			takeWhile(_ => height != this.cyRef.nativeElement.offsetHeight || width != this.cyRef.nativeElement.offsetWidth),
+			takeWhile(_ => {
+    const cyRef = this.cyRef();
+    return height != cyRef.nativeElement.offsetHeight || width != cyRef.nativeElement.offsetWidth;
+  }),
 			tap(_ => {
-			height = this.cyRef.nativeElement.offsetHeight
-			width = this.cyRef.nativeElement.offsetWidth
+			height = this.cyRef().nativeElement.offsetHeight
+			width = this.cyRef().nativeElement.offsetWidth
 			}),
 			last(),
 		)

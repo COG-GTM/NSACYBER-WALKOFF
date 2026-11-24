@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ViewChild, ChangeDetectorRef, OnDestroy, inject } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ChangeDetectorRef, OnDestroy, inject, viewChild } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData, Select2Component } from '../select2/select2.component';
@@ -46,9 +46,9 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 	private modalService = inject(NgbModal);
 	private router = inject(Router);
 
-	@ViewChild('nodeStatusContainer') nodeStatusContainer: ElementRef;
-	@ViewChild('nodeStatusTable') nodeStatusTable: DatatableComponent;
-	@ViewChild('workflowStatusTable') workflowStatusTable: DatatableComponent;
+	readonly nodeStatusContainer = viewChild<ElementRef>('nodeStatusContainer');
+	readonly nodeStatusTable = viewChild<DatatableComponent>('nodeStatusTable');
+	readonly workflowStatusTable = viewChild<DatatableComponent>('workflowStatusTable');
 
 	schedulerStatus: string;
 	workflowStatuses: WorkflowStatus[] = [];
@@ -99,8 +99,9 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 			.subscribe(event => this.filterWorkflowStatuses());
 
 		this.recalculateTableCallback = (e: any) => {
-			if (this.nodeStatusTable && this.nodeStatusTable.recalculate) {
-				this.nodeStatusTable.recalculate();
+			const nodeStatusTable = this.nodeStatusTable();
+   if (nodeStatusTable && nodeStatusTable.recalculate) {
+				nodeStatusTable.recalculate();
 			}
 		}
 
@@ -112,10 +113,12 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 	 */
 	ngAfterViewChecked(): void {
 		// Check if the table size has changed, and recalculate.
-		if (this.nodeStatusTable && this.nodeStatusTable.recalculate &&
-			(this.nodeStatusContainer.nativeElement.clientWidth !== this.nodeStatusComponentWidth)) {
-			this.nodeStatusComponentWidth = this.nodeStatusContainer.nativeElement.clientWidth;
-			this.nodeStatusTable.recalculate();
+		const nodeStatusTable = this.nodeStatusTable();
+  const nodeStatusContainer = this.nodeStatusContainer();
+  if (nodeStatusTable && nodeStatusTable.recalculate &&
+			(nodeStatusContainer.nativeElement.clientWidth !== this.nodeStatusComponentWidth)) {
+			this.nodeStatusComponentWidth = nodeStatusContainer.nativeElement.clientWidth;
+			nodeStatusTable.recalculate();
 			this.cdr.detectChanges();
 		}
 	}
@@ -151,7 +154,7 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 			].some(x => x && x.toLocaleLowerCase().includes(searchFilter));
 		});
 
-		this.workflowStatusTable.recalculate();
+		this.workflowStatusTable().recalculate();
 	}
 
 	/**

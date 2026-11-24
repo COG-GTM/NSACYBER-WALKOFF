@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnChanges, OnDestroy, Renderer2, SimpleChanges, ViewChild, inject, input, output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnChanges, OnDestroy, Renderer2, SimpleChanges, inject, input, output, viewChild } from '@angular/core';
 
 declare const jQuery: any;
 
@@ -21,7 +21,7 @@ export interface Select2OptionData {
 export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 	private renderer = inject(Renderer2);
 
-	@ViewChild('selector', { static: true }) selector: ElementRef<HTMLSelectElement>;
+	readonly selector = viewChild<ElementRef<HTMLSelectElement>>('selector');
 	readonly data = input<Select2OptionData[]>(undefined);
 	readonly value = input<string | string[]>(undefined);
 	readonly width = input<string>(undefined);
@@ -46,12 +46,12 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 			this.valueChanged.emit({ value: newValue, data: this.element.select2('data') });
 		}
 		if (changes.disabled && changes.disabled.previousValue !== changes.disabled.currentValue) {
-			this.renderer.setProperty(this.selector.nativeElement, 'disabled', this.disabled());
+			this.renderer.setProperty(this.selector().nativeElement, 'disabled', this.disabled());
 		}
 	}
 
 	async ngAfterViewInit() {
-		this.element = jQuery(this.selector.nativeElement);
+		this.element = jQuery(this.selector().nativeElement);
 		await this.initPlugin();
 		const value = this.value();
   if (typeof value !== 'undefined') { this.setElementValue(value); }
@@ -66,9 +66,10 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 
 	private async initPlugin() {
 		if (!this.element.select2) { return; }
-		if (this.element.hasClass('select2-hidden-accessible')) {
+		const selector = this.selector();
+  if (this.element.hasClass('select2-hidden-accessible')) {
 			this.element.select2('destroy');
-			this.renderer.setProperty(this.selector.nativeElement, 'innerHTML', '');
+			this.renderer.setProperty(selector.nativeElement, 'innerHTML', '');
 		}
 		const width = this.width();
   const options: any = { data: this.data(), width: width ? width : 'resolve', ...this.options() };
@@ -83,16 +84,16 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 			this.element.select2(options);
 		}
 		const disabled = this.disabled();
-  if (disabled) { this.renderer.setProperty(this.selector.nativeElement, 'disabled', disabled); }
+  if (disabled) { this.renderer.setProperty(selector.nativeElement, 'disabled', disabled); }
 	}
 
 	private setElementValue(newValue: string | string[]) {
 		if (Array.isArray(newValue)) {
-			for (const option of Array.from(this.selector.nativeElement.options)) {
+			for (const option of Array.from(this.selector().nativeElement.options)) {
 				if (newValue.indexOf(option.value) > -1) { this.renderer.setProperty(option, 'selected', 'true'); }
 			}
 		} else {
-			this.renderer.setProperty(this.selector.nativeElement, 'value', newValue);
+			this.renderer.setProperty(this.selector().nativeElement, 'value', newValue);
 		}
 		this.element.trigger('change.select2');
 	}

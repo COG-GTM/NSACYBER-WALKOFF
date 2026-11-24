@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy, ElementRef, inject } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit, OnDestroy, ElementRef, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -29,8 +29,8 @@ export class ResultsModalComponent implements OnInit, OnDestroy {
     modalService = inject(NgbModal);
 
     @Input() loadedWorkflowStatus: WorkflowStatus;
-    @ViewChild('nodeStatusContainer') nodeStatusContainer: ElementRef;
-    @ViewChild('nodeStatusTable') nodeStatusTable: DatatableComponent;
+    readonly nodeStatusContainer = viewChild<ElementRef>('nodeStatusContainer');
+    readonly nodeStatusTable = viewChild<DatatableComponent>('nodeStatusTable');
     NodeStatuses = NodeStatuses;
 
     editorOptionsData: any = {

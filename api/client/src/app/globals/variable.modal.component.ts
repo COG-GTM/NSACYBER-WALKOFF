@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
+import { Component, Input, OnInit, inject, viewChild } from "@angular/core";
 
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Variable, VariablePermission } from "../models/variable";
@@ -22,7 +22,7 @@ export class VariableModalComponent implements OnInit {
 
   @Input() variable: Variable = new Variable();
   @Input() isGlobal: boolean = false;
-  @ViewChild("jsonEditor", { static: true }) jsonEditor: JsonEditorComponent;
+  readonly jsonEditor = viewChild<JsonEditorComponent>("jsonEditor");
   initialValue: string;
   existing: boolean = false;
   hasPermissions: boolean = true;
@@ -43,10 +43,10 @@ export class VariableModalComponent implements OnInit {
     enableTransform: false,
     onChange: () => {
       try {
-        this.variable.value = this.jsonEditor.get() as any;
+        this.variable.value = this.jsonEditor().get() as any;
       }
       catch(e) {
-        this.variable.value = this.jsonEditor.getText();
+        this.variable.value = this.jsonEditor().getText();
       }
     }
   };

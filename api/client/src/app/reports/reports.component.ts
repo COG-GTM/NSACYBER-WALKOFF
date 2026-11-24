@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -29,7 +29,7 @@ export class ReportsComponent implements OnInit {
 	private http = inject(HttpClient);
 	private reportService = inject(ReportService);
 
-	@ViewChild('reportsMain', { static: true }) main: ElementRef;
+	readonly main = viewChild<ElementRef>('reportsMain');
 	reportName: string;
 	reportId: string;
 	paramsSub: any;
@@ -101,7 +101,7 @@ export class ReportsComponent implements OnInit {
 	clearReport() {
 		this.report = null;
 		if (this.activeIFrame) {
-			this.main.nativeElement.removeChild(this.activeIFrame);
+			this.main().nativeElement.removeChild(this.activeIFrame);
 			this.activeIFrame = null
 		}
 	}
@@ -115,7 +115,7 @@ export class ReportsComponent implements OnInit {
 				(this.activeIFrame as any).srcdoc = data;
 				this.activeIFrame.src = 'data:text/html;charset=utf-8,' + data;
 
-				this.main.nativeElement.appendChild(this.activeIFrame);
+				this.main().nativeElement.appendChild(this.activeIFrame);
 			})
 			.catch(e => this.toastrService.error(`Error retrieving report: ${e.message}`));
 	}

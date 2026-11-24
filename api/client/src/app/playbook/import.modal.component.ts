@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, inject } from '@angular/core';
+import { Component, Input, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm, FormsModule } from '@angular/forms';
@@ -11,8 +11,7 @@ import { NgForm, FormsModule } from '@angular/forms';
 export class ImportModalComponent {
     activeModal = inject(NgbActiveModal);
 
-    @ViewChild('myForm', { static: true })
-    myForm: NgForm;
+    readonly myForm = viewChild<NgForm>('myForm');
     submitted: boolean = false;
     importFile: File;
 

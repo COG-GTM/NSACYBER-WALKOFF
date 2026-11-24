@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, inject, viewChild } from '@angular/core';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
@@ -49,7 +49,7 @@ export class ManageAppComponent implements OnInit, OnDestroy {
     private modalService = inject(NgbModal);
     private router = inject(Router);
 
-    @ViewChild('editorArea') editorArea: CodemirrorComponent;
+    readonly editorArea = viewChild<CodemirrorComponent>('editorArea');
 
 	workflowsLoaded: boolean = false;
 	workflows: Workflow[] = [];
@@ -182,9 +182,9 @@ export class ManageAppComponent implements OnInit, OnDestroy {
             this.currentFile = path;
             this.options.mode =  filetype ? filetype.mode : 'null';
             setTimeout(() => {
-                this.editorArea.codeMirror.getDoc().clearHistory();
-                this.editorArea.codeMirrorGlobal.commands.save = (instance) => {
-                    if (instance == this.editorArea.codeMirror)
+                this.editorArea().codeMirror.getDoc().clearHistory();
+                this.editorArea().codeMirrorGlobal.commands.save = (instance) => {
+                    if (instance == this.editorArea().codeMirror)
                         this.saveFile();
                 }
             });
@@ -209,11 +209,11 @@ export class ManageAppComponent implements OnInit, OnDestroy {
     }
 
     undo() {
-        this.editorArea.codeMirror.execCommand('undo')
+        this.editorArea().codeMirror.execCommand('undo')
     }
 
     redo() {
-        this.editorArea.codeMirror.execCommand('redo')
+        this.editorArea().codeMirror.execCommand('redo')
     }
 
 	manageApp(app: AppApi): void {
