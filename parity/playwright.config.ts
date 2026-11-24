@@ -15,7 +15,7 @@ export default defineConfig({
   use: {
     ...devices['Desktop Chrome'],
     viewport: { width: 1400, height: 900 },
-    trace: 'retain-on-failure',
+    trace: 'off', // traces would capture the admin password and tokens
   },
   projects: [
     { name: 'baseline', use: { baseURL: process.env.BASELINE_URL || 'http://localhost:4000/walkoff/' } },

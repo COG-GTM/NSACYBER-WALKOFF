@@ -8,4 +8,4 @@ proxy.on('error', (e, req, res) => { try { res.writeHead(502); res.end(); } catc
 const target = u => u.startsWith('/walkoff/sockets') ? 'http://localhost:3000' : `http://localhost:${api}`;
 const srv = http.createServer((req, res) => proxy.web(req, res, { target: target(req.url) }));
 srv.on('upgrade', (req, sock, head) => proxy.ws(req, sock, head, { target: target(req.url) }));
-srv.listen(listen, () => console.log(`proxy :${listen} -> api :${api} + socketio :3000`));
+srv.listen(listen, '127.0.0.1', () => console.log(`proxy :${listen} -> api :${api} + socketio :3000`));

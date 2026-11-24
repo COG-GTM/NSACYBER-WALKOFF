@@ -9,4 +9,4 @@ docker run -d --name "$NAME" --network host \
   -e CONFIG_PATH=/app/data/local_config.yml \
   -e REDIS_URI="${REDIS_URI:-redis://localhost:6379}" \
   walkoff_core_api:local \
-  uvicorn api.server.app:app --host 0.0.0.0 --port "$PORT" --lifespan on
+  uvicorn api.server.app:app --host 127.0.0.1 --port "$PORT" --lifespan on

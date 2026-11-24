@@ -15,10 +15,12 @@ forwards `/walkoff/sockets` to the Socket.IO server. Both API instances share Mo
 
 ```bash
 # backing services (ports from data/local_config.yml; Redis on 6379 by default, override with REDIS_URI)
-docker run -d --name walkoff_mongo -p 27016:27017 mongo:4
-docker run -d --name walkoff_redis -p 6379:6379 redis:5
-pip install 'moto[server]' && moto_server -H 0.0.0.0 -p 9001 &      # S3/MinIO stand-in
+docker run -d --name walkoff_mongo -p 127.0.0.1:27016:27017 mongo:4
+docker run -d --name walkoff_redis -p 127.0.0.1:6379:6379 redis:5
+pip install 'moto[server]' && moto_server -H 127.0.0.1 -p 9001 &      # S3/MinIO stand-in
 (cd socketio && npm ci && node dist/server.js &)                    # :3000
+
+(cd parity && npm ci && npx playwright install chromium)        # proxy + suite deps
 
 # API image (once)
 docker build -f parity/backend/Dockerfile.api -t walkoff_core_api:local .
@@ -35,7 +37,7 @@ parity/backend/run-api.sh walkoff_api_upgraded "$PWD" 8042
 node parity/backend/proxy.js 4200 8042 &
 
 # suite (user must be an existing WALKOFF admin; the default seed is admin/admin)
-cd parity && npm ci && npx playwright install chromium
+cd parity
 WALKOFF_USERNAME=admin WALKOFF_PASSWORD=... npx playwright test   # both projects
 npm run report                                                       # report/README.md + side-by-side PNGs
 ```
