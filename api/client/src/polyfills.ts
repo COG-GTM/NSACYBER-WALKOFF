@@ -30,6 +30,9 @@ import 'zone.js';  // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 (window as any).global = window;
+// cytoscape-grid-guide assigns the undeclared `calculateOffset`; the v21 build runs it in strict mode,
+// where that throws unless the global already exists.
+(window as any).calculateOffset = undefined;
 
 /***************************************************************************************************
  * Load `$localize` onto the global scope - used by @ng-bootstrap/ng-bootstrap.
