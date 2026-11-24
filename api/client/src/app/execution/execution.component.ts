@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, Vie
 	ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
+import { Select2OptionData } from '../select2/select2.component';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { interval } from 'rxjs';
 import 'rxjs/add/operator/debounceTime';
@@ -35,9 +35,9 @@ import { ResultsModalComponent } from './results.modal.component';
 	providers: [AuthService],
 })
 export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
-	@ViewChild('nodeStatusContainer', { static: false }) nodeStatusContainer: ElementRef;
-	@ViewChild('nodeStatusTable', { static: false }) nodeStatusTable: DatatableComponent;
-	@ViewChild('workflowStatusTable', { static: false }) workflowStatusTable: DatatableComponent;
+	@ViewChild('nodeStatusContainer') nodeStatusContainer: ElementRef;
+	@ViewChild('nodeStatusTable') nodeStatusTable: DatatableComponent;
+	@ViewChild('workflowStatusTable') workflowStatusTable: DatatableComponent;
 
 	schedulerStatus: string;
 	workflowStatuses: WorkflowStatus[] = [];

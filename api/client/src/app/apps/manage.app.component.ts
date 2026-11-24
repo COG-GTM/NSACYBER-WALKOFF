@@ -39,7 +39,7 @@ import { FileModalComponent } from './file.modal.component';
 	providers: [AuthService, GlobalsService, SettingsService],
 })
 export class ManageAppComponent implements OnInit, OnDestroy {
-    @ViewChild('editorArea', { static: false }) editorArea: CodemirrorComponent;
+    @ViewChild('editorArea') editorArea: CodemirrorComponent;
 
 	workflowsLoaded: boolean = false;
 	workflows: Workflow[] = [];

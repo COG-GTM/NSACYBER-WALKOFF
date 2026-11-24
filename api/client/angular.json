@@ -10,12 +10,12 @@
       "prefix": "",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
-          "spec": false,
+          "style": "scss",
+          "skipTests": true,
           "flat": true
         },
         "@schematics/angular:service": {
-          "spec": false
+          "skipTests": true
         }
       },
       "architect": {
@@ -29,7 +29,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -58,7 +58,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -67,6 +66,10 @@
                   "type": "initial",
                   "maximumWarning": "5mb",
                   "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }

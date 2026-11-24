@@ -19,8 +19,8 @@ import { JsonModalComponent } from './json.modal.component';
 })
 export class ResultsModalComponent implements OnInit, OnDestroy {
     @Input() loadedWorkflowStatus: WorkflowStatus;
-    @ViewChild('nodeStatusContainer', { static: false }) nodeStatusContainer: ElementRef;
-    @ViewChild('nodeStatusTable', { static: false }) nodeStatusTable: DatatableComponent;
+    @ViewChild('nodeStatusContainer') nodeStatusContainer: ElementRef;
+    @ViewChild('nodeStatusTable') nodeStatusTable: DatatableComponent;
     NodeStatuses = NodeStatuses;
 
     editorOptionsData: any = {

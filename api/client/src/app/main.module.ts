@@ -3,14 +3,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { Select2Module } from 'ng2-select2';
+import { Select2Module } from './select2/select2.component';
 import { ClipboardModule } from 'ngx-clipboard';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth/auth.service';
 import { JwtInterceptor, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { RefreshTokenInterceptor, jwtTokenGetter, jwtOptionsFactory } from './refresh-token-interceptor';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { DateTimePickerModule } from 'ng-pick-datetime';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { DndModule } from './dnd/dnd.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -96,7 +96,8 @@ import { HasPermissionDirective } from './permission.directive';
 		Select2Module,
 		ClipboardModule,
 		NgxDatatableModule,
-		DateTimePickerModule,
+		OwlDateTimeModule,
+		OwlNativeDateTimeModule,
 		DndModule,
 	    BrowserAnimationsModule,
 		ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),

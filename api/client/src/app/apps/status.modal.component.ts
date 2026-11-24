@@ -20,7 +20,7 @@ import { UtilitiesService } from '../utilities.service';
     encapsulation: ViewEncapsulation.None,
 })
 export class StatusModalComponent implements OnInit, OnDestroy {
-    @ViewChild('consoleArea', { static: false }) consoleArea: CodemirrorComponent;
+    @ViewChild('consoleArea') consoleArea: CodemirrorComponent;
     @Input() buildId: string;
     @Input() appApi: AppApi;
     statusEventSource: any;

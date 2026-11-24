@@ -17,7 +17,7 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
 })
 export class JsonModalComponent implements OnInit, OnDestroy {
     @Input() results: string;
-    @ViewChild('jsonEditor', { static: false }) jsonEditor: JsonEditorComponent;
+    @ViewChild('jsonEditor') jsonEditor: JsonEditorComponent;
 
     editorOptionsData: any = {
 		mode: 'code',

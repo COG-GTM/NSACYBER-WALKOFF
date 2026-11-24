@@ -37,3 +37,8 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 (window as any).global = window;
+
+/***************************************************************************************************
+ * Load `$localize` onto the global scope - used by @ng-bootstrap/ng-bootstrap.
+ */
+import '@angular/localize/init';

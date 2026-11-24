@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
+import { Select2OptionData } from '../select2/select2.component';
 import * as moment from 'moment';
 
 import { SchedulerService } from './scheduler.service';
@@ -183,6 +183,8 @@ export class SchedulerModalComponent implements OnInit {
 	/**
 	 * Returns today's date to be used in initializing the minimum date in our date selector.
 	 */
+	minDate: Date = moment().startOf('day').toDate();
+
 	getToday(): string {
 		return moment().format('YYYY-MM-DD');
 	}

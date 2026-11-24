@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
+import { Select2OptionData } from '../select2/select2.component';
 import 'rxjs/add/operator/debounceTime';
 
 import { SchedulerModalComponent } from './scheduler.modal.component';
@@ -17,7 +17,7 @@ import { ScheduledTask } from '../models/scheduler/scheduledTask';
 	templateUrl: './scheduler.html',
 	styleUrls: [
 		'./scheduler.scss',
-		'../../../node_modules/ng-pick-datetime/styles/picker.min.css',
+		'../../../node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css',
 	],
 	encapsulation: ViewEncapsulation.None,
 	providers: [SchedulerService],

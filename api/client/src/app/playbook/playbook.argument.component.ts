@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnChanges, ElementRef, ViewChild } from '@angular/core';
-import { Select2OptionData } from 'ng2-select2/ng2-select2';
+import { Select2OptionData } from '../select2/select2.component';
 
 import { Workflow } from '../models/playbook/workflow';
 import { Action } from '../models/playbook/action';
@@ -33,7 +33,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 	@Input() globals: Global[];
 	@Input() branchCounters: any[];
 
-	@ViewChild('jsonEditor', { static: false }) jsonEditor: JsonEditorComponent;
+	@ViewChild('jsonEditor') jsonEditor: JsonEditorComponent;
 
 	@Output() createVariable = new EventEmitter<Argument>();
 

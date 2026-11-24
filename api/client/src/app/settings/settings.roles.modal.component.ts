@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
+import { Select2OptionData } from '../select2/select2.component';
 
 import { SettingsService } from './settings.service';
 import { UtilitiesService } from '../utilities.service';

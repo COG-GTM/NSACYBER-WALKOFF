@@ -7,7 +7,7 @@ import { UtilitiesService } from '../utilities.service';
 
 import { WorkingUser } from '../models/workingUser';
 import { Role } from '../models/role';
-import { Select2OptionData } from 'ng2-select2/ng2-select2.interface';
+import { Select2OptionData } from '../select2/select2.component';
 
 @Component({
 	selector: 'user-modal',

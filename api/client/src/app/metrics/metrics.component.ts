@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
+import { Select2OptionData } from '../select2/select2.component';
 import 'rxjs/add/operator/debounceTime';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 

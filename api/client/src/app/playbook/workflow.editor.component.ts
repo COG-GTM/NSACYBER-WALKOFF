@@ -69,14 +69,14 @@ import * as io from 'socket.io-client';
 })
 export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDestroy {
 	@ViewChild('cyRef', { static: true }) cyRef: ElementRef;
-	@ViewChild('workflowResultsTable', { static: false }) workflowResultsTable: DatatableComponent;
-	@ViewChild('consoleContainer', { static: false }) consoleContainer: ElementRef;
-	@ViewChild('consoleTable', { static: false }) consoleTable: DatatableComponent;
-	@ViewChild('errorLogTable', { static: false }) errorLogTable: DatatableComponent;
-	@ViewChild('environmentVariableTable', { static: false }) environmentVariableTable: DatatableComponent;
-	@ViewChild('importFile', { static: false }) importFile: ElementRef;
+	@ViewChild('workflowResultsTable') workflowResultsTable: DatatableComponent;
+	@ViewChild('consoleContainer') consoleContainer: ElementRef;
+	@ViewChild('consoleTable') consoleTable: DatatableComponent;
+	@ViewChild('errorLogTable') errorLogTable: DatatableComponent;
+	@ViewChild('environmentVariableTable') environmentVariableTable: DatatableComponent;
+	@ViewChild('importFile') importFile: ElementRef;
 	@ViewChild('accordion', { static: true }) apps_actions: ElementRef;
-	@ViewChild('consoleArea', { static: false }) consoleArea: CodemirrorComponent;
+	@ViewChild('consoleArea') consoleArea: CodemirrorComponent;
 
 	globals: Variable[] = [];
 	relevantGlobals: Variable[] = [];
