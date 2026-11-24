@@ -1,0 +1,8 @@
+# Local-only image for running the WALKOFF API against a checkout mounted at /app (parity runs).
+# Build from the repo root: docker build -f parity/backend/Dockerfile.api -t walkoff_core_api:local .
+# constraints.txt pins the 2020-era transitive deps that api/requirements.txt leaves open.
+FROM python:3.7.4-slim-buster
+COPY ./api/requirements.txt /requirements.txt
+COPY ./parity/backend/constraints.txt /constraints.txt
+RUN pip install --no-cache-dir -r /requirements.txt -c /constraints.txt
+WORKDIR /app
