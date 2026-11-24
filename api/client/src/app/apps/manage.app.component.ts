@@ -183,7 +183,7 @@ export class ManageAppComponent implements OnInit, OnDestroy {
             this.options.mode =  filetype ? filetype.mode : 'null';
             setTimeout(() => {
                 this.editorArea().codeMirror.getDoc().clearHistory();
-                this.editorArea().codeMirrorGlobal.commands.save = (instance) => {
+                (CodeMirror as any).commands.save = (instance) => {
                     if (instance == this.editorArea().codeMirror)
                         this.saveFile();
                 }

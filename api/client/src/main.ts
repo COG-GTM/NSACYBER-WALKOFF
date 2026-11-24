@@ -18,6 +18,14 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angul
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import 'codemirror/mode/meta';
+import 'codemirror/mode/shell/shell';
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/xml/xml';
+import 'codemirror/mode/yaml/yaml';
+import 'codemirror/mode/powershell/powershell';
+import 'codemirror/mode/dockerfile/dockerfile';
+import 'codemirror/addon/display/placeholder';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { MomentModule } from 'ngx-moment';
 import { MainComponent } from './app/main/main.component';
