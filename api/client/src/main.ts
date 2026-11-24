@@ -1,8 +1,25 @@
-import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
 
-import { MainModule } from './app/main.module';
 import { environment } from './environments/environment';
+import { UtilitiesService } from './app/utilities.service';
+import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from './app/auth/auth.service';
+import { JwtInterceptor, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { RefreshTokenInterceptor, jwtOptionsFactory } from './app/refresh-token-interceptor';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RoutingModule } from './app/routing';
+import { ClipboardModule } from 'ngx-clipboard';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { MomentModule } from 'ngx-moment';
+import { MainComponent } from './app/main/main.component';
 
 document.addEventListener('DOMContentLoaded', event => {
     if (checkLoggedIn()) {
@@ -10,7 +27,38 @@ document.addEventListener('DOMContentLoaded', event => {
             enableProdMode();
         }
 
-        platformBrowserDynamic().bootstrapModule(MainModule, { applicationProviders: [provideZoneChangeDetection()], })
+        bootstrapApplication(MainComponent, {
+    providers: [
+        provideZoneChangeDetection(),
+        importProvidersFrom(JwtModule.forRoot({
+            // config: {
+            // 	tokenGetter: jwtTokenGetter,
+            // 	disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
+            // },
+            jwtOptionsProvider: {
+                provide: JWT_OPTIONS,
+                useFactory: jwtOptionsFactory,
+                deps: [AuthService]
+            }
+        }), NgbModule, RoutingModule, ClipboardModule, NgxDatatableModule, OwlDateTimeModule, OwlNativeDateTimeModule, BrowserAnimationsModule, ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }), CodemirrorModule, NgJsonEditorModule, MomentModule),
+        UtilitiesService,
+        CookieService,
+        AuthService,
+        JwtInterceptor,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: JwtInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: RefreshTokenInterceptor,
+            multi: true
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideCharts(withDefaultRegisterables())
+    ]
+})
             .catch(err => console.log(err));
     }
     else { location.href = 'login'; }

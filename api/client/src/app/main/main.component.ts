@@ -11,6 +11,8 @@ import { Report } from '../models/report/report';
 
 import { MainProfileModalComponent } from './main.profile.modal.component';
 import { ClipboardService } from 'ngx-clipboard';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { HasPermissionDirective } from '../permission.directive';
 
 @Component({
     selector: 'main-component',
@@ -19,7 +21,7 @@ import { ClipboardService } from 'ngx-clipboard';
         './main.scss',
     ],
     providers: [MainService, AuthService, UtilitiesService],
-    standalone: false
+    imports: [RouterLink, RouterLinkActive, HasPermissionDirective, RouterOutlet]
 })
 export class MainComponent implements OnInit, OnDestroy {
 	currentUser: string;

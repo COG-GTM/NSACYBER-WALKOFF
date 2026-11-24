@@ -86,8 +86,8 @@ describe('App', () => {
         NgbModule,
         ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
         HasPermissionDirective,
+        MainComponent,
     ],
-    declarations: [MainComponent],
     schemas: [NO_ERRORS_SCHEMA],
     providers: [MainService],
 })
