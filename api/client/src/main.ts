@@ -10,7 +10,8 @@ import { refreshTokenInterceptor, jwtOptionsFactory } from './app/refresh-token-
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { RoutingModule } from './app/routing';
+import { routes } from './app/routing';
+import { provideRouter } from '@angular/router';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', event => {
                 useFactory: jwtOptionsFactory,
                 deps: [AuthService]
             }
-        }), NgbModule, RoutingModule, ClipboardModule, NgxDatatableModule, OwlDateTimeModule, OwlNativeDateTimeModule, BrowserAnimationsModule, ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }), CodemirrorModule, NgJsonEditorModule, MomentModule),
+        }), NgbModule, ClipboardModule, NgxDatatableModule, OwlDateTimeModule, OwlNativeDateTimeModule, BrowserAnimationsModule, ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }), CodemirrorModule, NgJsonEditorModule, MomentModule),
         UtilitiesService,
         CookieService,
         AuthService,
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', event => {
             multi: true
         },
         provideHttpClient(withInterceptorsFromDi(), withInterceptors([refreshTokenInterceptor])),
+        provideRouter(routes),
         provideCharts(withDefaultRegisterables())
     ]
 })

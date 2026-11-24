@@ -1,40 +1,21 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
-import { PlaybookComponent } from './playbook/playbook.component';
-import { SchedulerComponent } from './scheduler/scheduler.component';
-import { GlobalsComponent } from './globals/globals.component';
-import { SettingsComponent } from './settings/settings.component';
-import { ReportsComponent } from './reports/reports.component';
-import { ExecutionComponent } from './execution/execution.component';
-import { ManageReportsComponent } from './reports/manage.reports.component';
-import { WorkflowEditorComponent } from './playbook/workflow.editor.component';
-import { AppsListComponent } from './apps/apps.list.component';
-import { ManageAppComponent } from './apps/manage.app.component';
-//etc
-
-import { CanDeactivateGuard }    from './can-deactivate.guard';
+import { canDeactivateGuard } from './can-deactivate.guard';
 import { redirectGuard } from './redirect.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
 	{ path: '', redirectTo: '/workflows', pathMatch: 'full' },
-	{ path: 'workflows', component: PlaybookComponent },
-	{ path: 'workflows/new', component: WorkflowEditorComponent, canDeactivate: [CanDeactivateGuard] },
-	{ path: 'workflows/:workflowId', component: WorkflowEditorComponent, canDeactivate: [CanDeactivateGuard] },
-	{ path: 'settings/scheduler', component: SchedulerComponent },
-	{ path: 'settings/globals', component: GlobalsComponent },
-	{ path: 'settings/users', component: SettingsComponent },
-	{ path: 'execution', component: ExecutionComponent },
-	{ path: 'apps', component: AppsListComponent },
-	{ path: 'apps/:appId', component: ManageAppComponent, canDeactivate: [CanDeactivateGuard] },
-	{ path: 'report/new', component: ManageReportsComponent, canDeactivate: [CanDeactivateGuard] },
-	{ path: 'report/:reportId/edit', component: ManageReportsComponent, canDeactivate: [CanDeactivateGuard] },
-	{ path: 'report/:reportId', component: ReportsComponent },
+	{ path: 'workflows', loadComponent: () => import('./playbook/playbook.component').then(m => m.PlaybookComponent) },
+	{ path: 'workflows/new', loadComponent: () => import('./playbook/workflow.editor.component').then(m => m.WorkflowEditorComponent), canDeactivate: [canDeactivateGuard] },
+	{ path: 'workflows/:workflowId', loadComponent: () => import('./playbook/workflow.editor.component').then(m => m.WorkflowEditorComponent), canDeactivate: [canDeactivateGuard] },
+	{ path: 'settings/scheduler', loadComponent: () => import('./scheduler/scheduler.component').then(m => m.SchedulerComponent) },
+	{ path: 'settings/globals', loadComponent: () => import('./globals/globals.component').then(m => m.GlobalsComponent) },
+	{ path: 'settings/users', loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent) },
+	{ path: 'execution', loadComponent: () => import('./execution/execution.component').then(m => m.ExecutionComponent) },
+	{ path: 'apps', loadComponent: () => import('./apps/apps.list.component').then(m => m.AppsListComponent) },
+	{ path: 'apps/:appId', loadComponent: () => import('./apps/manage.app.component').then(m => m.ManageAppComponent), canDeactivate: [canDeactivateGuard] },
+	{ path: 'report/new', loadComponent: () => import('./reports/manage.reports.component').then(m => m.ManageReportsComponent), canDeactivate: [canDeactivateGuard] },
+	{ path: 'report/:reportId/edit', loadComponent: () => import('./reports/manage.reports.component').then(m => m.ManageReportsComponent), canDeactivate: [canDeactivateGuard] },
+	{ path: 'report/:reportId', loadComponent: () => import('./reports/reports.component').then(m => m.ReportsComponent) },
 	{ path: 'logout', canActivate: [redirectGuard], children: [], data: { externalUrl: '/walkoff/login', logout: true }}
 ];
-
-@NgModule({
-	imports: [RouterModule.forRoot(routes, {})],
-	exports: [RouterModule],
-})
-export class RoutingModule {}
