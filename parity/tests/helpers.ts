@@ -1,4 +1,4 @@
-import { expect, Page, TestInfo } from '@playwright/test';
+import { expect, Locator, Page, TestInfo } from '@playwright/test';
 import { randomBytes } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -83,4 +83,17 @@ export async function apiDeleteUser(page: Page, name: string) {
     }
   }
   throw new Error(`user ${name} not found`);
+}
+
+/** HTML5 drag and drop via synthetic DragEvents sharing one DataTransfer (mouse-driven dragTo does not
+ * start a native drag for these elements in headless Chromium). */
+export async function html5Drag(page: Page, source: Locator, target: Locator) {
+  const dt = await page.evaluateHandle(() => new DataTransfer());
+  const box = await target.boundingBox();
+  const at = { clientX: box.x + box.width / 2, clientY: box.y + box.height / 2 };
+  await source.dispatchEvent('dragstart', { dataTransfer: dt });
+  await target.dispatchEvent('dragenter', { dataTransfer: dt, ...at });
+  await target.dispatchEvent('dragover', { dataTransfer: dt, ...at });
+  await target.dispatchEvent('drop', { dataTransfer: dt, ...at });
+  await source.dispatchEvent('dragend', { dataTransfer: dt });
 }

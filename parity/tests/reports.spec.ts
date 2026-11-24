@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { confirmBootbox, dismissToasts, gotoApp, login, shot, stamp, toast } from './helpers';
+import { confirmBootbox, dismissToasts, gotoApp, html5Drag, login, shot, stamp, toast } from './helpers';
 
 test('create report with validation, view, edit and delete', async ({ page }) => {
   const name = stamp('parity-report');
@@ -20,12 +20,19 @@ test('create report with validation, view, edit and delete', async ({ page }) =>
   await widgetModal.getByRole('button', { name: 'Save' }).click();
   await expect(widgetModal).toBeHidden();
   await expect(page.locator('gridster-item')).toHaveCount(1);
+
+  // drag and drop a widget onto the grid
+  await html5Drag(page, page.locator('.actionPanel', { hasText: 'Bar Graph' }), page.locator('gridster'));
+  await expect(widgetModal.locator('.modal-title')).toHaveText('Configure Bar Graph');
+  await widgetModal.getByRole('button', { name: 'Save' }).click();
+  await expect(widgetModal).toBeHidden();
+  await expect(page.locator('gridster-item')).toHaveCount(2);
   await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(toast(page)).toContainText(`"${name}" Saved`);
   await expect(page).toHaveURL(/\/report\/[0-9a-f-]+$/);
   await expect(page.locator('h1')).toContainText(name);
   await expect(page.getByRole('button', { name: 'Save as PDF' })).toBeVisible();
-  await expect(page.locator('gridster-item')).toHaveCount(1);
+  await expect(page.locator('gridster-item')).toHaveCount(2);
 
   const reports = page.locator('#walkoffNav .nav-item.dropdown', { hasText: 'Reports' });
   await reports.locator('.dropdown-toggle').click();
