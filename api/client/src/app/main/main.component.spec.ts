@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, fakeAsync, tick, TestBed, ComponentFixture } from '@angular/core/testing';
+import { fakeAsync, tick, TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { } from 'jasmine';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -79,7 +79,7 @@ describe('App', () => {
 	/**
 	 * async beforeEach
 	 */
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			imports: [
 				//HttpModule,

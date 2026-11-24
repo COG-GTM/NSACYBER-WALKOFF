@@ -5,7 +5,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { UUID } from 'angular2-uuid';
 import { Observable, interval, timer } from 'rxjs';
 import { plainToClass, classToClass } from 'class-transformer';
-import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -1482,7 +1482,7 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		this.triggerCanvasResize();
 	}
 
-	switchConsoleTabs($e: NgbTabChangeEvent) {
+	switchConsoleTabs($e: NgbNavChangeEvent) {
 		if ($e.nextId == 'menu-tab' ) return $e.preventDefault();
 
 		this.showConsole = true;
@@ -1493,7 +1493,7 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 	/**
 	 * This function is used primarily to recalculate column widths for execution results table.
 	 */
-	recalculateConsoleTable($e: NgbTabChangeEvent) {
+	recalculateConsoleTable($e: NgbNavChangeEvent) {
 		let table: DatatableComponent;
 		setImmediate(() => {
 			switch($e.nextId) {

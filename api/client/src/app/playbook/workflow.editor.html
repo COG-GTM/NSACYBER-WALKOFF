@@ -283,11 +283,11 @@ else:
                             Returns: <span
                                 *ngIf="selectedActionApi?.returns?.schema?.type">({{ selectedActionApi?.returns?.schema?.type }})</span>
                         </label>
-                        <ngb-tabset justify="fill"
+                        <ul ngbNav #nav1="ngbNav" class="nav-tabs nav-fill"
                             [activeId]="selectedActionResults ? 'returns-results-tab' : 'returns-example-tab'">
-                            <ngb-tab id="returns-example-tab" title="Example"
-                                [disabled]="!selectedActionApi?.returns?.example">
-                                <ng-template ngbTabContent>
+                            <li [ngbNavItem]="'returns-example-tab'"
+                                [disabled]="!selectedActionApi?.returns?.example"><a ngbNavLink>Example</a>
+                                <ng-template ngbNavContent>
                                     <div class="d-flex m-2" *ngIf="selectedActionApi?.returns?.example">
                                         <div class="card bg-light flex-grow-1">
                                             <div class="card-body">
@@ -296,10 +296,10 @@ else:
                                         </div>
                                     </div>
                                 </ng-template>
-                            </ngb-tab>
-                            <ngb-tab id="returns-results-tab" title="Execution Result"
-                                [disabled]="!selectedActionResults">
-                                <ng-template ngbTabContent>
+                            </li>
+                            <li [ngbNavItem]="'returns-results-tab'"
+                                [disabled]="!selectedActionResults"><a ngbNavLink>Execution Result</a>
+                                <ng-template ngbNavContent>
                                     <!-- <div class="d-flex m-2" *ngIf="selectedActionResults">
                                         <div class="card bg-light flex-grow-1">
                                             <div class="card-body">
@@ -321,8 +321,9 @@ else:
                                         </a>
                                     </div>
                                 </ng-template>
-                            </ngb-tab>
-                        </ngb-tabset>
+                            </li>
+</ul>
+                        <div [ngbNavOutlet]="nav1" class="tab-content"></div>
                     </div>
                 </div>
                 <!-- Triggers -->
@@ -354,25 +355,25 @@ else:
     </div>
 
     <div class="bottom-panel fixed-bottom mb-1 pt-1 border-top" [class.show-console]="showConsole">
-        <ngb-tabset destoryOnHide="false" activeId="console-tab" (tabChange)="switchConsoleTabs($event)">
-            <ngb-tab id="menu-tab">
-                <ng-template ngbTabTitle>
+        <ul ngbNav #nav2="ngbNav" class="nav-tabs" activeId="console-tab" (navChange)="switchConsoleTabs($event)">
+            <li [ngbNavItem]="'menu-tab'">
+                <a ngbNavLink>
                     <div class="console-tab" (click)="toggleConsole()"
                         [ngbTooltip]="(showConsole ? 'Hide' : 'Show') + ' Console'">
                         <i class="fa fa-bars" aria-hidden="true"></i>
                     </div>
+                </a>
+                <ng-template ngbNavContent>
                 </ng-template>
-                <ng-template ngbTabContent>
-                </ng-template>
-            </ngb-tab>
-            <ngb-tab id="console-tab">
-                <ng-template ngbTabTitle>
+            </li>
+            <li [ngbNavItem]="'console-tab'">
+                <a ngbNavLink>
                     <div class="console-tab" (click)="toggleConsole()">Console
                         <span *ngIf="consoleLog.length > 0"
                             class="badge badge-pill badge-primary">{{ consoleLog.length }}</span>
                     </div>
-                </ng-template>
-                <ng-template ngbTabContent>
+                </a>
+                <ng-template ngbNavContent>
                     <ngx-codemirror #consoleArea [(ngModel)]="consoleContent" [options]="{
                         lineNumbers: true,
                         mode: 'shell',
@@ -380,16 +381,16 @@ else:
                         readOnly: true
                     }"></ngx-codemirror>
                 </ng-template>
-            </ngb-tab>
+            </li>
 
-            <ngb-tab *ngIf="loadedWorkflow?.id && !loadedWorkflow?.has_errors" id="execution-tab">
-                <ng-template ngbTabTitle>
+            <li *ngIf="loadedWorkflow?.id && !loadedWorkflow?.has_errors" [ngbNavItem]="'execution-tab'">
+                <a ngbNavLink>
                     <div class="console-tab" (click)="toggleConsole()">Results
                         <span *ngIf="nodeStatuses.length > 0"
                             class="badge badge-pill badge-primary">{{ nodeStatuses.length }}</span>
                     </div>
-                </ng-template>
-                <ng-template ngbTabContent>
+                </a>
+                <ng-template ngbNavContent>
                     <div id="executionResultsModal">
                         <div #workflowResultsContainer>
                             <ngx-datatable #workflowResultsTable class='material ' [columnMode]="'flex'"
@@ -475,15 +476,15 @@ else:
                         </div>
                     </div>
                 </ng-template>
-            </ngb-tab>
+            </li>
 
-            <ngb-tab *ngIf="loadedWorkflow?.has_errors" id="error-tab">
-                <ng-template ngbTabTitle>
+            <li *ngIf="loadedWorkflow?.has_errors" [ngbNavItem]="'error-tab'">
+                <a ngbNavLink>
                     <div class="console-tab" (click)="toggleConsole()">Errors <span
                             class="badge badge-pill badge-danger">{{ loadedWorkflow?.all_errors.length }}</span>
                     </div>
-                </ng-template>
-                <ng-template ngbTabContent>
+                </a>
+                <ng-template ngbNavContent>
                     <ngx-datatable #errorLogTable class='material expandable' [columnMode]="'flex'" [rows]="getErrors()"
                         [sortType]="'multi'" [headerHeight]="35" [footerHeight]="25" [rowHeight]="undefined"
                         [sorts]="[]" [limit]="10">
@@ -491,13 +492,13 @@ else:
                         </ngx-datatable-column>
                     </ngx-datatable>
                 </ng-template>
-            </ngb-tab>
+            </li>
 
-            <ngb-tab id="variable-tab">
-                <ng-template ngbTabTitle>
+            <li [ngbNavItem]="'variable-tab'">
+                <a ngbNavLink>
                     <div class="console-tab" (click)="toggleConsole()">Locals</div>
-                </ng-template>
-                <ng-template ngbTabContent>
+                </a>
+                <ng-template ngbNavContent>
                     <div class="p-2">
                         <div class="d-flex">
                             <h4 class="mx-2 mb-0">Local Variables</h4>
@@ -539,13 +540,13 @@ else:
                         </ngx-datatable-column>
                     </ngx-datatable>
                 </ng-template>
-            </ngb-tab>
+            </li>
 
-            <ngb-tab id="global-tab">
-                <ng-template ngbTabTitle>
+            <li [ngbNavItem]="'global-tab'">
+                <a ngbNavLink>
                     <div class="console-tab" (click)="toggleConsole()">Globals</div>
-                </ng-template>
-                <ng-template ngbTabContent>
+                </a>
+                <ng-template ngbNavContent>
                     <div class="p-2">
                         <div class="d-flex">
                             <h4 class="mx-2 mb-0">Global Variables</h4>
@@ -591,9 +592,10 @@ else:
                         </ngx-datatable-column>
                     </ngx-datatable>
                 </ng-template>
-            </ngb-tab>
+            </li>
+</ul>
 
-        </ngb-tabset>
+        <div [ngbNavOutlet]="nav2" class="tab-content"></div>
     </div>
 
 </div>

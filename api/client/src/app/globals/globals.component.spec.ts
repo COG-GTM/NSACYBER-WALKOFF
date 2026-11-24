@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { plainToClass } from 'class-transformer';
 import {} from 'jasmine';
@@ -82,7 +82,7 @@ describe('GlobalsComponent', () => {
 	/**
 	 * async beforeEach
 	 */
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			imports: [
 				HttpClientTestingModule,
@@ -125,7 +125,7 @@ describe('GlobalsComponent', () => {
 		service = fixture.debugElement.injector.get(GlobalsService);
 
 		spyOn(window, 'confirm').and.returnValue(true);
-		spyOn(service, 'getAllGlobals').and.returnValue(Promise.resolve(testGlobals));
+		spyOn(service, 'getAllGlobals').and.returnValue(Promise.resolve(testGlobals as any));
 		spyOn(service, 'getGlobalApis').and.returnValue(Promise.resolve(testGlobalApis));
 		spyOn(service, 'deleteGlobal').and.returnValue(Promise.resolve());
 	});
