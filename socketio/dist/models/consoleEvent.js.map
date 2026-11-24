@@ -1,1 +1,1 @@
-{"version":3,"file":"consoleEvent.js","sourceRoot":"","sources":["../../src/models/consoleEvent.ts"],"names":[],"mappings":";;AAEA,MAAa,YAAY;IASxB,IAAI,QAAQ;QACX,OAAO,CAAC,KAAK,EAAE,IAAI,CAAC,YAAY,CAAC,CAAC;IACnC,CAAC;CACD;AAZD,oCAYC"}
+{"version":3,"file":"consoleEvent.js","sourceRoot":"","sources":["../../../repos/NSACYBER-WALKOFF/socketio/src/models/consoleEvent.ts"],"names":[],"mappings":";;AAEA,MAAa,YAAY;IAOxB,IAAI,QAAQ;QACX,OAAO,CAAC,KAAK,EAAE,IAAI,CAAC,YAAY,EAAE,IAAI,CAAC,WAAW,CAAC,CAAC;IACrD,CAAC;CACD;AAVD,oCAUC"}

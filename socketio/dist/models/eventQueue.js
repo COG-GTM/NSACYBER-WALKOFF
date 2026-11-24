@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class EventQueue {
-    constructor(maxSize = 1000) {
+    constructor(maxSize = 500) {
         this.maxSize = maxSize;
         this.items = [];
     }
