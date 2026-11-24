@@ -9,13 +9,13 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth/auth.service';
 import { JwtInterceptor, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { RefreshTokenInterceptor, jwtTokenGetter, jwtOptionsFactory } from './refresh-token-interceptor';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { DndModule } from './dnd/dnd.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { GridsterModule } from 'angular-gridster2';
-import { NgChartsModule } from 'ng2-charts';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { NgJsonEditorModule } from 'ang-jsoneditor'
 import { MomentModule } from 'ngx-moment';
 
@@ -74,40 +74,7 @@ import { FileModalComponent } from './apps/file.modal.component';
 import { ManageAppComponent } from './apps/manage.app.component';
 import { HasPermissionDirective } from './permission.directive';
 
-@NgModule({
-    imports: [
-        FormsModule,
-        BrowserModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        JwtModule.forRoot({
-            // config: {
-            // 	tokenGetter: jwtTokenGetter,
-            // 	disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
-            // },
-            jwtOptionsProvider: {
-                provide: JWT_OPTIONS,
-                useFactory: jwtOptionsFactory,
-                deps: [AuthService]
-            }
-        }),
-        NgbModule,
-        RoutingModule,
-        Select2Module,
-        ClipboardModule,
-        NgxDatatableModule,
-        OwlDateTimeModule,
-        OwlNativeDateTimeModule,
-        DndModule,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
-        GridsterModule,
-        NgChartsModule,
-        CodemirrorModule,
-        NgJsonEditorModule,
-        MomentModule
-    ],
-    declarations: [
+@NgModule({ declarations: [
         //Main component
         MainComponent,
         //Router module components
@@ -153,7 +120,35 @@ import { HasPermissionDirective } from './permission.directive';
         // Directives
         HasPermissionDirective
     ],
-    providers: [
+    bootstrap: [MainComponent], imports: [FormsModule,
+        BrowserModule,
+        ReactiveFormsModule,
+        JwtModule.forRoot({
+            // config: {
+            // 	tokenGetter: jwtTokenGetter,
+            // 	disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
+            // },
+            jwtOptionsProvider: {
+                provide: JWT_OPTIONS,
+                useFactory: jwtOptionsFactory,
+                deps: [AuthService]
+            }
+        }),
+        NgbModule,
+        RoutingModule,
+        Select2Module,
+        ClipboardModule,
+        NgxDatatableModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        DndModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
+        GridsterModule,
+        BaseChartDirective,
+        CodemirrorModule,
+        NgJsonEditorModule,
+        MomentModule], providers: [
         UtilitiesService,
         CookieService,
         AuthService,
@@ -167,8 +162,8 @@ import { HasPermissionDirective } from './permission.directive';
             provide: HTTP_INTERCEPTORS,
             useClass: RefreshTokenInterceptor,
             multi: true
-        }
-    ],
-    bootstrap: [MainComponent]
-})
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideCharts(withDefaultRegisterables())
+    ] })
 export class MainModule {}

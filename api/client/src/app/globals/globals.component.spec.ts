@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, ComponentFixture, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -15,7 +15,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
 import { RefreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('GlobalsComponent', () => {
 	let comp: GlobalsComponent;
@@ -84,35 +84,33 @@ describe('GlobalsComponent', () => {
 	 */
 	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-			imports: [
-				HttpClientTestingModule,
-				NgbModule,
-				NgxDatatableModule,
-				JwtModule.forRoot({
-					config: {
-						tokenGetter: jwtTokenGetter,
-						disallowedRoutes: ['login', 'api/auth/login', 'api/auth/logout', 'api/auth/refresh']
-					}
-				}),
-				ToastrModule.forRoot({ positionClass: 'toast-bottom-right' })
-				// FormsModule,
-				// ReactiveFormsModule,
-			],
-			declarations: [GlobalsComponent],
-			schemas: [NO_ERRORS_SCHEMA],
-			providers: [GlobalsService, JwtInterceptor,
-			// Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
-			{
-				provide: HTTP_INTERCEPTORS,
-				useExisting: JwtInterceptor,
-				multi: true
-			},
-			{
-				provide: HTTP_INTERCEPTORS,
-				useClass: RefreshTokenInterceptor,
-				multi: true
-			}],
-		})
+    declarations: [GlobalsComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    imports: [NgbModule,
+        NgxDatatableModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: jwtTokenGetter,
+                disallowedRoutes: ['login', 'api/auth/login', 'api/auth/logout', 'api/auth/refresh']
+            }
+        }),
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right' })
+        // FormsModule,
+        // ReactiveFormsModule,
+    ],
+    providers: [GlobalsService, JwtInterceptor,
+        // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: JwtInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: RefreshTokenInterceptor,
+            multi: true
+        }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
 		.compileComponents();
 	}));
 
