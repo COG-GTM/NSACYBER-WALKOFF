@@ -21,7 +21,11 @@ function workflowFile(name: string): string {
 
 async function deleteWorkflow(page, name: string) {
   const c = card(page, name);
-  await c.locator('.workflow-menu-link').click();
+  // The filter is debounced and re-renders the cards, which can close a menu opened mid-render.
+  await expect(async () => {
+    await c.locator('.workflow-menu-link').click();
+    await expect(c.getByRole('button', { name: 'Delete' })).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 20000 });
   await c.getByRole('button', { name: 'Delete' }).click();
   await confirmBootbox(page);
   await expect(toast(page)).toContainText(`Deleted ${name}`);
