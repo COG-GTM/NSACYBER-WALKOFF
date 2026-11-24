@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Injectable, Input, Output, inject, input } from '@angular/core';
+import { Directive, ElementRef, HostListener, Injectable, Input, inject, input, output } from '@angular/core';
 
 /**
  * Minimal in-app replacement for the abandoned ng2-dnd package (no Ivy build): HTML5 drag and drop
@@ -19,8 +19,8 @@ export class DraggableDirective {
 
 	readonly dragData = input<any>(undefined);
 	@Input() set dragEnabled(enabled: boolean) { this.el.nativeElement.draggable = !!enabled; }
-	@Output() onDragStart = new EventEmitter<DragDropData>();
-	@Output() onDragEnd = new EventEmitter<DragDropData>();
+	readonly onDragStart = output<DragDropData>();
+	readonly onDragEnd = output<DragDropData>();
 
 	constructor() {
 		const el = this.el;
@@ -54,7 +54,7 @@ export class DroppableDirective {
 	private dnd = inject(DragDropService);
 
 	readonly dropEnabled = input(true);
-	@Output() onDropSuccess = new EventEmitter<DragDropData>();
+	readonly onDropSuccess = output<DragDropData>();
 
 	private get active() { return this.dropEnabled() && this.dnd.isDragged; }
 

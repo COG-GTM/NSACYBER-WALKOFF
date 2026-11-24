@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnChanges, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild, inject, input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnChanges, OnDestroy, Renderer2, SimpleChanges, ViewChild, inject, input, output } from '@angular/core';
 
 declare const jQuery: any;
 
@@ -27,7 +27,10 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 	readonly width = input<string>(undefined);
 	readonly disabled = input(false);
 	readonly options = input<any>(undefined);
-	@Output() valueChanged = new EventEmitter<{ value: string | string[], data: any }>();
+	readonly valueChanged = output<{
+    value: string | string[];
+    data: any;
+}>();
 
 	private element: any;
 

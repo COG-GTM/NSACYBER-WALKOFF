@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnChanges, ElementRef, ViewChild, input } from '@angular/core';
+import { Component, ViewEncapsulation, Input, OnChanges, ElementRef, ViewChild, input, output } from '@angular/core';
 import { Select2OptionData, Select2Component } from '../select2/select2.component';
 
 import { Workflow } from '../models/playbook/workflow';
@@ -38,7 +38,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 
 	@ViewChild('jsonEditor') jsonEditor: JsonEditorComponent;
 
-	@Output() createVariable = new EventEmitter<Argument>();
+	readonly createVariable = output<Argument>();
 
 	valueType: string = Variant.STATIC_VALUE;
 	valueTypes: any[];

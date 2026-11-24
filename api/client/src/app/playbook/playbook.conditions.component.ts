@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnInit, input } from '@angular/core';
+import { Component, ViewEncapsulation, Input, OnInit, input, output } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { AppApi } from '../models/api/appApi';
 import { ConditionApi } from '../models/api/conditionApi';
@@ -25,7 +25,7 @@ export class PlaybookConditionsComponent implements OnInit {
 	readonly appApis = input<AppApi[]>(undefined);
 	readonly loadedWorkflow = input<Workflow>(undefined);
 
-	@Output() createVariable = new EventEmitter<Argument>();
+	readonly createVariable = output<Argument>();
 
 	selectedConditionApi: string;
 	appNamesWithConditions: string[];

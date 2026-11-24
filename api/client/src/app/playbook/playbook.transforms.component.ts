@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnInit, input } from '@angular/core';
+import { Component, ViewEncapsulation, Input, OnInit, input, output } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { Workflow } from '../models/playbook/workflow';
 import { AppApi } from '../models/api/appApi';
@@ -23,7 +23,7 @@ export class PlaybookTransformsComponent implements OnInit {
 	readonly appApis = input<AppApi[]>(undefined);
 	readonly loadedWorkflow = input<Workflow>(undefined);
 
-	@Output() createVariable = new EventEmitter<Argument>();
+	readonly createVariable = output<Argument>();
 
 	selectedTransformApi: string;
 	appNamesWithTransforms: string[];
