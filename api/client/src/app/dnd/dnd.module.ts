@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Injectable, Input, NgModule, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Injectable, Input, Output } from '@angular/core';
 
 /**
  * Minimal in-app replacement for the abandoned ng2-dnd package (no Ivy build): HTML5 drag and drop
@@ -77,9 +77,3 @@ export class DroppableDirective {
 
 	private clear() { this.el.nativeElement.classList.remove('dnd-drag-enter', 'dnd-drag-over'); }
 }
-
-@NgModule({
-    imports: [DraggableDirective, DroppableDirective],
-    exports: [DraggableDirective, DroppableDirective],
-})
-export class DndModule {}

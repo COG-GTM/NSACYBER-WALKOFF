@@ -1,5 +1,5 @@
 import {
-	AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, Output,
+	AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output,
 	Renderer2, SimpleChanges, ViewChild,
 } from '@angular/core';
 
@@ -93,6 +93,3 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 		this.element.trigger('change.select2');
 	}
 }
-
-@NgModule({ imports: [Select2Component], exports: [Select2Component] })
-export class Select2Module {}

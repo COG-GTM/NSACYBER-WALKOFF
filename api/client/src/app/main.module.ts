@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { Select2Module } from './select2/select2.component';
+
 import { ClipboardModule } from 'ngx-clipboard';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth/auth.service';
@@ -11,7 +11,7 @@ import { JwtInterceptor, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { RefreshTokenInterceptor, jwtTokenGetter, jwtOptionsFactory } from './refresh-token-interceptor';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
-import { DndModule } from './dnd/dnd.module';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { Gridster, GridsterItem } from 'angular-gridster2';
@@ -77,77 +77,75 @@ import { HasPermissionDirective } from './permission.directive';
 @NgModule({ declarations: [
         //Main component
         MainComponent], bootstrap: [MainComponent], imports: [FormsModule,
-        BrowserModule,
-        ReactiveFormsModule,
-        JwtModule.forRoot({
-            // config: {
-            // 	tokenGetter: jwtTokenGetter,
-            // 	disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
-            // },
-            jwtOptionsProvider: {
-                provide: JWT_OPTIONS,
-                useFactory: jwtOptionsFactory,
-                deps: [AuthService]
-            }
-        }),
-        NgbModule,
-        RoutingModule,
-        Select2Module,
-        ClipboardModule,
-        NgxDatatableModule,
-        OwlDateTimeModule,
-        OwlNativeDateTimeModule,
-        DndModule,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
-        Gridster,
-        GridsterItem,
-        BaseChartDirective,
-        CodemirrorModule,
-        NgJsonEditorModule,
-        MomentModule, 
-        //Router module components
-        PlaybookComponent,
-        WorkflowEditorComponent,
-        SchedulerComponent,
-        GlobalsComponent,
-        MessagesComponent,
-        MetricsComponent,
-        SettingsComponent,
-        ReportsComponent,
-        ExecutionComponent,
-        AppsListComponent,
-        ManageAppComponent,
-        //Modals
-        SchedulerModalComponent,
-        GlobalsModalComponent,
-        VariableModalComponent,
-        MainProfileModalComponent,
-        SettingsUserModalComponent,
-        SettingsRoleModalComponent,
-        SettingsTimeoutModalComponent,
-        MessagesModalComponent,
-        PlaybookEnvironmentVariableModalComponent,
-        MetadataModalComponent,
-        ImportModalComponent,
-        ExecutionVariableModalComponent,
-        StatusModalComponent,
-        FileModalComponent,
-        ResultsModalComponent,
-        JsonModalComponent,
-        // Other subcomponents
-        PlaybookArgumentComponent,
-        PlaybookConditionsComponent,
-        PlaybookTransformsComponent,
-        PlaybookConditionalExpressionComponent,
-        SettingsRolesComponent,
-        // Pipes
-        KeysPipe,
-        ManageReportsComponent,
-        SafeEmbedPipe,
-        WidgetModalComponent,
-        // Directives
-        HasPermissionDirective], providers: [
+    BrowserModule,
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+        // config: {
+        // 	tokenGetter: jwtTokenGetter,
+        // 	disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
+        // },
+        jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [AuthService]
+        }
+    }),
+    NgbModule,
+    RoutingModule,
+    ClipboardModule,
+    NgxDatatableModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
+    Gridster,
+    GridsterItem,
+    BaseChartDirective,
+    CodemirrorModule,
+    NgJsonEditorModule,
+    MomentModule,
+    //Router module components
+    PlaybookComponent,
+    WorkflowEditorComponent,
+    SchedulerComponent,
+    GlobalsComponent,
+    MessagesComponent,
+    MetricsComponent,
+    SettingsComponent,
+    ReportsComponent,
+    ExecutionComponent,
+    AppsListComponent,
+    ManageAppComponent,
+    //Modals
+    SchedulerModalComponent,
+    GlobalsModalComponent,
+    VariableModalComponent,
+    MainProfileModalComponent,
+    SettingsUserModalComponent,
+    SettingsRoleModalComponent,
+    SettingsTimeoutModalComponent,
+    MessagesModalComponent,
+    PlaybookEnvironmentVariableModalComponent,
+    MetadataModalComponent,
+    ImportModalComponent,
+    ExecutionVariableModalComponent,
+    StatusModalComponent,
+    FileModalComponent,
+    ResultsModalComponent,
+    JsonModalComponent,
+    // Other subcomponents
+    PlaybookArgumentComponent,
+    PlaybookConditionsComponent,
+    PlaybookTransformsComponent,
+    PlaybookConditionalExpressionComponent,
+    SettingsRolesComponent,
+    // Pipes
+    KeysPipe,
+    ManageReportsComponent,
+    SafeEmbedPipe,
+    WidgetModalComponent,
+    // Directives
+    HasPermissionDirective], providers: [
         UtilitiesService,
         CookieService,
         AuthService,
