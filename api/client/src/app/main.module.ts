@@ -11,7 +11,7 @@ import { JwtInterceptor, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { RefreshTokenInterceptor, jwtTokenGetter, jwtOptionsFactory } from './refresh-token-interceptor';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { DateTimePickerModule } from 'ng-pick-datetime';
-import { DndModule } from 'ng2-dnd';
+import { DndModule } from './dnd/dnd.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { GridsterModule } from 'angular-gridster2';
@@ -97,7 +97,7 @@ import { HasPermissionDirective } from './permission.directive';
 		ClipboardModule,
 		NgxDatatableModule,
 		DateTimePickerModule,
-		DndModule.forRoot(),
+		DndModule,
 	    BrowserAnimationsModule,
 		ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
 		GridsterModule,

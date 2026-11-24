@@ -62,7 +62,7 @@ import * as io from 'socket.io-client';
 	styleUrls: [
 		'./workflow.editor.scss',
 		'../../../node_modules/cytoscape-panzoom/cytoscape.js-panzoom.css',
-		'../../../node_modules/ng2-dnd/bundles/style.css',
+		'../dnd/dnd.css',
 	],
 	encapsulation: ViewEncapsulation.None,
 	providers: [AuthService, GlobalsService, SettingsService],
