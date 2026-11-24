@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { VariableModalComponent } from './variable.modal.component';
@@ -20,7 +20,7 @@ import { UtilitiesService } from '../utilities.service';
 export class GlobalsComponent implements OnInit {
 	//Global Data Table params
 	globals: Variable[] = [];
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	constructor(
 		private globalsService: GlobalsService, private modalService: NgbModal, 

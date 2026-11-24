@@ -6,7 +6,7 @@ import { UUID } from 'angular2-uuid';
 import { Observable, interval, timer } from 'rxjs';
 import { plainToClass, classToClass } from 'class-transformer';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import * as cytoscape from 'cytoscape';
@@ -109,7 +109,7 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 	playbookToImport: File;
 	recalculateConsoleTableCallback: any;
 	actionFilter: string = '';
-	actionFilterControl = new FormControl();
+	actionFilterControl = new UntypedFormControl();
 	actionTypes = ActionType;
 	showConsole: boolean = false;
 	NodeStatuses = NodeStatuses;

@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../auth/auth.service';
@@ -43,7 +43,7 @@ export class ManageAppComponent implements OnInit, OnDestroy {
 	workflowsLoaded: boolean = false;
 	workflows: Workflow[] = [];
 	eventSource: any;
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
     filteredWorkflows: Workflow[] = [];
 
     apps: AppApi[];

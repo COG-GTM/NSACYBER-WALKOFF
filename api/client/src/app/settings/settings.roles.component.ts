@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -27,7 +27,7 @@ export class SettingsRolesComponent {
 	//Role Data Table params
 	roles: Role[] = [];
 	displayRoles: Role[] = [];
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	constructor(
 		private settingsService: SettingsService, private modalService: NgbModal,

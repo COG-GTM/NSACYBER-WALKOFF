@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -25,7 +25,7 @@ export class MessagesComponent implements OnInit {
 	messages: MessageListing[] = [];
 	displayMessages: MessageListing[] = [];
 	messageSelectConfig: Select2Options;
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	selectMapping: GenericObject = {};
 	messageRelativeTimes: GenericObject = {};

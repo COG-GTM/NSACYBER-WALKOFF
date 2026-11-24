@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ViewChild,
 	ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData } from '../select2/select2.component';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -50,7 +50,7 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 	nodeStatusComponentWidth: number;
 	workflowStatusActions: GenericObject;
 
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	workflowStatusEventSource: any;
 	nodeStatusEventSource: any;

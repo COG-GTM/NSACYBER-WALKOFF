@@ -24,6 +24,11 @@
 
 @import '~jquery.fancytree/dist/skin-lion/ui.fancytree.min.css';
 
+/* ng-bootstrap 12+ targets Bootstrap 5 and sets the backdrop inline to z-index 1055; restore Bootstrap 4 stacking */
+ngb-modal-backdrop.modal-backdrop {
+    z-index: $zindex-modal-backdrop !important;
+}
+
 /* Hack along for modal animations in ng-bootstrap */
 @keyframes modal-b-fade {
     from {

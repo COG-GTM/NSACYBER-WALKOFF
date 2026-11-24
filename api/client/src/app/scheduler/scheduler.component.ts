@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData } from '../select2/select2.component';
@@ -28,7 +28,7 @@ export class SchedulerComponent implements OnInit {
 	displayScheduledTasks: ScheduledTask[] = [];
 	availableWorkflows: Select2OptionData[] = [];
 
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	constructor(
 		private schedulerService: SchedulerService, private modalService: NgbModal,
