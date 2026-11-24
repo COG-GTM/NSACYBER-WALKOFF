@@ -15,7 +15,7 @@ import { MessageListing } from '../models/message/messageListing';
 
 import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
-import { RefreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
+import { refreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { plainToClass } from 'class-transformer';
 

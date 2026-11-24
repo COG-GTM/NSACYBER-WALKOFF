@@ -14,7 +14,7 @@ import { ManageAppComponent } from './apps/manage.app.component';
 //etc
 
 import { CanDeactivateGuard }    from './can-deactivate.guard';
-import { RedirectGuard } from './redirect.guard';
+import { redirectGuard } from './redirect.guard';
 
 const routes: Routes = [
 	{ path: '', redirectTo: '/workflows', pathMatch: 'full' },
@@ -30,7 +30,7 @@ const routes: Routes = [
 	{ path: 'report/new', component: ManageReportsComponent, canDeactivate: [CanDeactivateGuard] },
 	{ path: 'report/:reportId/edit', component: ManageReportsComponent, canDeactivate: [CanDeactivateGuard] },
 	{ path: 'report/:reportId', component: ReportsComponent },
-	{ path: 'logout', canActivate: [RedirectGuard], component: RedirectGuard, data: { externalUrl: '/walkoff/login', logout: true }}
+	{ path: 'logout', canActivate: [redirectGuard], children: [], data: { externalUrl: '/walkoff/login', logout: true }}
 ];
 
 @NgModule({

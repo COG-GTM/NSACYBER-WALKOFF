@@ -5,8 +5,8 @@ import { UtilitiesService } from './app/utilities.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './app/auth/auth.service';
 import { JwtInterceptor, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { RefreshTokenInterceptor, jwtOptionsFactory } from './app/refresh-token-interceptor';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { refreshTokenInterceptor, jwtOptionsFactory } from './app/refresh-token-interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -50,12 +50,7 @@ document.addEventListener('DOMContentLoaded', event => {
             useExisting: JwtInterceptor,
             multi: true
         },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: RefreshTokenInterceptor,
-            multi: true
-        },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withInterceptorsFromDi(), withInterceptors([refreshTokenInterceptor])),
         provideCharts(withDefaultRegisterables())
     ]
 })

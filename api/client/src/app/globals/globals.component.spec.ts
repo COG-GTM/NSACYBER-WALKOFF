@@ -14,8 +14,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
-import { RefreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { refreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('GlobalsComponent', () => {
 	let comp: GlobalsComponent;
@@ -98,17 +98,12 @@ describe('GlobalsComponent', () => {
         // ReactiveFormsModule,
         , GlobalsComponent],
     providers: [GlobalsService, JwtInterceptor,
-        // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
+        // Providing JwtInterceptor allow to inject JwtInterceptor manually into refreshTokenInterceptor
         {
             provide: HTTP_INTERCEPTORS,
             useExisting: JwtInterceptor,
             multi: true
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: RefreshTokenInterceptor,
-            multi: true
-        }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+        }, provideHttpClient(withInterceptorsFromDi(), withInterceptors([refreshTokenInterceptor])), provideHttpClientTesting()]
 })
 		.compileComponents();
 	}));

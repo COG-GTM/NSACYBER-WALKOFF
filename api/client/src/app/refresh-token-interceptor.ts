@@ -1,6 +1,6 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { AuthService } from './auth/auth.service';
 import { JwtInterceptor } from '@auth0/angular-jwt';
@@ -17,19 +17,12 @@ export function jwtTokenGetter() : string {
     return sessionStorage.getItem('access_token');
 }
 
-@Injectable()
-export class RefreshTokenInterceptor implements HttpInterceptor {
-    private authService = inject(AuthService);
-    private jwtInterceptor = inject(JwtInterceptor);
-
-
-    intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (this.jwtInterceptor.isAllowedDomain(req) && !this.jwtInterceptor.isDisallowedRoute(req) && this.authService.isAccessTokenExpired()) {
-            return from(this.authService.getAccessTokenRefreshed())
-                    .pipe(mergeMap(() => this.jwtInterceptor.intercept(req, next)));
-        } 
-        else {
-            return next.handle(req);
-        }
+export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
+    const authService = inject(AuthService);
+    const jwtInterceptor = inject(JwtInterceptor);
+    if (jwtInterceptor.isAllowedDomain(req) && !jwtInterceptor.isDisallowedRoute(req) && authService.isAccessTokenExpired()) {
+        return from(authService.getAccessTokenRefreshed())
+            .pipe(mergeMap(() => jwtInterceptor.intercept(req, { handle: next })));
     }
-}
+    return next(req);
+};
