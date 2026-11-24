@@ -105,3 +105,8 @@ div.jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected:hover 
 		text-decoration: none;
 	}
 }
+
+// ngx-datatable 24 draws a divider under every body row; the Angular 8 build (ngx-datatable 15) did not.
+.ngx-datatable.material .datatable-body .datatable-body-row {
+    border-bottom: 0;
+}
