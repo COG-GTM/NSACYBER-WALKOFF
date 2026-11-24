@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { plainToClass, classToPlain, serialize, deserializeArray } from 'class-transformer';
 import { UtilitiesService } from '../utilities.service';
 import { HttpClient } from '@angular/common/http';
@@ -14,11 +14,15 @@ import { Observable, Subscriber } from 'rxjs';
     providedIn: 'root'
 })
 export class ReportService {
+    private http = inject(HttpClient);
+    private utils = inject(UtilitiesService);
+    private executionService = inject(ExecutionService);
+
 
     reportsChange: Observable<any>;
     observer: Subscriber<any>;
 
-    constructor(private http: HttpClient, private utils: UtilitiesService, private executionService: ExecutionService) {
+    constructor() {
         this.reportsChange = new Observable((observer) => {
             this.observer = observer;
             this.getReports().then(reports => this.observer.next(reports));

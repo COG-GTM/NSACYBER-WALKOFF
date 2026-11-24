@@ -1,10 +1,10 @@
-import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit, OnDestroy, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from './app.service';
 import { AuthService } from '../auth/auth.service';
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { CodemirrorComponent, CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { Observable, Observer, zip, interval, Subscription } from 'rxjs';
 import { takeWhile, finalize } from 'rxjs/operators';
 
@@ -18,9 +18,16 @@ import { UtilitiesService } from '../utilities.service';
         './status.modal.scss',
     ],
     encapsulation: ViewEncapsulation.None,
+    imports: [CodemirrorModule]
 })
 export class StatusModalComponent implements OnInit, OnDestroy {
-    @ViewChild('consoleArea', { static: false }) consoleArea: CodemirrorComponent;
+    activeModal = inject(NgbActiveModal);
+    appService = inject(AppService);
+    utils = inject(UtilitiesService);
+    toastrService = inject(ToastrService);
+    authService = inject(AuthService);
+
+    readonly consoleArea = viewChild<CodemirrorComponent>('consoleArea');
     @Input() buildId: string;
     @Input() appApi: AppApi;
     statusEventSource: any;
@@ -29,9 +36,6 @@ export class StatusModalComponent implements OnInit, OnDestroy {
     statusSubscription: Subscription;
     completedStatus: { success: boolean, message: string};
     buildStatusSocket: SocketIOClient.Socket;
-
-    constructor(public activeModal: NgbActiveModal, public appService: AppService, public utils: UtilitiesService,
-        public toastrService: ToastrService, public authService: AuthService) { }
 
     ngOnInit(): void {
         this.createBuildStatusSocket();
@@ -48,7 +52,7 @@ export class StatusModalComponent implements OnInit, OnDestroy {
                 })
             )
             .subscribe(i => {
-                const cm = this.consoleArea.codeMirror;
+                const cm = this.consoleArea().codeMirror;
                 const $scroller = $(cm.getScrollerElement());
                 const atBottom = $scroller[0].scrollHeight - $scroller.scrollTop() - $scroller.outerHeight() <= 0;
                 cm.getDoc().setValue(i);

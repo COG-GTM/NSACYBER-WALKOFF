@@ -1,17 +1,21 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import { Component, Input, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentVariable } from '../models/playbook/environmentVariable';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { JsonEditorComponent, NgJsonEditorModule } from 'ang-jsoneditor';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'playbook-environment-variable-modal-component',
-  templateUrl: './playbook.environment.variable.modal.html',
+    selector: 'playbook-environment-variable-modal-component',
+    templateUrl: './playbook.environment.variable.modal.html',
+    imports: [FormsModule, NgJsonEditorModule]
 })
 export class PlaybookEnvironmentVariableModalComponent {
+  activeModal = inject(NgbActiveModal);
+
   @Input() variable: EnvironmentVariable = new EnvironmentVariable();
   @Input() existing: boolean = false;
-  @ViewChild('jsonEditor', { static: true }) jsonEditor: JsonEditorComponent;
+  readonly jsonEditor = viewChild<JsonEditorComponent>('jsonEditor');
 
   initialValue: string;
   editorOptionsData: any = {
@@ -26,16 +30,13 @@ export class PlaybookEnvironmentVariableModalComponent {
 		enableTransform: false,
 		onChange: () => {
 			try {
-			  	this.variable.value = this.jsonEditor.get() as any;
+			  	this.variable.value = this.jsonEditor().get() as any;
 			}
 			catch(e) {
-				this.variable.value = this.jsonEditor.getText();
+				this.variable.value = this.jsonEditor().getText();
 			}
 		}
 	}
-
-	
-	constructor(public activeModal: NgbActiveModal) {}
 
 	ngOnInit(): void {
     	this.initialValue = this.variable.value;

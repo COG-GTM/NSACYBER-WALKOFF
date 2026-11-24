@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
 import { plainToClass } from 'class-transformer';
 
 import { ScheduledTask } from '../models/scheduler/scheduledTask';
@@ -17,7 +15,9 @@ const schedulerStatusNumberMapping: { [key: number]: string } = {
 
 @Injectable()
 export class SchedulerService {
-	constructor (private http: HttpClient, private utils: UtilitiesService) {}
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
+
 
 	getSchedulerStatus(): Promise<string> {
 		return this.http.get('api/scheduler/')

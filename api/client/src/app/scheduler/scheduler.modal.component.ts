@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
 import * as moment from 'moment';
 
 import { SchedulerService } from './scheduler.service';
@@ -12,16 +12,23 @@ import { ScheduledTaskCron } from '../models/scheduler/scheduledTaskCron';
 import { ScheduledTaskInterval } from '../models/scheduler/scheduledTaskInterval';
 import { ScheduledTaskDate } from '../models/scheduler/scheduledTaskDate';
 import { GenericObject } from '../models/genericObject';
+import { FormsModule } from '@angular/forms';
+import { OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 @Component({
-	selector: 'scheduler-modal',
-	templateUrl: './scheduler.modal.html',
-	styleUrls: [
-		'./scheduler.scss',
-	],
-	providers: [SchedulerService, UtilitiesService],
+    selector: 'scheduler-modal',
+    templateUrl: './scheduler.modal.html',
+    styleUrls: [
+        './scheduler.scss',
+    ],
+    providers: [SchedulerService, UtilitiesService],
+    imports: [Select2Component, FormsModule, OwlDateTimeModule]
 })
 export class SchedulerModalComponent implements OnInit {
+	private schedulerService = inject(SchedulerService);
+	activeModal = inject(NgbActiveModal);
+	private toastrService = inject(ToastrService);
+
 	@Input() workingScheduledTask: ScheduledTask = new ScheduledTask();
 	@Input() title: string;
 	@Input() submitText: string;
@@ -32,11 +39,6 @@ export class SchedulerModalComponent implements OnInit {
 	cron: ScheduledTaskCron = new ScheduledTaskCron();
 	interval: ScheduledTaskInterval = new ScheduledTaskInterval();
 	date: ScheduledTaskDate = new ScheduledTaskDate();
-	
-	constructor(
-		private schedulerService: SchedulerService, public activeModal: NgbActiveModal,
-		private toastrService: ToastrService,
-	) {}
 
 	/**
 	 * Initializes the workflow select config for selecting workflows to schedule.
@@ -108,7 +110,7 @@ export class SchedulerModalComponent implements OnInit {
 			const startDate = +args.start_date;
 			const endDate = +args.end_date;
 
-			if (startDate > endDate) { return 'The end date cannot be before the start date.'; }
+			if (args.end_date && startDate > endDate) { return 'The end date cannot be before the start date.'; }
 		}
 
 		if (this.workingScheduledTask.task_trigger.type === 'interval') {
@@ -183,6 +185,8 @@ export class SchedulerModalComponent implements OnInit {
 	/**
 	 * Returns today's date to be used in initializing the minimum date in our date selector.
 	 */
+	minDate: Date = moment().startOf('day').toDate();
+
 	getToday(): string {
 		return moment().format('YYYY-MM-DD');
 	}

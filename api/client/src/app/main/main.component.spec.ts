@@ -1,12 +1,13 @@
-import { HttpModule, Http, RequestOptions } from '@angular/http';
+import {} from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, fakeAsync, tick, TestBed, ComponentFixture } from '@angular/core/testing';
+import { fakeAsync, tick, TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { } from 'jasmine';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { MainComponent } from './main.component';
 import { MainService } from './main.service';
+import { HasPermissionDirective } from '../permission.directive';
 import { AuthService } from '../auth/auth.service';
 
 // import { Message } from '../models/message/message';
@@ -14,7 +15,7 @@ import { MessageListing } from '../models/message/messageListing';
 
 import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
-import { RefreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
+import { refreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { plainToClass } from 'class-transformer';
 
@@ -78,17 +79,18 @@ describe('App', () => {
 	/**
 	 * async beforeEach
 	 */
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-			imports: [
-				//HttpModule,
-				NgbModule.forRoot(),
-				ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
-			],
-			declarations: [MainComponent],
-			schemas: [NO_ERRORS_SCHEMA],
-			providers: [MainService],
-		})
+    imports: [
+        //HttpModule,
+        NgbModule,
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
+        HasPermissionDirective,
+        MainComponent,
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [MainService],
+})
 			.compileComponents();
 	}));
 

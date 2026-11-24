@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { plainToClass } from 'class-transformer';
 
@@ -12,7 +12,9 @@ import { UtilitiesService } from '../utilities.service';
 	providedIn: 'root'
 })
 export class SettingsService {
-	constructor (private http: HttpClient, private utils: UtilitiesService) {}
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
+
 
 	getConfiguration(): Promise<Configuration> {
 		return this.http.get('api/settings/')

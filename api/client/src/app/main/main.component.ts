@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -11,24 +11,30 @@ import { Report } from '../models/report/report';
 
 import { MainProfileModalComponent } from './main.profile.modal.component';
 import { ClipboardService } from 'ngx-clipboard';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { HasPermissionDirective } from '../permission.directive';
 
 @Component({
-	selector: 'main-component',
-	templateUrl: './main.html',
-	styleUrls: [
-		'./main.scss',
-	],
-	providers: [MainService, AuthService, UtilitiesService],
+    selector: 'main-component',
+    templateUrl: './main.html',
+    styleUrls: [
+        './main.scss',
+    ],
+    providers: [MainService, AuthService, UtilitiesService],
+    imports: [RouterLink, RouterLinkActive, HasPermissionDirective, RouterOutlet]
 })
 export class MainComponent implements OnInit, OnDestroy {
+	private authService = inject(AuthService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	utils = inject(UtilitiesService);
+	private reportService = inject(ReportService);
+	private clipboardService = inject(ClipboardService);
+
 	currentUser: string;
 	reports: Report[] = [];
 
-	constructor(
-		private authService: AuthService, private modalService: NgbModal, 
-		private toastrService: ToastrService, public utils: UtilitiesService, 
-		private reportService: ReportService, private clipboardService: ClipboardService
-	) {
+	constructor() {
 
 		const hideBackdrop = () => {
 			const backdropNodes = document.querySelectorAll('.modal-backdrop');

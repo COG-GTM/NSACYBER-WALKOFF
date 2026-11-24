@@ -7,14 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const class_transformer_1 = require("class-transformer");
+const nodeStatusEvent_1 = require("./nodeStatusEvent");
 class WorkflowStatusEvent {
     get channels() {
         return ['all', this.execution_id, this.workflow_id];
     }
 }
 __decorate([
-    class_transformer_1.Type(() => NodeStatusSummary)
-], WorkflowStatusEvent.prototype, "node_status", void 0);
+    class_transformer_1.Type(() => nodeStatusEvent_1.NodeStatusEvent)
+], WorkflowStatusEvent.prototype, "node_statuses", void 0);
 exports.WorkflowStatusEvent = WorkflowStatusEvent;
 var WorkflowStatuses;
 (function (WorkflowStatuses) {
@@ -25,7 +26,4 @@ var WorkflowStatuses;
     WorkflowStatuses["ABORTED"] = "ABORTED";
     WorkflowStatuses["EXECUTING"] = "EXECUTING";
 })(WorkflowStatuses = exports.WorkflowStatuses || (exports.WorkflowStatuses = {}));
-class NodeStatusSummary {
-}
-exports.NodeStatusSummary = NodeStatusSummary;
 //# sourceMappingURL=workflowStatusEvent.js.map

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -7,17 +7,23 @@ import { UtilitiesService } from '../utilities.service';
 
 import { WorkingUser } from '../models/workingUser';
 import { Role } from '../models/role';
-import { Select2OptionData } from 'ng2-select2/ng2-select2.interface';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-	selector: 'user-modal',
-	templateUrl: './settings.user.modal.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	providers: [SettingsService, UtilitiesService],
+    selector: 'user-modal',
+    templateUrl: './settings.user.modal.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    providers: [SettingsService, UtilitiesService],
+    imports: [FormsModule, Select2Component]
 })
 export class SettingsUserModalComponent {
+	private settingsService = inject(SettingsService);
+	activeModal = inject(NgbActiveModal);
+	private toastrService = inject(ToastrService);
+
 	@Input() workingUser: WorkingUser;
 	@Input() title: string;
 	@Input() submitText: string;
@@ -26,11 +32,6 @@ export class SettingsUserModalComponent {
 	roleSelectData: Select2OptionData[];
 	roleSelectConfig: Select2Options;
 	roleSelectInitialValue: number[];
-
-	constructor(
-		private settingsService: SettingsService, public activeModal: NgbActiveModal,
-		private toastrService: ToastrService, ) {
-	}
 
 	ngOnInit(): void {
 		this.roleSelectData = this.roles.map((role) => {

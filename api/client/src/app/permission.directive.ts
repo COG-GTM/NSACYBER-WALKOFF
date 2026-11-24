@@ -1,10 +1,4 @@
-import {
-    Directive,
-    Input,
-    TemplateRef,
-    ViewContainerRef,
-    OnInit,
-} from '@angular/core';
+import { Directive, Input, TemplateRef, ViewContainerRef, OnInit, inject } from '@angular/core';
 import { PermissionService } from './permission.service';
 
 /* 
@@ -14,18 +8,15 @@ import { PermissionService } from './permission.service';
 *  Setting all to true performs an AND operation on passed permissions requiring them all
 *  IE: <div *hasPermission="['viewReports', 'editReports'] all:true"> {{ Protected  }}</div>
 */
-@Directive({
-    selector: '[hasPermission]'
-})
+@Directive({ selector: '[hasPermission]' })
 export class HasPermissionDirective implements OnInit {
+    private templateRef = inject<TemplateRef<any>>(TemplateRef);
+    private viewContainer = inject(ViewContainerRef);
+    private permissionService = inject(PermissionService);
+
     private permissions = [];
     private matchAll = false;
     private isHidden = true;
-
-    constructor(
-        private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef, 
-        private permissionService: PermissionService
-    ) {}
 
     ngOnInit() { }
 

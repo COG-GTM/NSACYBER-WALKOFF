@@ -1,11 +1,10 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy} from '@angular/core';
-import 'rxjs/Rx';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, inject } from '@angular/core';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../auth/auth.service';
@@ -19,29 +18,30 @@ import { AppApi } from '../models/api/appApi';
 import { StatusModalComponent } from './status.modal.component';
 
 @Component({
-	selector: 'apps-list-component',
-	templateUrl: './apps.list.html',
-	styleUrls: [
-		'./apps.list.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService, GlobalsService, SettingsService],
+    selector: 'apps-list-component',
+    templateUrl: './apps.list.html',
+    styleUrls: [
+        './apps.list.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService, GlobalsService, SettingsService]
 })
 export class AppsListComponent implements OnInit, OnDestroy {
+	private playbookService = inject(PlaybookService);
+	private authService = inject(AuthService);
+	private appService = inject(AppService);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+	private modalService = inject(NgbModal);
+	private router = inject(Router);
+
 	workflowsLoaded: boolean = false;
 	workflows: Workflow[] = [];
 	eventSource: any;
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 	filteredWorkflows: Workflow[] = [];
 
 	apps: AppApi[];
-
-	constructor(
-		private playbookService: PlaybookService, private authService: AuthService,
-		private appService: AppService,
-		private toastrService: ToastrService, private utils: UtilitiesService, 
-		private modalService: NgbModal, private router: Router
-	) {}
 
 	/**
 	 * On component initialization, we grab arrays of globals, app apis, and playbooks/workflows (id, name pairs).

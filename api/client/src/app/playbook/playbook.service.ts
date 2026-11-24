@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { plainToClass, classToPlain } from 'class-transformer';
 import { HttpClient } from '@angular/common/http';
 
@@ -18,24 +18,28 @@ import { UtilitiesService } from '../utilities.service';
 
 import { UUID } from 'angular2-uuid';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
 import { Subscriber } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ActionType } from '../models/api/actionApi';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class PlaybookService {
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
+	private executionService = inject(ExecutionService);
+	private globalsService = inject(GlobalsService);
+	private settingsService = inject(SettingsService);
+
 
 	workflowsChange: Observable<any>;
 	observer: Subscriber<any>;
 
 	tempStoredWorkflow: Workflow;
 
-	constructor(private http: HttpClient, private utils: UtilitiesService, private executionService: ExecutionService,
-		private globalsService: GlobalsService, private settingsService: SettingsService) {
+	constructor() {
 		this.workflowsChange = new Observable((observer) => {
 			this.observer = observer;
 			this.getWorkflows().then(workflows => this.observer.next(workflows));
@@ -108,7 +112,7 @@ export class PlaybookService {
 	 */
 	exportPlaybook(playbookId: string): Observable<Blob> {
 		return this.http.get(`api/playbooks/${playbookId}?mode=export`, { responseType: 'blob' })
-			.catch(this.utils.handleResponseError);
+			.pipe(catchError(this.utils.handleResponseError));
 	}
 
 	/**

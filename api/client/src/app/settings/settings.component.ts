@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import 'rxjs/add/operator/debounceTime';
 
 import { SettingsService } from './settings.service';
 
@@ -14,29 +13,36 @@ import { WorkingUser } from '../models/workingUser';
 import { Role } from '../models/role';
 import { SettingsTimeoutModalComponent } from './settings.timeout.modal.component';
 import { UtilitiesService } from '../utilities.service';
+import { debounceTime } from 'rxjs/operators';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { SettingsRolesComponent } from './settings.roles.component';
 
 @Component({
-	selector: 'settings-component',
-	templateUrl: './settings.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	providers: [SettingsService],
+    selector: 'settings-component',
+    templateUrl: './settings.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    providers: [SettingsService],
+    imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, SettingsRolesComponent]
 })
 export class SettingsComponent {
+	private settingsService = inject(SettingsService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	configuration: Configuration = new Configuration();
 
 	//User Data Table params
 	users: User[] = [];
 	displayUsers: User[] = [];
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	roles: Role[] = [];
 
-	constructor(
-		private settingsService: SettingsService, private modalService: NgbModal,
-		private toastrService: ToastrService, private utils: UtilitiesService,
-	) {
+	constructor() {
 
 		//this.getConfiguration();
 		this.getUsers();
@@ -44,7 +50,7 @@ export class SettingsComponent {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterUsers());
 	}
 

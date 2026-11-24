@@ -1,11 +1,10 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy} from '@angular/core';
-import 'rxjs/Rx';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, inject } from '@angular/core';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../auth/auth.service';
@@ -17,27 +16,32 @@ import { Workflow } from '../models/playbook/workflow';
 import { WorkflowStatuses, WorkflowStatus } from '../models/execution/workflowStatus';
 import { MetadataModalComponent } from './metadata.modal.component';
 import { ImportModalComponent } from './import.modal.component';
+import { debounceTime } from 'rxjs/operators';
+import { HasPermissionDirective } from '../permission.directive';
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap/dropdown';
 
 @Component({
-	selector: 'playbook-component',
-	templateUrl: './playbook.html',
-	styleUrls: [ './playbook.scss' ],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService, GlobalsService, SettingsService],
+    selector: 'playbook-component',
+    templateUrl: './playbook.html',
+    styleUrls: ['./playbook.scss'],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService, GlobalsService, SettingsService],
+    imports: [HasPermissionDirective, RouterLink, FormsModule, ReactiveFormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu]
 })
 export class PlaybookComponent implements OnInit, OnDestroy {
+	private playbookService = inject(PlaybookService);
+	private authService = inject(AuthService);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+	private modalService = inject(NgbModal);
+	private router = inject(Router);
+
 	workflowStatusSocket: SocketIOClient.Socket;
 	workflowsLoaded: boolean = false;
 	workflows: Workflow[] = [];
 	eventSource: any;
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 	filteredWorkflows: Workflow[] = [];
-
-	constructor(
-		private playbookService: PlaybookService, private authService: AuthService,
-		private toastrService: ToastrService, private utils: UtilitiesService, 
-		private modalService: NgbModal, private router: Router
-	) {}
 
 	/**
 	 * On component initialization, we grab arrays of globals, app apis, and playbooks/workflows (id, name pairs).
@@ -48,7 +52,7 @@ export class PlaybookComponent implements OnInit, OnDestroy {
 		this.getPlaybooksWithWorkflows();
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(() => this.filterWorkflows());
 	}
 

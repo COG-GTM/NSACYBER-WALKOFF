@@ -1,5 +1,5 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnChanges, ElementRef, ViewChild } from '@angular/core';
-import { Select2OptionData } from 'ng2-select2/ng2-select2';
+import { Component, ViewEncapsulation, Input, OnChanges, ElementRef, input, output, viewChild } from '@angular/core';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
 
 import { Workflow } from '../models/playbook/workflow';
 import { Action } from '../models/playbook/action';
@@ -11,31 +11,34 @@ import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Global } from '../models/global';
 import { WorkflowNode } from '../models/playbook/WorkflowNode';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { JsonEditorComponent, NgJsonEditorModule } from 'ang-jsoneditor';
+import { FormsModule } from '@angular/forms';
+import { KeysPipe } from '../pipes/keys.pipe';
 
 const AVAILABLE_TYPES = ['string', 'number', 'boolean'];
 
 @Component({
-	selector: 'playbook-argument-component',
-	templateUrl: './playbook.argument.html',
-	styleUrls: [],
-	encapsulation: ViewEncapsulation.None,
-	providers: [],
+    selector: 'playbook-argument-component',
+    templateUrl: './playbook.argument.html',
+    styleUrls: [],
+    encapsulation: ViewEncapsulation.None,
+    providers: [],
+    imports: [FormsModule, Select2Component, NgJsonEditorModule, KeysPipe]
 })
 export class PlaybookArgumentComponent implements OnChanges {
 	@Input() id: number;
 	@Input() argument: Argument;
-	@Input() parameterApi: ParameterApi;
-	@Input() selectedAction: Action;
+	readonly parameterApi = input<ParameterApi>(undefined);
+	readonly selectedAction = input<Action>(undefined);
 	@Input() loadedWorkflow: Workflow;
-	@Input() users: User[];
-	@Input() roles: Role[];
-	@Input() globals: Global[];
-	@Input() branchCounters: any[];
+	readonly users = input<User[]>(undefined);
+	readonly roles = input<Role[]>(undefined);
+	readonly globals = input<Global[]>(undefined);
+	readonly branchCounters = input<any[]>(undefined);
 
-	@ViewChild('jsonEditor', { static: false }) jsonEditor: JsonEditorComponent;
+	readonly jsonEditor = viewChild<JsonEditorComponent>('jsonEditor');
 
-	@Output() createVariable = new EventEmitter<Argument>();
+	readonly createVariable = output<Argument>();
 
 	valueType: string = Variant.STATIC_VALUE;
 	valueTypes: any[];
@@ -85,7 +88,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 	}
 
 	initParameterSchema(): void {
-		this.parameterSchema = this.parameterApi.json_schema;
+		this.parameterSchema = this.parameterApi().json_schema;
 		if (this.argument.value == null) {
 			if (this.parameterSchema.type === 'array') { 
 				this.argument.value = [];
@@ -129,7 +132,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 	initUserSelect(): void {
 		if (!this.isUserSelect) { return; }
 
-		this.selectData = this.users.map((user) => {
+		this.selectData = this.users().map((user) => {
 			return { id: user.id.toString(), text: user.username };
 		});
 
@@ -156,7 +159,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 	initRoleSelect(): void {
 		if (!this.isRoleSelect) { return; }
 
-		this.selectData = this.roles.map((role) => {
+		this.selectData = this.roles().map((role) => {
 			return { id: role.id.toString(), text: role.name };
 		});
 
@@ -311,7 +314,7 @@ export class PlaybookArgumentComponent implements OnChanges {
 
 	// TODO: maybe somehow recursively find actions that may occur before. Right now it just returns all of them.
 	getPreviousActions(): WorkflowNode[] {
-		return this.loadedWorkflow.getPreviousActions(this.selectedAction);
+		return this.loadedWorkflow.getPreviousActions(this.selectedAction());
 	}
 
 	/**

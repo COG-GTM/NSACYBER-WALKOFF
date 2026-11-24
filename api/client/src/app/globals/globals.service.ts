@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { plainToClass, classToPlain } from 'class-transformer';
 
@@ -12,12 +12,15 @@ import { Variable } from '../models/variable';
 	providedIn: 'root'
 })
 export class GlobalsService {
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
+
 
 	globalsChange: Observable<any>;
 	observer: Subscriber<any>;
 
 
-	constructor (private http: HttpClient, private utils: UtilitiesService) {
+	constructor () {
 		this.globalsChange = new Observable((observer) => {
             this.observer = observer;
             this.getAllGlobals().then(globals => this.observer.next(globals));

@@ -1,5 +1,5 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, ViewEncapsulation, OnInit, inject } from '@angular/core';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { VariableModalComponent } from './variable.modal.component';
@@ -8,24 +8,28 @@ import { Variable } from '../models/variable';
 
 import { classToClass } from 'class-transformer';
 import { UtilitiesService } from '../utilities.service';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { JsonPipe } from '@angular/common';
 
 @Component({
-	selector: 'globals-component',
-	templateUrl: './globals.html',
-	styleUrls: [
-		'./globals.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
+    selector: 'globals-component',
+    templateUrl: './globals.html',
+    styleUrls: [
+        './globals.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, JsonPipe]
 })
 export class GlobalsComponent implements OnInit {
+	private globalsService = inject(GlobalsService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	//Global Data Table params
 	globals: Variable[] = [];
-	filterQuery: FormControl = new FormControl();
-
-	constructor(
-		private globalsService: GlobalsService, private modalService: NgbModal, 
-		private toastrService: ToastrService, private utils: UtilitiesService,
-	) {}
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	/**
 	 * On component init, initialize the app select2 config, grab globals and global apis from the server.

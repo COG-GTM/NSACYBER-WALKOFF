@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -7,17 +7,19 @@ import { UtilitiesService } from '../utilities.service';
 
 import { WorkingUser } from '../models/workingUser';
 import { Configuration } from '../models/configuration';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-	selector: 'timeout-modal',
-	templateUrl: './settings.timeout.modal.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	providers: [SettingsService, UtilitiesService],
+    selector: 'timeout-modal',
+    templateUrl: './settings.timeout.modal.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    providers: [SettingsService, UtilitiesService],
+    imports: [FormsModule]
 })
 export class SettingsTimeoutModalComponent {
-	@Input() configuration: Configuration;
+	activeModal = inject(NgbActiveModal);
 
-	constructor(public activeModal: NgbActiveModal) {}
+	@Input() configuration: Configuration;
 }

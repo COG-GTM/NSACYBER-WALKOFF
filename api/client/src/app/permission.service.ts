@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { plainToClass } from 'class-transformer';
 import { UtilitiesService } from './utilities.service';
 import { timer } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, last } from 'rxjs/operators';
 import { Role } from './models/role';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PermissionService {
+    private http = inject(HttpClient);
+    private utils = inject(UtilitiesService);
+
     permissionsLoaded = false;
     fetchedPermissions;
 
@@ -70,7 +73,7 @@ export class PermissionService {
         ],
     }
     
-    constructor(private http: HttpClient, private utils: UtilitiesService) {
+    constructor() {
         // Refresh permissions every 30 seconds
         timer(0, 30000).subscribe(async _ => {
             this.fetchedPermissions = await this.fetchPermissions();
@@ -118,6 +121,6 @@ export class PermissionService {
     }
 
     waitUntilReady() {
-        return timer(0, 100).pipe(takeWhile(_ => !this.permissionsLoaded, true)).last().toPromise();
+        return timer(0, 100).pipe(takeWhile(_ => !this.permissionsLoaded, true), last()).toPromise();
     }
 }

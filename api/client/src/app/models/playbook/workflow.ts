@@ -1,5 +1,5 @@
 import { Type, Expose } from 'class-transformer';
-import { Select2OptionData } from 'ng2-select2/ng2-select2';
+import { Select2OptionData } from '../../select2/select2.component';
 
 import { Action } from './action';
 import { Branch } from './branch';

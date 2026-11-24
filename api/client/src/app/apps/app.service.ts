@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { plainToClass } from 'class-transformer';
 
@@ -11,8 +11,9 @@ import { UtilitiesService } from '../utilities.service';
 	providedIn: 'root'
 })
 export class AppService {
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
 
-	constructor (private http: HttpClient, private utils: UtilitiesService) { }
 
 	/**
 	 * Gets all app apis from the server.

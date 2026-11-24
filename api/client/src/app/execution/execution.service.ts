@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/toPromise';
+import { Injectable, inject } from '@angular/core';
 import { plainToClass, classToPlain } from 'class-transformer';
 import { HttpClient } from '@angular/common/http';
 
@@ -13,7 +12,9 @@ import { UtilitiesService } from '../utilities.service';
 	providedIn: 'root'
 })
 export class ExecutionService {
-	constructor (private http: HttpClient, private utils: UtilitiesService) {}
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
+
 
 	/**
 	 * Asyncronously adds a workflow (by ID) to the queue to be executed.

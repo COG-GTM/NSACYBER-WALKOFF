@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { GridsterConfig, GridType, CompactType } from 'angular-gridster2';
+import { Component, OnInit, inject } from '@angular/core';
+import { GridsterConfig, GridType, CompactType, Gridster, GridsterItem } from 'angular-gridster2';
 import { ReportWidget, BarChartWidget, PieChartWidget, LineChartWidget, TextWidget, KibanaWidget, TableWidget } from '../models/report/reportWidget';
 import { Report } from '../models/report/report';
 import { ReportService } from './report.service';
@@ -8,13 +8,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WidgetModalComponent } from './widget.modal.component';
 import { UtilitiesService } from '../utilities.service';
+import { FormsModule } from '@angular/forms';
+import { DraggableDirective, DroppableDirective } from '../dnd/dnd.module';
+import { BaseChartDirective } from 'ng2-charts';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { SafeEmbedPipe } from '../pipes/safeEmbed.pipe';
 
 @Component({
     selector: 'manage-reports-component',
     templateUrl: './manage.reports.component.html',
-    styleUrls: ['./manage.reports.component.scss']
+    styleUrls: ['./manage.reports.component.scss'],
+    imports: [FormsModule, DraggableDirective, Gridster, DroppableDirective, GridsterItem, BaseChartDirective, DatatableComponent, SafeEmbedPipe]
 })
 export class ManageReportsComponent implements OnInit {
+    private reportService = inject(ReportService);
+    private toastrService = inject(ToastrService);
+    private activeRoute = inject(ActivatedRoute);
+    private router = inject(Router);
+    private modalService = inject(NgbModal);
+    private utils = inject(UtilitiesService);
+
 
     options: GridsterConfig;
 
@@ -38,15 +51,6 @@ export class ManageReportsComponent implements OnInit {
         {name: 'pie', label: 'Pie Graph'},
         {name: 'kibana', label: 'Kibana Embed'},
     ];
-
-    constructor(
-        private reportService: ReportService, 
-        private toastrService: ToastrService,
-        private activeRoute: ActivatedRoute,
-        private router: Router,
-        private modalService: NgbModal,
-        private utils: UtilitiesService
-    ) {}
 
     ngOnInit() {
         this.activeRoute.params.subscribe(params => {

@@ -1,5 +1,5 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 //import * as jsPDF from 'jspdf';
@@ -8,17 +8,28 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { ReportService } from './report.service';
-import { GridsterConfig, GridType, CompactType } from 'angular-gridster2';
+import { GridsterConfig, GridType, CompactType, Gridster, GridsterItem } from 'angular-gridster2';
 import { Report } from '../models/report/report';
+import { NgClass } from '@angular/common';
+import { HasPermissionDirective } from '../permission.directive';
+import { BaseChartDirective } from 'ng2-charts';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { SafeEmbedPipe } from '../pipes/safeEmbed.pipe';
 
 @Component({
-	selector: 'reports-component',
-	templateUrl: './reports.html',
-	styleUrls: ['./reports.scss'],
-	providers: [AuthService],
+    selector: 'reports-component',
+    templateUrl: './reports.html',
+    styleUrls: ['./reports.scss'],
+    providers: [AuthService],
+    imports: [NgClass, HasPermissionDirective, RouterLink, Gridster, GridsterItem, BaseChartDirective, DatatableComponent, SafeEmbedPipe]
 })
 export class ReportsComponent implements OnInit {
-	@ViewChild('reportsMain', { static: true }) main: ElementRef;
+	private route = inject(ActivatedRoute);
+	private toastrService = inject(ToastrService);
+	private http = inject(HttpClient);
+	private reportService = inject(ReportService);
+
+	readonly main = viewChild<ElementRef>('reportsMain');
 	reportName: string;
 	reportId: string;
 	paramsSub: any;
@@ -32,11 +43,6 @@ export class ReportsComponent implements OnInit {
 	gridColSize = 125;
 	gridGutterSize = 10;
 	gridDefaultCols = 3;
-	
-	constructor(
-		private route: ActivatedRoute, private toastrService: ToastrService,
-		private http: HttpClient, private reportService: ReportService
-	) { }
 
 	/**
 	 * On init, get our report name from the route params and grab the report.
@@ -95,7 +101,7 @@ export class ReportsComponent implements OnInit {
 	clearReport() {
 		this.report = null;
 		if (this.activeIFrame) {
-			this.main.nativeElement.removeChild(this.activeIFrame);
+			this.main().nativeElement.removeChild(this.activeIFrame);
 			this.activeIFrame = null
 		}
 	}
@@ -109,7 +115,7 @@ export class ReportsComponent implements OnInit {
 				(this.activeIFrame as any).srcdoc = data;
 				this.activeIFrame.src = 'data:text/html;charset=utf-8,' + data;
 
-				this.main.nativeElement.appendChild(this.activeIFrame);
+				this.main().nativeElement.appendChild(this.activeIFrame);
 			})
 			.catch(e => this.toastrService.error(`Error retrieving report: ${e.message}`));
 	}

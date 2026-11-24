@@ -1,21 +1,28 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, inject, viewChild } from "@angular/core";
 
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Variable, VariablePermission } from "../models/variable";
 import { SettingsService } from "../settings/settings.service";
 import { Role } from "../models/role";
 import { ToastrService } from "ngx-toastr";
-import { JsonEditorComponent } from "ang-jsoneditor";
+import { JsonEditorComponent, NgJsonEditorModule } from "ang-jsoneditor";
+import { FormsModule } from "@angular/forms";
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap/tooltip";
 
 @Component({
-  selector: "variable-modal-component",
-  templateUrl: "./variable.modal.html",
-  styleUrls: ["./variable.modal.scss"]
+    selector: "variable-modal-component",
+    templateUrl: "./variable.modal.html",
+    styleUrls: ["./variable.modal.scss"],
+    imports: [FormsModule, NgJsonEditorModule, NgbTooltip]
 })
 export class VariableModalComponent implements OnInit {
+  activeModal = inject(NgbActiveModal);
+  settingsService = inject(SettingsService);
+  toastrService = inject(ToastrService);
+
   @Input() variable: Variable = new Variable();
   @Input() isGlobal: boolean = false;
-  @ViewChild("jsonEditor", { static: true }) jsonEditor: JsonEditorComponent;
+  readonly jsonEditor = viewChild<JsonEditorComponent>("jsonEditor");
   initialValue: string;
   existing: boolean = false;
   hasPermissions: boolean = true;
@@ -23,12 +30,6 @@ export class VariableModalComponent implements OnInit {
   systemRoles: Role[];
   permissions: any[] = [];
   newPermission: any = { role: "", permissions: "" };
-
-  constructor(
-    public activeModal: NgbActiveModal,
-    public settingsService: SettingsService,
-    public toastrService: ToastrService
-  ) {}
 
   editorOptionsData: any = {
     mode: "code",
@@ -42,10 +43,10 @@ export class VariableModalComponent implements OnInit {
     enableTransform: false,
     onChange: () => {
       try {
-        this.variable.value = this.jsonEditor.get() as any;
+        this.variable.value = this.jsonEditor().get() as any;
       }
       catch(e) {
-        this.variable.value = this.jsonEditor.getText();
+        this.variable.value = this.jsonEditor().getText();
       }
     }
   };

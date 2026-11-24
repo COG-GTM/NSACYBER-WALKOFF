@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReportWidget } from '../models/report/reportWidget';
@@ -6,13 +6,20 @@ import { ExecutionService } from '../execution/execution.service';
 import { PlaybookService } from '../playbook/playbook.service';
 import { WorkflowStatuses } from '../models/execution/workflowStatus';
 import { UtilitiesService } from '../utilities.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'widget-modal-component',
     templateUrl: './widget.modal.component.html',
-    styleUrls: ['./widget.modal.component.scss']
+    styleUrls: ['./widget.modal.component.scss'],
+    imports: [FormsModule]
 })
 export class WidgetModalComponent implements OnInit {
+    activeModal = inject(NgbActiveModal);
+    private executionService = inject(ExecutionService);
+    private playbookService = inject(PlaybookService);
+    private utils = inject(UtilitiesService);
+
 
     @Input() widget: ReportWidget;
     typeLabel: string = 'Widget';
@@ -20,9 +27,6 @@ export class WidgetModalComponent implements OnInit {
     workflows: any[] = [];
     executions: any[] = [];
     nodeResults: any[] = [];
-
-    constructor(public activeModal: NgbActiveModal, private executionService: ExecutionService, 
-        private playbookService: PlaybookService, private utils: UtilitiesService) { }
 
     ngOnInit() {
         this.updateWorkflows();

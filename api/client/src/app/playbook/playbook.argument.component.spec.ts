@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {} from 'jasmine';
 
@@ -16,12 +16,12 @@ describe('PlaybookArgumentComponent', () => {
 	/**
 	 * async beforeEach
 	 */
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-			declarations: [PlaybookArgumentComponent, KeysPipe],
-			schemas: [NO_ERRORS_SCHEMA],
-			providers: [],
-		})
+    imports: [PlaybookArgumentComponent, KeysPipe],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [],
+})
 			.compileComponents();
 	}));
 

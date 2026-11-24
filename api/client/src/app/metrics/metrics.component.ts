@@ -1,8 +1,7 @@
 import { Component, ViewEncapsulation, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
-import 'rxjs/add/operator/debounceTime';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
+import { DatatableComponent, DataTableColumnDirective } from '@swimlane/ngx-datatable';
 
 import { MetricsService } from './metrics.service';
 import { UtilitiesService } from '../utilities.service';
@@ -11,13 +10,14 @@ import { AppMetric } from '../models/metric/appMetric';
 import { WorkflowMetric } from '../models/metric/workflowMetric';
 
 @Component({
-	selector: 'metrics-component',
-	templateUrl: './metrics.html',
-	encapsulation: ViewEncapsulation.None,
-	styleUrls: [
-		'./metrics.scss',
-	],
-	providers: [MetricsService],
+    selector: 'metrics-component',
+    templateUrl: './metrics.html',
+    encapsulation: ViewEncapsulation.None,
+    styleUrls: [
+        './metrics.scss',
+    ],
+    providers: [MetricsService],
+    imports: [DatatableComponent, DataTableColumnDirective, Select2Component]
 })
 
 export class MetricsComponent implements OnInit {
@@ -73,7 +73,6 @@ export class MetricsComponent implements OnInit {
 		}
 		if (table && table.recalculate) {
 			this.cdr.detectChanges();
-			if (Array.isArray(table.rows)) table.rows = [...table.rows];
 			table.recalculate();
 		}
 	}

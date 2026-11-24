@@ -1,6 +1,6 @@
-import { HttpModule, Http, RequestOptions } from '@angular/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { plainToClass } from 'class-transformer';
 import {} from 'jasmine';
@@ -14,8 +14,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
-import { RefreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { refreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('GlobalsComponent', () => {
 	let comp: GlobalsComponent;
@@ -82,37 +82,29 @@ describe('GlobalsComponent', () => {
 	/**
 	 * async beforeEach
 	 */
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-			imports: [
-				HttpModule,
-				NgbModule.forRoot(),
-				NgxDatatableModule,
-				JwtModule.forRoot({
-					config: {
-						tokenGetter: jwtTokenGetter,
-						blacklistedRoutes: ['login', 'api/auth/login', 'api/auth/logout', 'api/auth/refresh']
-					}
-				}),
-				ToastrModule.forRoot({ positionClass: 'toast-bottom-right' })
-				// FormsModule,
-				// ReactiveFormsModule,
-			],
-			declarations: [GlobalsComponent],
-			schemas: [NO_ERRORS_SCHEMA],
-			providers: [GlobalsService, JwtInterceptor,
-			// Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
-			{
-				provide: HTTP_INTERCEPTORS,
-				useExisting: JwtInterceptor,
-				multi: true
-			},
-			{
-				provide: HTTP_INTERCEPTORS,
-				useClass: RefreshTokenInterceptor,
-				multi: true
-			}],
-		})
+    schemas: [NO_ERRORS_SCHEMA],
+    imports: [NgbModule,
+        NgxDatatableModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: jwtTokenGetter,
+                disallowedRoutes: ['login', 'api/auth/login', 'api/auth/logout', 'api/auth/refresh']
+            }
+        }),
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right' })
+        // FormsModule,
+        // ReactiveFormsModule,
+        , GlobalsComponent],
+    providers: [GlobalsService, JwtInterceptor,
+        // Providing JwtInterceptor allow to inject JwtInterceptor manually into refreshTokenInterceptor
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: JwtInterceptor,
+            multi: true
+        }, provideHttpClient(withInterceptorsFromDi(), withInterceptors([refreshTokenInterceptor])), provideHttpClientTesting()]
+})
 		.compileComponents();
 	}));
 
@@ -125,7 +117,7 @@ describe('GlobalsComponent', () => {
 		service = fixture.debugElement.injector.get(GlobalsService);
 
 		spyOn(window, 'confirm').and.returnValue(true);
-		spyOn(service, 'getAllGlobals').and.returnValue(Promise.resolve(testGlobals));
+		spyOn(service, 'getAllGlobals').and.returnValue(Promise.resolve(testGlobals as any));
 		spyOn(service, 'getGlobalApis').and.returnValue(Promise.resolve(testGlobalApis));
 		spyOn(service, 'deleteGlobal').and.returnValue(Promise.resolve());
 	});

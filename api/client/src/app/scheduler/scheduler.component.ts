@@ -1,9 +1,8 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, ViewEncapsulation, OnInit, inject } from '@angular/core';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
-import 'rxjs/add/operator/debounceTime';
+import { Select2OptionData } from '../select2/select2.component';
 
 import { SchedulerModalComponent } from './scheduler.modal.component';
 
@@ -11,29 +10,33 @@ import { SchedulerService } from './scheduler.service';
 import { UtilitiesService } from '../utilities.service';
 
 import { ScheduledTask } from '../models/scheduler/scheduledTask';
+import { debounceTime } from 'rxjs/operators';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 
 @Component({
-	selector: 'scheduler-component',
-	templateUrl: './scheduler.html',
-	styleUrls: [
-		'./scheduler.scss',
-		'../../../node_modules/ng-pick-datetime/styles/picker.min.css',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [SchedulerService],
+    selector: 'scheduler-component',
+    templateUrl: './scheduler.html',
+    styleUrls: [
+        './scheduler.scss',
+        '../../../node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [SchedulerService],
+    imports: [NgbTooltip, FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective]
 })
 export class SchedulerComponent implements OnInit {
+	private schedulerService = inject(SchedulerService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	schedulerStatus: string;
 	scheduledTasks: ScheduledTask[] = [];
 	displayScheduledTasks: ScheduledTask[] = [];
 	availableWorkflows: Select2OptionData[] = [];
 
-	filterQuery: FormControl = new FormControl();
-
-	constructor(
-		private schedulerService: SchedulerService, private modalService: NgbModal,
-		private toastrService: ToastrService, private utils: UtilitiesService,
-	) {}
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	/**
 	 * On component initialization, get the scheduler status for display/actioning.
@@ -49,7 +52,7 @@ export class SchedulerComponent implements OnInit {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterScheduledTasks());
 	}
 

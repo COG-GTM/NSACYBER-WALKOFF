@@ -1,13 +1,16 @@
-import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit, OnDestroy, ElementRef, inject, viewChild } from '@angular/core';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth/auth.service';
 import { UtilitiesService } from '../utilities.service';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 import { WorkflowStatus } from '../models/execution/workflowStatus';
 import { NodeStatuses } from '../models/execution/nodeStatus';
 import { JsonModalComponent } from './json.modal.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { MomentModule } from 'ngx-moment';
 
 @Component({
     selector: 'results-modal-component',
@@ -16,11 +19,18 @@ import { JsonModalComponent } from './json.modal.component';
         './results.modal.scss',
     ],
     encapsulation: ViewEncapsulation.None,
+    imports: [DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, ClipboardModule, NgbTooltip, MomentModule]
 })
 export class ResultsModalComponent implements OnInit, OnDestroy {
+    activeModal = inject(NgbActiveModal);
+    utils = inject(UtilitiesService);
+    toastrService = inject(ToastrService);
+    authService = inject(AuthService);
+    modalService = inject(NgbModal);
+
     @Input() loadedWorkflowStatus: WorkflowStatus;
-    @ViewChild('nodeStatusContainer', { static: false }) nodeStatusContainer: ElementRef;
-    @ViewChild('nodeStatusTable', { static: false }) nodeStatusTable: DatatableComponent;
+    readonly nodeStatusContainer = viewChild<ElementRef>('nodeStatusContainer');
+    readonly nodeStatusTable = viewChild<DatatableComponent>('nodeStatusTable');
     NodeStatuses = NodeStatuses;
 
     editorOptionsData: any = {
@@ -35,10 +45,6 @@ export class ResultsModalComponent implements OnInit, OnDestroy {
         enableTransform: false,
         onEditable: () => false
 	}
-
-    constructor(public activeModal: NgbActiveModal, public utils: UtilitiesService,
-        public toastrService: ToastrService, public authService: AuthService,
-        public modalService: NgbModal) { }
 
     ngOnInit(): void {}
 

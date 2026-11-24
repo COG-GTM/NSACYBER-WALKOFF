@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class ConsoleEvent {
     get channels() {
-        return ['all', this.execution_id];
+        return ['all', this.execution_id, this.workflow_id];
     }
 }
 exports.ConsoleEvent = ConsoleEvent;

@@ -1,8 +1,7 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import 'rxjs/add/operator/debounceTime';
 
 import { SettingsService } from './settings.service';
 import { UtilitiesService } from '../utilities.service';
@@ -12,34 +11,40 @@ import { SettingsRoleModalComponent } from './settings.roles.modal.component';
 import { Role } from '../models/role';
 import { AvailableResourceAction } from '../models/availableResourceAction';
 import { GenericObject } from '../models/genericObject';
+import { debounceTime } from 'rxjs/operators';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 
 @Component({
-	selector: 'settings-roles-component',
-	templateUrl: './settings.roles.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [SettingsService],
+    selector: 'settings-roles-component',
+    templateUrl: './settings.roles.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [SettingsService],
+    imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip]
 })
 export class SettingsRolesComponent {
+	private settingsService = inject(SettingsService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	availableResourceActions: AvailableResourceAction[] = [];
 	//Role Data Table params
 	roles: Role[] = [];
 	displayRoles: Role[] = [];
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
-	constructor(
-		private settingsService: SettingsService, private modalService: NgbModal,
-		private toastrService: ToastrService, private utils: UtilitiesService,
-	) {
+	constructor() {
 
 		this.getAvailableResourceActions();
 		this.getRoles();
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterRoles());
 	}
 

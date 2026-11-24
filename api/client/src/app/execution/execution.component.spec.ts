@@ -1,6 +1,6 @@
-import { HttpModule, Http, RequestOptions } from '@angular/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {} from 'jasmine';
 import * as moment from 'moment';
@@ -14,8 +14,8 @@ import { WorkflowStatus } from '../models/execution/workflowStatus';
 
 import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
-import { RefreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { refreshTokenInterceptor, jwtTokenGetter } from '../refresh-token-interceptor';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ExecutionComponent', () => {
 	let comp: ExecutionComponent;
@@ -109,31 +109,23 @@ describe('ExecutionComponent', () => {
 	/**
 	 * async beforeEach
 	 */
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-			imports: [
-				HttpModule,
-				// NgbModule.forRoot(),
-				NgxDatatableModule,
-				ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
-				// FormsModule,
-				// ReactiveFormsModule,
-			],
-			declarations: [ExecutionComponent],
-			schemas: [NO_ERRORS_SCHEMA],
-			providers: [ExecutionService, JwtInterceptor, 
-				// Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
-				{
-					provide: HTTP_INTERCEPTORS,
-					useExisting: JwtInterceptor,
-					multi: true
-				},
-				{
-					provide: HTTP_INTERCEPTORS,
-					useClass: RefreshTokenInterceptor,
-					multi: true
-			}],
-		})
+    schemas: [NO_ERRORS_SCHEMA],
+    imports: [
+        // NgbModule,
+        NgxDatatableModule,
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
+        ExecutionComponent
+    ],
+    providers: [ExecutionService, JwtInterceptor,
+        // Providing JwtInterceptor allow to inject JwtInterceptor manually into refreshTokenInterceptor
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: JwtInterceptor,
+            multi: true
+        }, provideHttpClient(withInterceptorsFromDi(), withInterceptors([refreshTokenInterceptor])), provideHttpClientTesting()]
+})
 			.compileComponents();
 	}));
 

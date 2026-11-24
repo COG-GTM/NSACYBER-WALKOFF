@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -10,21 +10,24 @@ import { MessagesModalComponent } from './messages.modal.component';
 
 import { GenericObject } from '../models/genericObject';
 import { MessageListing } from '../models/message/messageListing';
+import { debounceTime } from 'rxjs/operators';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 
 @Component({
-	selector: 'messages-component',
-	templateUrl: './messages.html',
-	styleUrls: [
-		'./messages.scss',
-	],
-	providers: [MessagesService],
+    selector: 'messages-component',
+    templateUrl: './messages.html',
+    styleUrls: [
+        './messages.scss',
+    ],
+    providers: [MessagesService],
+    imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective]
 })
 export class MessagesComponent implements OnInit {
 	//Device Data Table params
 	messages: MessageListing[] = [];
 	displayMessages: MessageListing[] = [];
 	messageSelectConfig: Select2Options;
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	selectMapping: GenericObject = {};
 	messageRelativeTimes: GenericObject = {};
@@ -44,7 +47,7 @@ export class MessagesComponent implements OnInit {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterMessages());
 	}
 

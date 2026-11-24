@@ -1,13 +1,11 @@
-import { Component, ViewEncapsulation, ViewChild, ElementRef, ChangeDetectorRef, OnInit,
-	AfterViewChecked, OnDestroy} from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, ChangeDetectorRef, OnInit, AfterViewChecked, OnDestroy, inject, viewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 import { UUID } from 'angular2-uuid';
 import { Observable, interval, timer } from 'rxjs';
-import 'rxjs/Rx';
 import { plainToClass, classToClass } from 'class-transformer';
-import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { FormControl } from '@angular/forms';
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import * as cytoscape from 'cytoscape';
@@ -42,7 +40,7 @@ import { ConsoleLog } from '../models/execution/consoleLog';
 import { EnvironmentVariable } from '../models/playbook/environmentVariable';
 import { PlaybookEnvironmentVariableModalComponent } from './playbook.environment.variable.modal.component';
 import { WorkflowStatus } from '../models/execution/workflowStatus';
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { CodemirrorComponent, CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { ActivatedRoute } from '@angular/router';
 import { Variable } from '../models/variable';
 import { MetadataModalComponent } from './metadata.modal.component';
@@ -54,29 +52,51 @@ import { VariableModalComponent } from '../globals/variable.modal.component';
 import { ResultsModalComponent } from '../execution/results.modal.component';
 import { JsonModalComponent } from '../execution/json.modal.component';
 import * as io from 'socket.io-client';
+import { debounceTime, distinctUntilChanged, takeWhile, tap, last } from 'rxjs/operators';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { DraggableDirective, DroppableDirective } from '../dnd/dnd.module';
+import { PlaybookArgumentComponent } from './playbook.argument.component';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap/popover';
+import { NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap/nav';
+import { PlaybookConditionalExpressionComponent } from './playbook.conditional.expression.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { HasPermissionDirective } from '../permission.directive';
+import { JsonPipe } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
 
 
 @Component({
-	selector: 'workflow-editor-component',
-	templateUrl: './workflow.editor.html',
-	styleUrls: [
-		'./workflow.editor.scss',
-		'../../../node_modules/cytoscape-panzoom/cytoscape.js-panzoom.css',
-		'../../../node_modules/ng2-dnd/bundles/style.css',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService, GlobalsService, SettingsService],
+    selector: 'workflow-editor-component',
+    templateUrl: './workflow.editor.html',
+    styleUrls: [
+        './workflow.editor.scss',
+        '../../../node_modules/cytoscape-panzoom/cytoscape.js-panzoom.css',
+        '../dnd/dnd.css',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService, GlobalsService, SettingsService],
+    imports: [NgbTooltip, FormsModule, ReactiveFormsModule, DraggableDirective, DroppableDirective, PlaybookArgumentComponent, NgbPopover, CodemirrorModule, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet, PlaybookConditionalExpressionComponent, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, ClipboardModule, HasPermissionDirective, JsonPipe, MomentModule]
 })
 export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDestroy {
-	@ViewChild('cyRef', { static: true }) cyRef: ElementRef;
-	@ViewChild('workflowResultsTable', { static: false }) workflowResultsTable: DatatableComponent;
-	@ViewChild('consoleContainer', { static: false }) consoleContainer: ElementRef;
-	@ViewChild('consoleTable', { static: false }) consoleTable: DatatableComponent;
-	@ViewChild('errorLogTable', { static: false }) errorLogTable: DatatableComponent;
-	@ViewChild('environmentVariableTable', { static: false }) environmentVariableTable: DatatableComponent;
-	@ViewChild('importFile', { static: false }) importFile: ElementRef;
-	@ViewChild('accordion', { static: true }) apps_actions: ElementRef;
-	@ViewChild('consoleArea', { static: false }) consoleArea: CodemirrorComponent;
+	private playbookService = inject(PlaybookService);
+	private authService = inject(AuthService);
+	private toastrService = inject(ToastrService);
+	private activeRoute = inject(ActivatedRoute);
+	private cdr = inject(ChangeDetectorRef);
+	private utils = inject(UtilitiesService);
+	private modalService = inject(NgbModal);
+	private router = inject(Router);
+	private globalsService = inject(GlobalsService);
+
+	readonly cyRef = viewChild<ElementRef>('cyRef');
+	readonly workflowResultsTable = viewChild<DatatableComponent>('workflowResultsTable');
+	readonly consoleContainer = viewChild<ElementRef>('consoleContainer');
+	readonly consoleTable = viewChild<DatatableComponent>('consoleTable');
+	readonly errorLogTable = viewChild<DatatableComponent>('errorLogTable');
+	readonly environmentVariableTable = viewChild<DatatableComponent>('environmentVariableTable');
+	readonly importFile = viewChild<ElementRef>('importFile');
+	readonly apps_actions = viewChild<ElementRef>('accordion');
+	readonly consoleArea = viewChild<CodemirrorComponent>('consoleArea');
 
 	globals: Variable[] = [];
 	relevantGlobals: Variable[] = [];
@@ -109,7 +129,7 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 	playbookToImport: File;
 	recalculateConsoleTableCallback: any;
 	actionFilter: string = '';
-	actionFilterControl = new FormControl();
+	actionFilterControl = new UntypedFormControl();
 	actionTypes = ActionType;
 	showConsole: boolean = false;
 	NodeStatuses = NodeStatuses;
@@ -139,14 +159,6 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 # result = input.result.get("key")`
 	}
 
-	constructor(
-		private playbookService: PlaybookService, private authService: AuthService,
-		private toastrService: ToastrService, private activeRoute: ActivatedRoute,
-		private cdr: ChangeDetectorRef, private utils: UtilitiesService,
-		private modalService: NgbModal, private router: Router,
-		private globalsService: GlobalsService
-	) {}
-
 	/**
 	 * On component initialization, we grab arrays of globals, app apis, and playbooks/workflows (id, name pairs).
 	 * We also initialize an EventSoruce for Action Statuses for the execution results table.
@@ -159,7 +171,7 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		/**
 		 * Filter app list by application and action names
 		 */
-		this.actionFilterControl.valueChanges.debounceTime(100).distinctUntilChanged().subscribe(query => {
+		this.actionFilterControl.valueChanges.pipe(debounceTime(100), distinctUntilChanged()).subscribe(query => {
 			this.actionFilter = query.trim();
 			setTimeout(() => {
 				($('.action-panel') as any)
@@ -324,8 +336,9 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 
 	updateConsole() {
 		this.consoleLog = this.consoleLog.slice();
-		if (!this.consoleArea || !this.consoleArea.codeMirror) return;
-		const cm = this.consoleArea.codeMirror;
+		const consoleArea = this.consoleArea();
+  if (!consoleArea || !consoleArea.codeMirror) return;
+		const cm = consoleArea.codeMirror;
 		const $scroller = $(cm.getScrollerElement());
 		const atBottom = $scroller[0].scrollHeight - $scroller.scrollTop() - $scroller.outerHeight() <= 0;
 		cm.getDoc().setValue(this.consoleContent);
@@ -490,7 +503,8 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 
 		// Refresh the console log so that it displays correctly after being hidden
 		setTimeout(() => {
-			if (this.consoleArea && this.consoleArea.codeMirror) this.consoleArea.codeMirror.refresh();
+			const consoleArea = this.consoleArea();
+   if (consoleArea && consoleArea.codeMirror) consoleArea.codeMirror.refresh();
 		});
 
 		const defaults = {
@@ -1305,8 +1319,9 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		this.clearExecutionHighlighting();
 		this.consoleLog = [];
 		this.nodeStatuses = [];
-		if (this.consoleArea && this.consoleArea.codeMirror) 
-			this.consoleArea.codeMirror.getDoc().setValue('');
+		const consoleArea = this.consoleArea();
+  if (consoleArea && consoleArea.codeMirror) 
+			consoleArea.codeMirror.getDoc().setValue('');
 	}
 
 	/**
@@ -1482,7 +1497,7 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		this.triggerCanvasResize();
 	}
 
-	switchConsoleTabs($e: NgbTabChangeEvent) {
+	switchConsoleTabs($e: NgbNavChangeEvent) {
 		if ($e.nextId == 'menu-tab' ) return $e.preventDefault();
 
 		this.showConsole = true;
@@ -1493,28 +1508,27 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 	/**
 	 * This function is used primarily to recalculate column widths for execution results table.
 	 */
-	recalculateConsoleTable($e: NgbTabChangeEvent) {
+	recalculateConsoleTable($e: NgbNavChangeEvent) {
 		let table: DatatableComponent;
 		setImmediate(() => {
 			switch($e.nextId) {
 				case 'console-tab':
-					table = this.consoleTable;
+					table = this.consoleTable();
 					break;
 				case 'execution-tab':
-					table = this.workflowResultsTable;
+					table = this.workflowResultsTable();
 					break;
 				case 'error-tab':
-					table = this.errorLogTable;
+					table = this.errorLogTable();
 					break;
 				case 'variable-tab':
-					table = this.environmentVariableTable;
+					table = this.environmentVariableTable();
 					break;
 			}
 
 			if (table && table.recalculate) {
 				console.log('changing: ' + $e.nextId)
 				this.cdr.detectChanges();
-				if (Array.isArray(table.rows)) table.rows = [...table.rows];
 				table.recalculate();
 			}
 		})
@@ -1634,12 +1648,17 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		// const options = { zoom: this.cy.zoom(), pan: this.cy.pan() }
 		// setTimeout(() => this.setupGraph(options), 255);
 		let height, width;
-		timer(0, 50).takeWhile(_ => height != this.cyRef.nativeElement.offsetHeight || width != this.cyRef.nativeElement.offsetWidth)
-		.do(_ => {
-			height = this.cyRef.nativeElement.offsetHeight
-			width = this.cyRef.nativeElement.offsetWidth
-		})
-		.last()
+		timer(0, 50).pipe(
+			takeWhile(_ => {
+    const cyRef = this.cyRef();
+    return height != cyRef.nativeElement.offsetHeight || width != cyRef.nativeElement.offsetWidth;
+  }),
+			tap(_ => {
+			height = this.cyRef().nativeElement.offsetHeight
+			width = this.cyRef().nativeElement.offsetWidth
+			}),
+			last(),
+		)
 		.subscribe(_ => window.dispatchEvent(new Event('resize')))	
 	}
 }

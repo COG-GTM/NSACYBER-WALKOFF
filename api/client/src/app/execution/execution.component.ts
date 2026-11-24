@@ -1,11 +1,9 @@
-import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ViewChild,
-	ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ChangeDetectorRef, OnDestroy, inject, viewChild } from '@angular/core';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from 'ng2-select2';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 import { interval } from 'rxjs';
-import 'rxjs/add/operator/debounceTime';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -24,20 +22,33 @@ import { EnvironmentVariable } from '../models/playbook/environmentVariable';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ResultsModalComponent } from './results.modal.component';
+import { debounceTime } from 'rxjs/operators';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { ClipboardModule } from 'ngx-clipboard';
+import { MomentModule } from 'ngx-moment';
 
 @Component({
-	selector: 'execution-component',
-	templateUrl: './execution.html',
-	styleUrls: [
-		'./execution.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService],
+    selector: 'execution-component',
+    templateUrl: './execution.html',
+    styleUrls: [
+        './execution.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService],
+    imports: [Select2Component, FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, ClipboardModule, MomentModule]
 })
 export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
-	@ViewChild('nodeStatusContainer', { static: false }) nodeStatusContainer: ElementRef;
-	@ViewChild('nodeStatusTable', { static: false }) nodeStatusTable: DatatableComponent;
-	@ViewChild('workflowStatusTable', { static: false }) workflowStatusTable: DatatableComponent;
+	private executionService = inject(ExecutionService);
+	private authService = inject(AuthService);
+	private cdr = inject(ChangeDetectorRef);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+	private modalService = inject(NgbModal);
+	private router = inject(Router);
+
+	readonly nodeStatusContainer = viewChild<ElementRef>('nodeStatusContainer');
+	readonly nodeStatusTable = viewChild<DatatableComponent>('nodeStatusTable');
+	readonly workflowStatusTable = viewChild<DatatableComponent>('workflowStatusTable');
 
 	schedulerStatus: string;
 	workflowStatuses: WorkflowStatus[] = [];
@@ -50,7 +61,7 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 	nodeStatusComponentWidth: number;
 	workflowStatusActions: GenericObject;
 
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
 
 	workflowStatusEventSource: any;
 	nodeStatusEventSource: any;
@@ -59,12 +70,6 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 
 	workflowStatusSocket: SocketIOClient.Socket;
 	nodeStatusSocket: SocketIOClient.Socket;
-
-	constructor(
-		private executionService: ExecutionService, private authService: AuthService, private cdr: ChangeDetectorRef,
-		private toastrService: ToastrService, private utils: UtilitiesService,
-		private modalService: NgbModal, private router: Router
-	) {}
 
 	/**
 	 * On component init, set up our workflow select2 config.
@@ -90,14 +95,13 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterWorkflowStatuses());
 
 		this.recalculateTableCallback = (e: any) => {
-			if (this.nodeStatusTable && this.nodeStatusTable.recalculate) {
-				if (Array.isArray(this.nodeStatusTable.rows))
-					this.nodeStatusTable.rows = [...this.nodeStatusTable.rows];
-				this.nodeStatusTable.recalculate();
+			const nodeStatusTable = this.nodeStatusTable();
+   if (nodeStatusTable && nodeStatusTable.recalculate) {
+				nodeStatusTable.recalculate();
 			}
 		}
 
@@ -109,10 +113,12 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 	 */
 	ngAfterViewChecked(): void {
 		// Check if the table size has changed, and recalculate.
-		if (this.nodeStatusTable && this.nodeStatusTable.recalculate &&
-			(this.nodeStatusContainer.nativeElement.clientWidth !== this.nodeStatusComponentWidth)) {
-			this.nodeStatusComponentWidth = this.nodeStatusContainer.nativeElement.clientWidth;
-			this.nodeStatusTable.recalculate();
+		const nodeStatusTable = this.nodeStatusTable();
+  const nodeStatusContainer = this.nodeStatusContainer();
+  if (nodeStatusTable && nodeStatusTable.recalculate &&
+			(nodeStatusContainer.nativeElement.clientWidth !== this.nodeStatusComponentWidth)) {
+			this.nodeStatusComponentWidth = nodeStatusContainer.nativeElement.clientWidth;
+			nodeStatusTable.recalculate();
 			this.cdr.detectChanges();
 		}
 	}
@@ -148,7 +154,7 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 			].some(x => x && x.toLocaleLowerCase().includes(searchFilter));
 		});
 
-		this.workflowStatusTable.recalculate();
+		this.workflowStatusTable().recalculate();
 	}
 
 	/**

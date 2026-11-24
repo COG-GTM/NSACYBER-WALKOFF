@@ -1,24 +1,27 @@
-import { Component, ViewEncapsulation, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, ViewEncapsulation, Input, OnInit, input, output } from '@angular/core';
 
 import { AppApi } from '../models/api/appApi';
 import { ConditionalExpression } from '../models/playbook/conditionalExpression';
 import { Workflow } from '../models/playbook/workflow';
 import { Argument } from '../models/playbook/argument';
+import { FormsModule } from '@angular/forms';
+import { PlaybookConditionsComponent } from './playbook.conditions.component';
 
 @Component({
-	selector: 'playbook-conditional-expression-component',
-	templateUrl: './playbook.conditional.expression.html',
-	styleUrls: [],
-	encapsulation: ViewEncapsulation.None,
-	providers: [],
+    selector: 'playbook-conditional-expression-component',
+    templateUrl: './playbook.conditional.expression.html',
+    styleUrls: [],
+    encapsulation: ViewEncapsulation.None,
+    providers: [],
+    imports: [FormsModule, PlaybookConditionsComponent]
 })
 export class PlaybookConditionalExpressionComponent implements OnInit {
-	@Input() selectedAppName: string;
+	readonly selectedAppName = input<string>(undefined);
 	@Input() conditionalExpression: ConditionalExpression;
-	@Input() appApis: AppApi[];
-	@Input() loadedWorkflow: Workflow;
+	readonly appApis = input<AppApi[]>(undefined);
+	readonly loadedWorkflow = input<Workflow>(undefined);
 
-	@Output() createVariable = new EventEmitter<Argument>();
+	readonly createVariable = output<Argument>();
 
 	availableOperators: string[];
 

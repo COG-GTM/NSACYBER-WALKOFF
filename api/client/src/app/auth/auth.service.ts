@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient } from '@angular/common/http';
 import { plainToClass } from 'class-transformer';
@@ -14,10 +14,12 @@ const ACCESS_TOKEN_NAME = 'access_token';
 
 @Injectable()
 export class AuthService {
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
+	private cookieService = inject(CookieService);
+
 
 	jwtHelper = new JwtHelperService();
-
-	constructor(private http: HttpClient, private utils: UtilitiesService, private cookieService: CookieService) {}
 
 	//TODO: not currently used, eventually should be used on the login
 	login(username: string, password: string, redirect: boolean = false): Promise<void> {

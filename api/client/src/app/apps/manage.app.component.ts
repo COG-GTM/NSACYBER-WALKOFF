@@ -1,11 +1,10 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import 'rxjs/Rx';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, inject, viewChild } from '@angular/core';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule } from '@angular/forms';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../auth/auth.service';
@@ -25,26 +24,37 @@ import * as CodeMirror from 'codemirror'
 import { createTree } from 'jquery.fancytree';
 import 'jquery.fancytree/dist/modules/jquery.fancytree.edit';
 import 'jquery.fancytree/dist/modules/jquery.fancytree.filter';
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { CodemirrorComponent, CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { StatusModalComponent } from './status.modal.component';
 import { FileModalComponent } from './file.modal.component';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 
 @Component({
-	selector: 'manage-app-component',
-	templateUrl: './manage.app.html',
-	styleUrls: [
-		'./manage.app.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService, GlobalsService, SettingsService],
+    selector: 'manage-app-component',
+    templateUrl: './manage.app.html',
+    styleUrls: [
+        './manage.app.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService, GlobalsService, SettingsService],
+    imports: [NgbTooltip, CodemirrorModule, FormsModule]
 })
 export class ManageAppComponent implements OnInit, OnDestroy {
-    @ViewChild('editorArea', { static: false }) editorArea: CodemirrorComponent;
+    private playbookService = inject(PlaybookService);
+    private authService = inject(AuthService);
+    private appService = inject(AppService);
+    private activeRoute = inject(ActivatedRoute);
+    private toastrService = inject(ToastrService);
+    private utils = inject(UtilitiesService);
+    private modalService = inject(NgbModal);
+    private router = inject(Router);
+
+    readonly editorArea = viewChild<CodemirrorComponent>('editorArea');
 
 	workflowsLoaded: boolean = false;
 	workflows: Workflow[] = [];
 	eventSource: any;
-	filterQuery: FormControl = new FormControl();
+	filterQuery: UntypedFormControl = new UntypedFormControl();
     filteredWorkflows: Workflow[] = [];
 
     apps: AppApi[];
@@ -61,13 +71,6 @@ export class ManageAppComponent implements OnInit, OnDestroy {
     }
 
     warningCallback: any;
-
-	constructor(
-		private playbookService: PlaybookService, private authService: AuthService,
-		private appService: AppService, private activeRoute: ActivatedRoute,
-		private toastrService: ToastrService, private utils: UtilitiesService, 
-		private modalService: NgbModal, private router: Router
-	) {}
 
 	/**
 	 * On component initialization, we grab arrays of globals, app apis, and playbooks/workflows (id, name pairs).
@@ -179,9 +182,9 @@ export class ManageAppComponent implements OnInit, OnDestroy {
             this.currentFile = path;
             this.options.mode =  filetype ? filetype.mode : 'null';
             setTimeout(() => {
-                this.editorArea.codeMirror.getDoc().clearHistory();
-                this.editorArea.codeMirrorGlobal.commands.save = (instance) => {
-                    if (instance == this.editorArea.codeMirror)
+                this.editorArea().codeMirror.getDoc().clearHistory();
+                (CodeMirror as any).commands.save = (instance) => {
+                    if (instance == this.editorArea().codeMirror)
                         this.saveFile();
                 }
             });
@@ -206,11 +209,11 @@ export class ManageAppComponent implements OnInit, OnDestroy {
     }
 
     undo() {
-        this.editorArea.codeMirror.execCommand('undo')
+        this.editorArea().codeMirror.execCommand('undo')
     }
 
     redo() {
-        this.editorArea.codeMirror.execCommand('redo')
+        this.editorArea().codeMirror.execCommand('redo')
     }
 
 	manageApp(app: AppApi): void {
