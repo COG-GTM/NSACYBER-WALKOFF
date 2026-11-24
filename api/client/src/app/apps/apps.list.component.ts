@@ -18,13 +18,14 @@ import { AppApi } from '../models/api/appApi';
 import { StatusModalComponent } from './status.modal.component';
 
 @Component({
-	selector: 'apps-list-component',
-	templateUrl: './apps.list.html',
-	styleUrls: [
-		'./apps.list.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService, GlobalsService, SettingsService],
+    selector: 'apps-list-component',
+    templateUrl: './apps.list.html',
+    styleUrls: [
+        './apps.list.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService, GlobalsService, SettingsService],
+    standalone: false
 })
 export class AppsListComponent implements OnInit, OnDestroy {
 	workflowsLoaded: boolean = false;

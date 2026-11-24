@@ -8,12 +8,13 @@ import { UtilitiesService } from '../utilities.service';
 import { Message } from '../models/message/message';
 
 @Component({
-	selector: 'messages-modal',
-	templateUrl: './messages.modal.html',
-	styleUrls: [
-		'./messages.scss',
-	],
-	providers: [MessagesService, UtilitiesService],
+    selector: 'messages-modal',
+    templateUrl: './messages.modal.html',
+    styleUrls: [
+        './messages.scss',
+    ],
+    providers: [MessagesService, UtilitiesService],
+    standalone: false
 })
 export class MessagesModalComponent implements OnInit {
 	@Input() message: Message;

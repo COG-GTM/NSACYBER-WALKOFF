@@ -16,6 +16,7 @@ import { JsonModalComponent } from './json.modal.component';
         './results.modal.scss',
     ],
     encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class ResultsModalComponent implements OnInit, OnDestroy {
     @Input() loadedWorkflowStatus: WorkflowStatus;

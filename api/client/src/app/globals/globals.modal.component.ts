@@ -12,12 +12,13 @@ import { ParameterSchema } from '../models/api/parameterSchema';
 import { GenericObject } from '../models/genericObject';
 
 @Component({
-	selector: 'global-modal',
-	templateUrl: './globals.modal.html',
-	styleUrls: [
-		'./globals.scss',
-	],
-	providers: [GlobalsService, UtilitiesService],
+    selector: 'global-modal',
+    templateUrl: './globals.modal.html',
+    styleUrls: [
+        './globals.scss',
+    ],
+    providers: [GlobalsService, UtilitiesService],
+    standalone: false
 })
 export class GlobalsModalComponent implements OnInit, AfterViewInit {
 	@Input() workingGlobal: WorkingGlobal = new WorkingGlobal();

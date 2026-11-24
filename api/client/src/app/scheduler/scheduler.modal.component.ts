@@ -14,12 +14,13 @@ import { ScheduledTaskDate } from '../models/scheduler/scheduledTaskDate';
 import { GenericObject } from '../models/genericObject';
 
 @Component({
-	selector: 'scheduler-modal',
-	templateUrl: './scheduler.modal.html',
-	styleUrls: [
-		'./scheduler.scss',
-	],
-	providers: [SchedulerService, UtilitiesService],
+    selector: 'scheduler-modal',
+    templateUrl: './scheduler.modal.html',
+    styleUrls: [
+        './scheduler.scss',
+    ],
+    providers: [SchedulerService, UtilitiesService],
+    standalone: false
 })
 export class SchedulerModalComponent implements OnInit {
 	@Input() workingScheduledTask: ScheduledTask = new ScheduledTask();

@@ -8,11 +8,12 @@ import { Argument } from '../models/playbook/argument';
 import { Transform } from '../models/playbook/transform';
 
 @Component({
-	selector: 'playbook-transforms-component',
-	templateUrl: './playbook.transforms.html',
-	styleUrls: [],
-	encapsulation: ViewEncapsulation.None,
-	providers: [],
+    selector: 'playbook-transforms-component',
+    templateUrl: './playbook.transforms.html',
+    styleUrls: [],
+    encapsulation: ViewEncapsulation.None,
+    providers: [],
+    standalone: false
 })
 export class PlaybookTransformsComponent implements OnInit {
 	@Input() selectedAppName: string;

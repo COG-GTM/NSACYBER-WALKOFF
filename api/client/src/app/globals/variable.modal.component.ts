@@ -8,9 +8,10 @@ import { ToastrService } from "ngx-toastr";
 import { JsonEditorComponent } from "ang-jsoneditor";
 
 @Component({
-  selector: "variable-modal-component",
-  templateUrl: "./variable.modal.html",
-  styleUrls: ["./variable.modal.scss"]
+    selector: "variable-modal-component",
+    templateUrl: "./variable.modal.html",
+    styleUrls: ["./variable.modal.scss"],
+    standalone: false
 })
 export class VariableModalComponent implements OnInit {
   @Input() variable: Variable = new Variable();

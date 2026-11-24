@@ -6,11 +6,12 @@ import { Workflow } from '../models/playbook/workflow';
 import { Argument } from '../models/playbook/argument';
 
 @Component({
-	selector: 'playbook-conditional-expression-component',
-	templateUrl: './playbook.conditional.expression.html',
-	styleUrls: [],
-	encapsulation: ViewEncapsulation.None,
-	providers: [],
+    selector: 'playbook-conditional-expression-component',
+    templateUrl: './playbook.conditional.expression.html',
+    styleUrls: [],
+    encapsulation: ViewEncapsulation.None,
+    providers: [],
+    standalone: false
 })
 export class PlaybookConditionalExpressionComponent implements OnInit {
 	@Input() selectedAppName: string;

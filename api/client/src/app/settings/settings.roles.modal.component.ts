@@ -11,12 +11,13 @@ import { AvailableResourceAction } from '../models/availableResourceAction';
 import { Resource } from '../models/resource';
 
 @Component({
-	selector: 'settings-role-modal',
-	templateUrl: './settings.roles.modal.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	providers: [SettingsService, UtilitiesService],
+    selector: 'settings-role-modal',
+    templateUrl: './settings.roles.modal.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    providers: [SettingsService, UtilitiesService],
+    standalone: false
 })
 export class SettingsRoleModalComponent {
 	@Input() workingRole: Role;

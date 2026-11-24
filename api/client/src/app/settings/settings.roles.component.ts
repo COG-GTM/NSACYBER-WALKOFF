@@ -14,13 +14,14 @@ import { GenericObject } from '../models/genericObject';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
-	selector: 'settings-roles-component',
-	templateUrl: './settings.roles.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [SettingsService],
+    selector: 'settings-roles-component',
+    templateUrl: './settings.roles.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [SettingsService],
+    standalone: false
 })
 export class SettingsRolesComponent {
 	availableResourceActions: AvailableResourceAction[] = [];

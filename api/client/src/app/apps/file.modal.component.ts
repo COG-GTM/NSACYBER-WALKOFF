@@ -7,6 +7,7 @@ import { UtilitiesService } from '../utilities.service';
 @Component({
     selector: 'file-modal-component',
     templateUrl: './file.modal.html',
+    standalone: false
 })
 export class FileModalComponent {
     @ViewChild('myForm', { static: true })

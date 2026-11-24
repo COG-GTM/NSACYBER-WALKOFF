@@ -12,7 +12,10 @@ export class DragDropService {
 	dragData: any;
 }
 
-@Directive({ selector: '[dnd-draggable]' })
+@Directive({
+    selector: '[dnd-draggable]',
+    standalone: false
+})
 export class DraggableDirective {
 	@Input() dragData: any;
 	@Input() set dragEnabled(enabled: boolean) { this.el.nativeElement.draggable = !!enabled; }
@@ -43,7 +46,10 @@ export class DraggableDirective {
 	}
 }
 
-@Directive({ selector: '[dnd-droppable]' })
+@Directive({
+    selector: '[dnd-droppable]',
+    standalone: false
+})
 export class DroppableDirective {
 	@Input() dropEnabled = true;
 	@Output() onDropSuccess = new EventEmitter<DragDropData>();

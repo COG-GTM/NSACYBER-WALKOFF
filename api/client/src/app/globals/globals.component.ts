@@ -10,12 +10,13 @@ import { classToClass } from 'class-transformer';
 import { UtilitiesService } from '../utilities.service';
 
 @Component({
-	selector: 'globals-component',
-	templateUrl: './globals.html',
-	styleUrls: [
-		'./globals.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
+    selector: 'globals-component',
+    templateUrl: './globals.html',
+    styleUrls: [
+        './globals.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class GlobalsComponent implements OnInit {
 	//Global Data Table params

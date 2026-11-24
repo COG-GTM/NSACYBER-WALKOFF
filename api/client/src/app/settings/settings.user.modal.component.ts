@@ -10,12 +10,13 @@ import { Role } from '../models/role';
 import { Select2OptionData } from '../select2/select2.component';
 
 @Component({
-	selector: 'user-modal',
-	templateUrl: './settings.user.modal.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	providers: [SettingsService, UtilitiesService],
+    selector: 'user-modal',
+    templateUrl: './settings.user.modal.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    providers: [SettingsService, UtilitiesService],
+    standalone: false
 })
 export class SettingsUserModalComponent {
 	@Input() workingUser: WorkingUser;

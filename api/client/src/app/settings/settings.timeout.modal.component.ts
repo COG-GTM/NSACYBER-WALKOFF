@@ -9,12 +9,13 @@ import { WorkingUser } from '../models/workingUser';
 import { Configuration } from '../models/configuration';
 
 @Component({
-	selector: 'timeout-modal',
-	templateUrl: './settings.timeout.modal.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	providers: [SettingsService, UtilitiesService],
+    selector: 'timeout-modal',
+    templateUrl: './settings.timeout.modal.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    providers: [SettingsService, UtilitiesService],
+    standalone: false
 })
 export class SettingsTimeoutModalComponent {
 	@Input() configuration: Configuration;

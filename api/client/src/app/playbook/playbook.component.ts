@@ -19,11 +19,12 @@ import { ImportModalComponent } from './import.modal.component';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
-	selector: 'playbook-component',
-	templateUrl: './playbook.html',
-	styleUrls: [ './playbook.scss' ],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService, GlobalsService, SettingsService],
+    selector: 'playbook-component',
+    templateUrl: './playbook.html',
+    styleUrls: ['./playbook.scss'],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService, GlobalsService, SettingsService],
+    standalone: false
 })
 export class PlaybookComponent implements OnInit, OnDestroy {
 	workflowStatusSocket: SocketIOClient.Socket;

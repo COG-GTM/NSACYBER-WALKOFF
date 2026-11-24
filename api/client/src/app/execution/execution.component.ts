@@ -26,13 +26,14 @@ import { ResultsModalComponent } from './results.modal.component';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
-	selector: 'execution-component',
-	templateUrl: './execution.html',
-	styleUrls: [
-		'./execution.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService],
+    selector: 'execution-component',
+    templateUrl: './execution.html',
+    styleUrls: [
+        './execution.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService],
+    standalone: false
 })
 export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 	@ViewChild('nodeStatusContainer') nodeStatusContainer: ElementRef;

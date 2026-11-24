@@ -16,12 +16,13 @@ import { UtilitiesService } from '../utilities.service';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
-	selector: 'settings-component',
-	templateUrl: './settings.html',
-	styleUrls: [
-		'./settings.scss',
-	],
-	providers: [SettingsService],
+    selector: 'settings-component',
+    templateUrl: './settings.html',
+    styleUrls: [
+        './settings.scss',
+    ],
+    providers: [SettingsService],
+    standalone: false
 })
 export class SettingsComponent {
 	configuration: Configuration = new Configuration();

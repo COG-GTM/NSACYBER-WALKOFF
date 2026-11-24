@@ -57,15 +57,16 @@ import { debounceTime, distinctUntilChanged, takeWhile, tap, last } from 'rxjs/o
 
 
 @Component({
-	selector: 'workflow-editor-component',
-	templateUrl: './workflow.editor.html',
-	styleUrls: [
-		'./workflow.editor.scss',
-		'../../../node_modules/cytoscape-panzoom/cytoscape.js-panzoom.css',
-		'../dnd/dnd.css',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService, GlobalsService, SettingsService],
+    selector: 'workflow-editor-component',
+    templateUrl: './workflow.editor.html',
+    styleUrls: [
+        './workflow.editor.scss',
+        '../../../node_modules/cytoscape-panzoom/cytoscape.js-panzoom.css',
+        '../dnd/dnd.css',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService, GlobalsService, SettingsService],
+    standalone: false
 })
 export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDestroy {
 	@ViewChild('cyRef', { static: true }) cyRef: ElementRef;

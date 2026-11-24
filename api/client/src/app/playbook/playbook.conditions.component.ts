@@ -9,11 +9,12 @@ import { Condition } from '../models/playbook/condition';
 
 
 @Component({
-	selector: 'playbook-conditions-component',
-	templateUrl: './playbook.conditions.html',
-	styleUrls: [],
-	encapsulation: ViewEncapsulation.None,
-	providers: [],
+    selector: 'playbook-conditions-component',
+    templateUrl: './playbook.conditions.html',
+    styleUrls: [],
+    encapsulation: ViewEncapsulation.None,
+    providers: [],
+    standalone: false
 })
 export class PlaybookConditionsComponent implements OnInit {
 	@Input() selectedAppName: string;

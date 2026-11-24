@@ -13,12 +13,13 @@ import { MainProfileModalComponent } from './main.profile.modal.component';
 import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
-	selector: 'main-component',
-	templateUrl: './main.html',
-	styleUrls: [
-		'./main.scss',
-	],
-	providers: [MainService, AuthService, UtilitiesService],
+    selector: 'main-component',
+    templateUrl: './main.html',
+    styleUrls: [
+        './main.scss',
+    ],
+    providers: [MainService, AuthService, UtilitiesService],
+    standalone: false
 })
 export class MainComponent implements OnInit, OnDestroy {
 	currentUser: string;

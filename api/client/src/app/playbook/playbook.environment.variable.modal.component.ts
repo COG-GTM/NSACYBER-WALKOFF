@@ -5,8 +5,9 @@ import { EnvironmentVariable } from '../models/playbook/environmentVariable';
 import { JsonEditorComponent } from 'ang-jsoneditor';
 
 @Component({
-  selector: 'playbook-environment-variable-modal-component',
-  templateUrl: './playbook.environment.variable.modal.html',
+    selector: 'playbook-environment-variable-modal-component',
+    templateUrl: './playbook.environment.variable.modal.html',
+    standalone: false
 })
 export class PlaybookEnvironmentVariableModalComponent {
   @Input() variable: EnvironmentVariable = new EnvironmentVariable();

@@ -12,7 +12,8 @@ import { UtilitiesService } from '../utilities.service';
 @Component({
     selector: 'manage-reports-component',
     templateUrl: './manage.reports.component.html',
-    styleUrls: ['./manage.reports.component.scss']
+    styleUrls: ['./manage.reports.component.scss'],
+    standalone: false
 })
 export class ManageReportsComponent implements OnInit {
 

@@ -12,10 +12,11 @@ import { GridsterConfig, GridType, CompactType } from 'angular-gridster2';
 import { Report } from '../models/report/report';
 
 @Component({
-	selector: 'reports-component',
-	templateUrl: './reports.html',
-	styleUrls: ['./reports.scss'],
-	providers: [AuthService],
+    selector: 'reports-component',
+    templateUrl: './reports.html',
+    styleUrls: ['./reports.scss'],
+    providers: [AuthService],
+    standalone: false
 })
 export class ReportsComponent implements OnInit {
 	@ViewChild('reportsMain', { static: true }) main: ElementRef;

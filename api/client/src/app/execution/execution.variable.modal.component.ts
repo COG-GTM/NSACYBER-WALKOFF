@@ -8,6 +8,7 @@ import { EnvironmentVariable } from '../models/playbook/environmentVariable';
 @Component({
     selector: 'execution-variable-modal-component',
     templateUrl: './execution.variable.modal.html',
+    standalone: false
 })
 export class ExecutionVariableModalComponent {
     @Input() workflow: Workflow;

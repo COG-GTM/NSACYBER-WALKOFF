@@ -15,7 +15,8 @@ import { PermissionService } from './permission.service';
 *  IE: <div *hasPermission="['viewReports', 'editReports'] all:true"> {{ Protected  }}</div>
 */
 @Directive({
-    selector: '[hasPermission]'
+    selector: '[hasPermission]',
+    standalone: false
 })
 export class HasPermissionDirective implements OnInit {
     private permissions = [];

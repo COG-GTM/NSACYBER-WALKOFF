@@ -18,8 +18,9 @@ export interface Select2OptionData {
  * Same selector, inputs and valueChanged payload; wraps the global jQuery select2 plugin.
  */
 @Component({
-	selector: 'select2',
-	template: `<select #selector><ng-content select="option, optgroup"></ng-content></select>`,
+    selector: 'select2',
+    template: `<select #selector><ng-content select="option, optgroup"></ng-content></select>`,
+    standalone: false
 })
 export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 	@ViewChild('selector', { static: true }) selector: ElementRef<HTMLSelectElement>;

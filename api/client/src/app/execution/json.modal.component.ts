@@ -14,6 +14,7 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
         './json.modal.scss',
     ],
     encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class JsonModalComponent implements OnInit, OnDestroy {
     @Input() results: string;

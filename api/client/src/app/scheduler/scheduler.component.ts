@@ -13,14 +13,15 @@ import { ScheduledTask } from '../models/scheduler/scheduledTask';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
-	selector: 'scheduler-component',
-	templateUrl: './scheduler.html',
-	styleUrls: [
-		'./scheduler.scss',
-		'../../../node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [SchedulerService],
+    selector: 'scheduler-component',
+    templateUrl: './scheduler.html',
+    styleUrls: [
+        './scheduler.scss',
+        '../../../node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [SchedulerService],
+    standalone: false
 })
 export class SchedulerComponent implements OnInit {
 	schedulerStatus: string;

@@ -29,13 +29,14 @@ import { StatusModalComponent } from './status.modal.component';
 import { FileModalComponent } from './file.modal.component';
 
 @Component({
-	selector: 'manage-app-component',
-	templateUrl: './manage.app.html',
-	styleUrls: [
-		'./manage.app.scss',
-	],
-	encapsulation: ViewEncapsulation.None,
-	providers: [AuthService, GlobalsService, SettingsService],
+    selector: 'manage-app-component',
+    templateUrl: './manage.app.html',
+    styleUrls: [
+        './manage.app.scss',
+    ],
+    encapsulation: ViewEncapsulation.None,
+    providers: [AuthService, GlobalsService, SettingsService],
+    standalone: false
 })
 export class ManageAppComponent implements OnInit, OnDestroy {
     @ViewChild('editorArea') editorArea: CodemirrorComponent;

@@ -12,8 +12,9 @@ import { PlaybookService } from './playbook.service';
     selector: 'metadata-modal-component',
     templateUrl: './metadata.modal.html',
     styleUrls: [
-		'./metadata.modal.scss',
-	],
+        './metadata.modal.scss',
+    ],
+    standalone: false
 })
 export class MetadataModalComponent {
     @Input() workflow: Workflow = new Workflow();

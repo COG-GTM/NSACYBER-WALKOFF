@@ -13,12 +13,13 @@ import { MessageListing } from '../models/message/messageListing';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
-	selector: 'messages-component',
-	templateUrl: './messages.html',
-	styleUrls: [
-		'./messages.scss',
-	],
-	providers: [MessagesService],
+    selector: 'messages-component',
+    templateUrl: './messages.html',
+    styleUrls: [
+        './messages.scss',
+    ],
+    providers: [MessagesService],
+    standalone: false
 })
 export class MessagesComponent implements OnInit {
 	//Device Data Table params

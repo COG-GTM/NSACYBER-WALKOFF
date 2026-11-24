@@ -10,12 +10,13 @@ import { User } from '../models/user';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
-	selector: 'main-profile',
-	templateUrl: './main.profile.modal.html',
-	styleUrls: [
-		'./main.scss',
-	],
-	providers: [MainService, UtilitiesService]
+    selector: 'main-profile',
+    templateUrl: './main.profile.modal.html',
+    styleUrls: [
+        './main.scss',
+    ],
+    providers: [MainService, UtilitiesService],
+    standalone: false
 })
 
 export class MainProfileModalComponent {

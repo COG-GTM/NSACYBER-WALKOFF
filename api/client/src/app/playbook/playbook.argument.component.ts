@@ -16,11 +16,12 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
 const AVAILABLE_TYPES = ['string', 'number', 'boolean'];
 
 @Component({
-	selector: 'playbook-argument-component',
-	templateUrl: './playbook.argument.html',
-	styleUrls: [],
-	encapsulation: ViewEncapsulation.None,
-	providers: [],
+    selector: 'playbook-argument-component',
+    templateUrl: './playbook.argument.html',
+    styleUrls: [],
+    encapsulation: ViewEncapsulation.None,
+    providers: [],
+    standalone: false
 })
 export class PlaybookArgumentComponent implements OnChanges {
 	@Input() id: number;

@@ -10,7 +10,8 @@ import { UtilitiesService } from '../utilities.service';
 @Component({
     selector: 'widget-modal-component',
     templateUrl: './widget.modal.component.html',
-    styleUrls: ['./widget.modal.component.scss']
+    styleUrls: ['./widget.modal.component.scss'],
+    standalone: false
 })
 export class WidgetModalComponent implements OnInit {
 

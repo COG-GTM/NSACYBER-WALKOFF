@@ -18,6 +18,7 @@ import { UtilitiesService } from '../utilities.service';
         './status.modal.scss',
     ],
     encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class StatusModalComponent implements OnInit, OnDestroy {
     @ViewChild('consoleArea') consoleArea: CodemirrorComponent;

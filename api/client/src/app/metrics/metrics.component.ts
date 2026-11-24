@@ -10,13 +10,14 @@ import { AppMetric } from '../models/metric/appMetric';
 import { WorkflowMetric } from '../models/metric/workflowMetric';
 
 @Component({
-	selector: 'metrics-component',
-	templateUrl: './metrics.html',
-	encapsulation: ViewEncapsulation.None,
-	styleUrls: [
-		'./metrics.scss',
-	],
-	providers: [MetricsService],
+    selector: 'metrics-component',
+    templateUrl: './metrics.html',
+    encapsulation: ViewEncapsulation.None,
+    styleUrls: [
+        './metrics.scss',
+    ],
+    providers: [MetricsService],
+    standalone: false
 })
 
 export class MetricsComponent implements OnInit {
