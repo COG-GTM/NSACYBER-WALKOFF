@@ -1515,7 +1515,6 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 			if (table && table.recalculate) {
 				console.log('changing: ' + $e.nextId)
 				this.cdr.detectChanges();
-				if (Array.isArray(table.rows)) table.rows = [...table.rows];
 				table.recalculate();
 			}
 		})

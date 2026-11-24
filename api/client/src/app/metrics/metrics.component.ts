@@ -73,7 +73,6 @@ export class MetricsComponent implements OnInit {
 		}
 		if (table && table.recalculate) {
 			this.cdr.detectChanges();
-			if (Array.isArray(table.rows)) table.rows = [...table.rows];
 			table.recalculate();
 		}
 	}

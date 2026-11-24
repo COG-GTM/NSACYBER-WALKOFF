@@ -96,8 +96,6 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 
 		this.recalculateTableCallback = (e: any) => {
 			if (this.nodeStatusTable && this.nodeStatusTable.recalculate) {
-				if (Array.isArray(this.nodeStatusTable.rows))
-					this.nodeStatusTable.rows = [...this.nodeStatusTable.rows];
 				this.nodeStatusTable.recalculate();
 			}
 		}

@@ -14,7 +14,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angul
 import { DndModule } from './dnd/dnd.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { GridsterModule } from 'angular-gridster2';
+import { Gridster, GridsterItem } from 'angular-gridster2';
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { NgJsonEditorModule } from 'ang-jsoneditor'
 import { MomentModule } from 'ngx-moment';
@@ -144,7 +144,8 @@ import { HasPermissionDirective } from './permission.directive';
         DndModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
-        GridsterModule,
+        Gridster,
+        GridsterItem,
         BaseChartDirective,
         CodemirrorModule,
         NgJsonEditorModule,

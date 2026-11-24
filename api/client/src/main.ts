@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { MainModule } from './app/main.module';
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', event => {
             enableProdMode();
         }
 
-        platformBrowserDynamic().bootstrapModule(MainModule)
+        platformBrowserDynamic().bootstrapModule(MainModule, { applicationProviders: [provideZoneChangeDetection()], })
             .catch(err => console.log(err));
     }
     else { location.href = 'login'; }
