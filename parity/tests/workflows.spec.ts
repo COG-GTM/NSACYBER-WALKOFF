@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import { randomUUID } from 'crypto';
-import { confirmBootbox, dismissToasts, gotoApp, login, promptBootbox, shot, stamp, toast } from './helpers';
+import { settleFilter, confirmBootbox, dismissToasts, gotoApp, login, promptBootbox, shot, stamp, toast } from './helpers';
 
 test.beforeEach(async ({ page }) => login(page));
 
@@ -75,6 +75,7 @@ test('import, filter, edit settings, duplicate, open in editor and delete a work
 
   const filter = page.getByPlaceholder('Filter Workflows...');
   await filter.fill(name);
+  await settleFilter(page);
   // fuzzy (Fuse.js) filter: the exact match ranks first
   await expect(page.locator('.workflow-card').first().locator('.card-title')).toHaveText(name);
   await expect(card(page, name).getByRole('button', { name: 'Execute Workflow' })).toBeEnabled();
@@ -96,6 +97,7 @@ test('import, filter, edit settings, duplicate, open in editor and delete a work
   await promptBootbox(page, dup);
   await expect(toast(page)).toContainText(`Duplicated ${dup}`);
   await filter.fill(dup);
+  await settleFilter(page);
   await expect(page.locator('.workflow-card').first().locator('.card-title')).toHaveText(dup);
 
   // Editor
@@ -107,6 +109,7 @@ test('import, filter, edit settings, duplicate, open in editor and delete a work
 
   // Delete both
   await page.getByPlaceholder('Filter Workflows...').fill(name);
+  await settleFilter(page);
   await deleteWorkflow(page, dup);
   await deleteWorkflow(page, name);
 });

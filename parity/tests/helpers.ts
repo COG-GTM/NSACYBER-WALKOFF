@@ -97,3 +97,8 @@ export async function html5Drag(page: Page, source: Locator, target: Locator) {
   await target.dispatchEvent('drop', { dataTransfer: dt, ...at });
   await source.dispatchEvent('dragend', { dataTransfer: dt });
 }
+
+/** List filters debounce input by 500 ms and then re-render every card; wait for that to happen. */
+export async function settleFilter(page: Page) {
+  await page.waitForTimeout(800);
+}
