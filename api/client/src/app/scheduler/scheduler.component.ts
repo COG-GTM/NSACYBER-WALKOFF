@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, inject } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -26,17 +26,17 @@ import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirect
     imports: [NgbTooltip, FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective]
 })
 export class SchedulerComponent implements OnInit {
+	private schedulerService = inject(SchedulerService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	schedulerStatus: string;
 	scheduledTasks: ScheduledTask[] = [];
 	displayScheduledTasks: ScheduledTask[] = [];
 	availableWorkflows: Select2OptionData[] = [];
 
 	filterQuery: UntypedFormControl = new UntypedFormControl();
-
-	constructor(
-		private schedulerService: SchedulerService, private modalService: NgbModal,
-		private toastrService: ToastrService, private utils: UtilitiesService,
-	) {}
 
 	/**
 	 * On component initialization, get the scheduler status for display/actioning.

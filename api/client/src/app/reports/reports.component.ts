@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -24,6 +24,11 @@ import { SafeEmbedPipe } from '../pipes/safeEmbed.pipe';
     imports: [NgClass, HasPermissionDirective, RouterLink, Gridster, GridsterItem, BaseChartDirective, DatatableComponent, SafeEmbedPipe]
 })
 export class ReportsComponent implements OnInit {
+	private route = inject(ActivatedRoute);
+	private toastrService = inject(ToastrService);
+	private http = inject(HttpClient);
+	private reportService = inject(ReportService);
+
 	@ViewChild('reportsMain', { static: true }) main: ElementRef;
 	reportName: string;
 	reportId: string;
@@ -38,11 +43,6 @@ export class ReportsComponent implements OnInit {
 	gridColSize = 125;
 	gridGutterSize = 10;
 	gridDefaultCols = 3;
-	
-	constructor(
-		private route: ActivatedRoute, private toastrService: ToastrService,
-		private http: HttpClient, private reportService: ReportService
-	) { }
 
 	/**
 	 * On init, get our report name from the route params and grab the report.

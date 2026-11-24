@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy, inject } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -18,6 +18,11 @@ import { ClipboardModule } from 'ngx-clipboard';
     imports: [NgJsonEditorModule, ClipboardModule]
 })
 export class JsonModalComponent implements OnInit, OnDestroy {
+    activeModal = inject(NgbActiveModal);
+    utils = inject(UtilitiesService);
+    toastrService = inject(ToastrService);
+    authService = inject(AuthService);
+
     @Input() results: string;
     @ViewChild('jsonEditor') jsonEditor: JsonEditorComponent;
 
@@ -33,9 +38,6 @@ export class JsonModalComponent implements OnInit, OnDestroy {
         enableTransform: false,
         onEditable: () => false
 	}
-
-    constructor(public activeModal: NgbActiveModal, public utils: UtilitiesService,
-        public toastrService: ToastrService, public authService: AuthService) { }
 
     ngOnInit(): void {}
 

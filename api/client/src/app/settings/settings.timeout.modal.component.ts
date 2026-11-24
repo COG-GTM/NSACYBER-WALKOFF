@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
     imports: [FormsModule]
 })
 export class SettingsTimeoutModalComponent {
-	@Input() configuration: Configuration;
+	activeModal = inject(NgbActiveModal);
 
-	constructor(public activeModal: NgbActiveModal) {}
+	@Input() configuration: Configuration;
 }

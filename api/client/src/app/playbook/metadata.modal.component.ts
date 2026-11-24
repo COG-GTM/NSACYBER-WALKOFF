@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, inject } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Workflow, WorkflowPermission } from '../models/playbook/workflow';
@@ -19,6 +19,11 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
     imports: [FormsModule, Select2Component, NgbTooltip]
 })
 export class MetadataModalComponent {
+    activeModal = inject(NgbActiveModal);
+    playbookService = inject(PlaybookService);
+    settingsService = inject(SettingsService);
+    toastrService = inject(ToastrService);
+
     @Input() workflow: Workflow = new Workflow();
     @Input() existing: boolean = false;
 
@@ -39,9 +44,6 @@ export class MetadataModalComponent {
         width: '100%',
         placeholder: 'Add Tags...'
     };
-
-    constructor(public activeModal: NgbActiveModal, public playbookService: PlaybookService,
-        public settingsService: SettingsService, public toastrService: ToastrService) { }
 
     ngOnInit(): void {
         this.settingsService.getRoles().then(roles => this.systemRoles = roles);

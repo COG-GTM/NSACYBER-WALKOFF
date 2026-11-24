@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -24,14 +24,17 @@ import { HasPermissionDirective } from '../permission.directive';
     imports: [RouterLink, RouterLinkActive, HasPermissionDirective, RouterOutlet]
 })
 export class MainComponent implements OnInit, OnDestroy {
+	private authService = inject(AuthService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	utils = inject(UtilitiesService);
+	private reportService = inject(ReportService);
+	private clipboardService = inject(ClipboardService);
+
 	currentUser: string;
 	reports: Report[] = [];
 
-	constructor(
-		private authService: AuthService, private modalService: NgbModal, 
-		private toastrService: ToastrService, public utils: UtilitiesService, 
-		private reportService: ReportService, private clipboardService: ClipboardService
-	) {
+	constructor() {
 
 		const hideBackdrop = () => {
 			const backdropNodes = document.querySelectorAll('.modal-backdrop');

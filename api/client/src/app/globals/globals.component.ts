@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, inject } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -22,14 +22,14 @@ import { JsonPipe } from '@angular/common';
     imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, JsonPipe]
 })
 export class GlobalsComponent implements OnInit {
+	private globalsService = inject(GlobalsService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	//Global Data Table params
 	globals: Variable[] = [];
 	filterQuery: UntypedFormControl = new UntypedFormControl();
-
-	constructor(
-		private globalsService: GlobalsService, private modalService: NgbModal, 
-		private toastrService: ToastrService, private utils: UtilitiesService,
-	) {}
 
 	/**
 	 * On component init, initialize the app select2 config, grab globals and global apis from the server.

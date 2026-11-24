@@ -1,5 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ViewChild,
-	ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ViewChild, ChangeDetectorRef, OnDestroy, inject } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData, Select2Component } from '../select2/select2.component';
@@ -39,6 +38,14 @@ import { MomentModule } from 'ngx-moment';
     imports: [Select2Component, FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, ClipboardModule, MomentModule]
 })
 export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
+	private executionService = inject(ExecutionService);
+	private authService = inject(AuthService);
+	private cdr = inject(ChangeDetectorRef);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+	private modalService = inject(NgbModal);
+	private router = inject(Router);
+
 	@ViewChild('nodeStatusContainer') nodeStatusContainer: ElementRef;
 	@ViewChild('nodeStatusTable') nodeStatusTable: DatatableComponent;
 	@ViewChild('workflowStatusTable') workflowStatusTable: DatatableComponent;
@@ -63,12 +70,6 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 
 	workflowStatusSocket: SocketIOClient.Socket;
 	nodeStatusSocket: SocketIOClient.Socket;
-
-	constructor(
-		private executionService: ExecutionService, private authService: AuthService, private cdr: ChangeDetectorRef,
-		private toastrService: ToastrService, private utils: UtilitiesService,
-		private modalService: NgbModal, private router: Router
-	) {}
 
 	/**
 	 * On component init, set up our workflow select2 config.

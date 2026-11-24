@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -21,6 +21,11 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class MainProfileModalComponent {
+	private mainService = inject(MainService);
+	activeModal = inject(NgbActiveModal);
+	private toastrService = inject(ToastrService);
+	private authService = inject(AuthService);
+
 	@Input() username: string;
 	@Input() submitText: string;
 
@@ -36,11 +41,6 @@ export class MainProfileModalComponent {
 	passwordConfirm :string = '';
 
 	changeType: string;
-
-	constructor(
-		private mainService: MainService, public activeModal: NgbActiveModal,
-		private toastrService: ToastrService, private authService: AuthService) {
-	}
 
 	ngOnInit(): void {
 		this.mainService.getUser(this.username)

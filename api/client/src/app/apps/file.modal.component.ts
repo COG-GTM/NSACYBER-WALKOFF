@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, inject } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm, FormsModule } from '@angular/forms';
@@ -11,13 +11,14 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
     imports: [FormsModule, NgbTooltip]
 })
 export class FileModalComponent {
+    activeModal = inject(NgbActiveModal);
+    utils = inject(UtilitiesService);
+
     @ViewChild('myForm', { static: true })
     myForm: NgForm;
     path: string;
     submitted: boolean = false;
     importFile: File;
-    
-    constructor(public activeModal: NgbActiveModal, public utils: UtilitiesService) { }
 
     /**
 	 * Sets our playbook to import based on a file input change.

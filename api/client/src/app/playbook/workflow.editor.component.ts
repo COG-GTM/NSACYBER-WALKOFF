@@ -1,5 +1,4 @@
-import { Component, ViewEncapsulation, ViewChild, ElementRef, ChangeDetectorRef, OnInit,
-	AfterViewChecked, OnDestroy} from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, ElementRef, ChangeDetectorRef, OnInit, AfterViewChecked, OnDestroy, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 import { UUID } from 'angular2-uuid';
@@ -79,6 +78,16 @@ import { MomentModule } from 'ngx-moment';
     imports: [NgbTooltip, FormsModule, ReactiveFormsModule, DraggableDirective, DroppableDirective, PlaybookArgumentComponent, NgbPopover, CodemirrorModule, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet, PlaybookConditionalExpressionComponent, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, ClipboardModule, HasPermissionDirective, JsonPipe, MomentModule]
 })
 export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDestroy {
+	private playbookService = inject(PlaybookService);
+	private authService = inject(AuthService);
+	private toastrService = inject(ToastrService);
+	private activeRoute = inject(ActivatedRoute);
+	private cdr = inject(ChangeDetectorRef);
+	private utils = inject(UtilitiesService);
+	private modalService = inject(NgbModal);
+	private router = inject(Router);
+	private globalsService = inject(GlobalsService);
+
 	@ViewChild('cyRef', { static: true }) cyRef: ElementRef;
 	@ViewChild('workflowResultsTable') workflowResultsTable: DatatableComponent;
 	@ViewChild('consoleContainer') consoleContainer: ElementRef;
@@ -149,14 +158,6 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 # 		
 # result = input.result.get("key")`
 	}
-
-	constructor(
-		private playbookService: PlaybookService, private authService: AuthService,
-		private toastrService: ToastrService, private activeRoute: ActivatedRoute,
-		private cdr: ChangeDetectorRef, private utils: UtilitiesService,
-		private modalService: NgbModal, private router: Router,
-		private globalsService: GlobalsService
-	) {}
 
 	/**
 	 * On component initialization, we grab arrays of globals, app apis, and playbooks/workflows (id, name pairs).

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy} from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, inject } from '@angular/core';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
@@ -27,6 +27,14 @@ import { StatusModalComponent } from './status.modal.component';
     providers: [AuthService, GlobalsService, SettingsService]
 })
 export class AppsListComponent implements OnInit, OnDestroy {
+	private playbookService = inject(PlaybookService);
+	private authService = inject(AuthService);
+	private appService = inject(AppService);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+	private modalService = inject(NgbModal);
+	private router = inject(Router);
+
 	workflowsLoaded: boolean = false;
 	workflows: Workflow[] = [];
 	eventSource: any;
@@ -34,13 +42,6 @@ export class AppsListComponent implements OnInit, OnDestroy {
 	filteredWorkflows: Workflow[] = [];
 
 	apps: AppApi[];
-
-	constructor(
-		private playbookService: PlaybookService, private authService: AuthService,
-		private appService: AppService,
-		private toastrService: ToastrService, private utils: UtilitiesService, 
-		private modalService: NgbModal, private router: Router
-	) {}
 
 	/**
 	 * On component initialization, we grab arrays of globals, app apis, and playbooks/workflows (id, name pairs).

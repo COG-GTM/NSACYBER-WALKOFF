@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { plainToClass } from 'class-transformer';
 
@@ -8,7 +8,9 @@ import { User } from '../models/user';
 
 @Injectable()
 export class MainService {
-	constructor (private http: HttpClient, private utils: UtilitiesService) { }
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
+
 
 	/**
 	 * Grabs username from API endpoint to fill out users info

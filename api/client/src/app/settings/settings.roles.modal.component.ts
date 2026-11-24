@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData, Select2Component } from '../select2/select2.component';
@@ -21,6 +21,11 @@ import { FormsModule } from '@angular/forms';
     imports: [FormsModule, Select2Component]
 })
 export class SettingsRoleModalComponent {
+	private settingsService = inject(SettingsService);
+	activeModal = inject(NgbActiveModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	@Input() workingRole: Role;
 	@Input() title: string;
 	@Input() submitText: string;
@@ -32,11 +37,7 @@ export class SettingsRoleModalComponent {
 	newResourceTempIdTracker: number = -1;
 	selectedAvailableResourceActionName: string;
 
-	constructor(
-		private settingsService: SettingsService, public activeModal: NgbActiveModal,
-		private toastrService: ToastrService,
-		private utils: UtilitiesService,
-	) {
+	constructor() {
 
 		this.permissionSelectConfig = {
 			width: '100%',

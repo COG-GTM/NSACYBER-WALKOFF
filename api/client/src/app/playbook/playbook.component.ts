@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy} from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, inject } from '@angular/core';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
@@ -29,18 +29,19 @@ import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/n
     imports: [HasPermissionDirective, RouterLink, FormsModule, ReactiveFormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu]
 })
 export class PlaybookComponent implements OnInit, OnDestroy {
+	private playbookService = inject(PlaybookService);
+	private authService = inject(AuthService);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+	private modalService = inject(NgbModal);
+	private router = inject(Router);
+
 	workflowStatusSocket: SocketIOClient.Socket;
 	workflowsLoaded: boolean = false;
 	workflows: Workflow[] = [];
 	eventSource: any;
 	filterQuery: UntypedFormControl = new UntypedFormControl();
 	filteredWorkflows: Workflow[] = [];
-
-	constructor(
-		private playbookService: PlaybookService, private authService: AuthService,
-		private toastrService: ToastrService, private utils: UtilitiesService, 
-		private modalService: NgbModal, private router: Router
-	) {}
 
 	/**
 	 * On component initialization, we grab arrays of globals, app apis, and playbooks/workflows (id, name pairs).

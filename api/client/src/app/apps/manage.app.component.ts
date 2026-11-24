@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
@@ -40,6 +40,15 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
     imports: [NgbTooltip, CodemirrorModule, FormsModule]
 })
 export class ManageAppComponent implements OnInit, OnDestroy {
+    private playbookService = inject(PlaybookService);
+    private authService = inject(AuthService);
+    private appService = inject(AppService);
+    private activeRoute = inject(ActivatedRoute);
+    private toastrService = inject(ToastrService);
+    private utils = inject(UtilitiesService);
+    private modalService = inject(NgbModal);
+    private router = inject(Router);
+
     @ViewChild('editorArea') editorArea: CodemirrorComponent;
 
 	workflowsLoaded: boolean = false;
@@ -62,13 +71,6 @@ export class ManageAppComponent implements OnInit, OnDestroy {
     }
 
     warningCallback: any;
-
-	constructor(
-		private playbookService: PlaybookService, private authService: AuthService,
-		private appService: AppService, private activeRoute: ActivatedRoute,
-		private toastrService: ToastrService, private utils: UtilitiesService, 
-		private modalService: NgbModal, private router: Router
-	) {}
 
 	/**
 	 * On component initialization, we grab arrays of globals, app apis, and playbooks/workflows (id, name pairs).

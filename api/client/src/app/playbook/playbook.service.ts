@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { plainToClass, classToPlain } from 'class-transformer';
 import { HttpClient } from '@angular/common/http';
 
@@ -27,14 +27,19 @@ import { ActionType } from '../models/api/actionApi';
 	providedIn: 'root'
 })
 export class PlaybookService {
+	private http = inject(HttpClient);
+	private utils = inject(UtilitiesService);
+	private executionService = inject(ExecutionService);
+	private globalsService = inject(GlobalsService);
+	private settingsService = inject(SettingsService);
+
 
 	workflowsChange: Observable<any>;
 	observer: Subscriber<any>;
 
 	tempStoredWorkflow: Workflow;
 
-	constructor(private http: HttpClient, private utils: UtilitiesService, private executionService: ExecutionService,
-		private globalsService: GlobalsService, private settingsService: SettingsService) {
+	constructor() {
 		this.workflowsChange = new Observable((observer) => {
 			this.observer = observer;
 			this.getWorkflows().then(workflows => this.observer.next(workflows));

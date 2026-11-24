@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -28,6 +28,11 @@ import { SettingsRolesComponent } from './settings.roles.component';
     imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, SettingsRolesComponent]
 })
 export class SettingsComponent {
+	private settingsService = inject(SettingsService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	configuration: Configuration = new Configuration();
 
 	//User Data Table params
@@ -37,10 +42,7 @@ export class SettingsComponent {
 
 	roles: Role[] = [];
 
-	constructor(
-		private settingsService: SettingsService, private modalService: NgbModal,
-		private toastrService: ToastrService, private utils: UtilitiesService,
-	) {
+	constructor() {
 
 		//this.getConfiguration();
 		this.getUsers();

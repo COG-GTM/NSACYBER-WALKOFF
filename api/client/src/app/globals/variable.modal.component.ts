@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
 
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Variable, VariablePermission } from "../models/variable";
@@ -16,6 +16,10 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap/tooltip";
     imports: [FormsModule, NgJsonEditorModule, NgbTooltip]
 })
 export class VariableModalComponent implements OnInit {
+  activeModal = inject(NgbActiveModal);
+  settingsService = inject(SettingsService);
+  toastrService = inject(ToastrService);
+
   @Input() variable: Variable = new Variable();
   @Input() isGlobal: boolean = false;
   @ViewChild("jsonEditor", { static: true }) jsonEditor: JsonEditorComponent;
@@ -26,12 +30,6 @@ export class VariableModalComponent implements OnInit {
   systemRoles: Role[];
   permissions: any[] = [];
   newPermission: any = { role: "", permissions: "" };
-
-  constructor(
-    public activeModal: NgbActiveModal,
-    public settingsService: SettingsService,
-    public toastrService: ToastrService
-  ) {}
 
   editorOptionsData: any = {
     mode: "code",

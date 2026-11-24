@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import { Component, Input, ViewChild, inject } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentVariable } from '../models/playbook/environmentVariable';
@@ -11,6 +11,8 @@ import { FormsModule } from '@angular/forms';
     imports: [FormsModule, NgJsonEditorModule]
 })
 export class PlaybookEnvironmentVariableModalComponent {
+  activeModal = inject(NgbActiveModal);
+
   @Input() variable: EnvironmentVariable = new EnvironmentVariable();
   @Input() existing: boolean = false;
   @ViewChild('jsonEditor', { static: true }) jsonEditor: JsonEditorComponent;
@@ -35,9 +37,6 @@ export class PlaybookEnvironmentVariableModalComponent {
 			}
 		}
 	}
-
-	
-	constructor(public activeModal: NgbActiveModal) {}
 
 	ngOnInit(): void {
     	this.initialValue = this.variable.value;

@@ -1,5 +1,5 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { AuthService } from './auth/auth.service';
@@ -19,8 +19,9 @@ export function jwtTokenGetter() : string {
 
 @Injectable()
 export class RefreshTokenInterceptor implements HttpInterceptor {
+    private authService = inject(AuthService);
+    private jwtInterceptor = inject(JwtInterceptor);
 
-    constructor (private authService: AuthService, private jwtInterceptor: JwtInterceptor) {}
 
     intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (this.jwtInterceptor.isAllowedDomain(req) && !this.jwtInterceptor.isDisallowedRoute(req) && this.authService.isAccessTokenExpired()) {

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy, ElementRef, inject } from '@angular/core';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -22,6 +22,12 @@ import { MomentModule } from 'ngx-moment';
     imports: [DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, ClipboardModule, NgbTooltip, MomentModule]
 })
 export class ResultsModalComponent implements OnInit, OnDestroy {
+    activeModal = inject(NgbActiveModal);
+    utils = inject(UtilitiesService);
+    toastrService = inject(ToastrService);
+    authService = inject(AuthService);
+    modalService = inject(NgbModal);
+
     @Input() loadedWorkflowStatus: WorkflowStatus;
     @ViewChild('nodeStatusContainer') nodeStatusContainer: ElementRef;
     @ViewChild('nodeStatusTable') nodeStatusTable: DatatableComponent;
@@ -39,10 +45,6 @@ export class ResultsModalComponent implements OnInit, OnDestroy {
         enableTransform: false,
         onEditable: () => false
 	}
-
-    constructor(public activeModal: NgbActiveModal, public utils: UtilitiesService,
-        public toastrService: ToastrService, public authService: AuthService,
-        public modalService: NgbModal) { }
 
     ngOnInit(): void {}
 

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -26,16 +26,18 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
     imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip]
 })
 export class SettingsRolesComponent {
+	private settingsService = inject(SettingsService);
+	private modalService = inject(NgbModal);
+	private toastrService = inject(ToastrService);
+	private utils = inject(UtilitiesService);
+
 	availableResourceActions: AvailableResourceAction[] = [];
 	//Role Data Table params
 	roles: Role[] = [];
 	displayRoles: Role[] = [];
 	filterQuery: UntypedFormControl = new UntypedFormControl();
 
-	constructor(
-		private settingsService: SettingsService, private modalService: NgbModal,
-		private toastrService: ToastrService, private utils: UtilitiesService,
-	) {
+	constructor() {
 
 		this.getAvailableResourceActions();
 		this.getRoles();

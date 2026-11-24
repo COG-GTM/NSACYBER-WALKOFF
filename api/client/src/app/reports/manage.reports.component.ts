@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { GridsterConfig, GridType, CompactType, Gridster, GridsterItem } from 'angular-gridster2';
 import { ReportWidget, BarChartWidget, PieChartWidget, LineChartWidget, TextWidget, KibanaWidget, TableWidget } from '../models/report/reportWidget';
 import { Report } from '../models/report/report';
@@ -21,6 +21,13 @@ import { SafeEmbedPipe } from '../pipes/safeEmbed.pipe';
     imports: [FormsModule, DraggableDirective, Gridster, DroppableDirective, GridsterItem, BaseChartDirective, DatatableComponent, SafeEmbedPipe]
 })
 export class ManageReportsComponent implements OnInit {
+    private reportService = inject(ReportService);
+    private toastrService = inject(ToastrService);
+    private activeRoute = inject(ActivatedRoute);
+    private router = inject(Router);
+    private modalService = inject(NgbModal);
+    private utils = inject(UtilitiesService);
+
 
     options: GridsterConfig;
 
@@ -44,15 +51,6 @@ export class ManageReportsComponent implements OnInit {
         {name: 'pie', label: 'Pie Graph'},
         {name: 'kibana', label: 'Kibana Embed'},
     ];
-
-    constructor(
-        private reportService: ReportService, 
-        private toastrService: ToastrService,
-        private activeRoute: ActivatedRoute,
-        private router: Router,
-        private modalService: NgbModal,
-        private utils: UtilitiesService
-    ) {}
 
     ngOnInit() {
         this.activeRoute.params.subscribe(params => {

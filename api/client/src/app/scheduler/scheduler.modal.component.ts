@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData, Select2Component } from '../select2/select2.component';
@@ -26,6 +26,10 @@ import { DatePipe } from '@angular/common';
     imports: [Select2Component, FormsModule, OwlDateTimeModule, DatePipe]
 })
 export class SchedulerModalComponent implements OnInit {
+	private schedulerService = inject(SchedulerService);
+	activeModal = inject(NgbActiveModal);
+	private toastrService = inject(ToastrService);
+
 	@Input() workingScheduledTask: ScheduledTask = new ScheduledTask();
 	@Input() title: string;
 	@Input() submitText: string;
@@ -36,11 +40,6 @@ export class SchedulerModalComponent implements OnInit {
 	cron: ScheduledTaskCron = new ScheduledTaskCron();
 	interval: ScheduledTaskInterval = new ScheduledTaskInterval();
 	date: ScheduledTaskDate = new ScheduledTaskDate();
-	
-	constructor(
-		private schedulerService: SchedulerService, public activeModal: NgbActiveModal,
-		private toastrService: ToastrService,
-	) {}
 
 	/**
 	 * Initializes the workflow select config for selecting workflows to schedule.

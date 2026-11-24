@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, ViewChild, ViewEncapsulation, OnInit, OnDestroy, inject } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -21,6 +21,12 @@ import { UtilitiesService } from '../utilities.service';
     imports: [CodemirrorModule]
 })
 export class StatusModalComponent implements OnInit, OnDestroy {
+    activeModal = inject(NgbActiveModal);
+    appService = inject(AppService);
+    utils = inject(UtilitiesService);
+    toastrService = inject(ToastrService);
+    authService = inject(AuthService);
+
     @ViewChild('consoleArea') consoleArea: CodemirrorComponent;
     @Input() buildId: string;
     @Input() appApi: AppApi;
@@ -30,9 +36,6 @@ export class StatusModalComponent implements OnInit, OnDestroy {
     statusSubscription: Subscription;
     completedStatus: { success: boolean, message: string};
     buildStatusSocket: SocketIOClient.Socket;
-
-    constructor(public activeModal: NgbActiveModal, public appService: AppService, public utils: UtilitiesService,
-        public toastrService: ToastrService, public authService: AuthService) { }
 
     ngOnInit(): void {
         this.createBuildStatusSocket();

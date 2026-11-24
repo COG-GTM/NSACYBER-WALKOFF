@@ -1,7 +1,4 @@
-import {
-	AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output,
-	Renderer2, SimpleChanges, ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild, inject } from '@angular/core';
 
 declare const jQuery: any;
 
@@ -22,6 +19,8 @@ export interface Select2OptionData {
     template: `<select #selector><ng-content select="option, optgroup"></ng-content></select>`
 })
 export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
+	private renderer = inject(Renderer2);
+
 	@ViewChild('selector', { static: true }) selector: ElementRef<HTMLSelectElement>;
 	@Input() data: Select2OptionData[];
 	@Input() value: string | string[];
@@ -31,8 +30,6 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 	@Output() valueChanged = new EventEmitter<{ value: string | string[], data: any }>();
 
 	private element: any;
-
-	constructor(private renderer: Renderer2) {}
 
 	async ngOnChanges(changes: SimpleChanges) {
 		if (!this.element) { return; }

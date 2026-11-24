@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,9 +11,9 @@ import { EnvironmentVariable } from '../models/playbook/environmentVariable';
     imports: [FormsModule]
 })
 export class ExecutionVariableModalComponent {
-    @Input() workflow: Workflow;
+    activeModal = inject(NgbActiveModal);
 
-    constructor(public activeModal: NgbActiveModal) {}
+    @Input() workflow: Workflow;
 
     execute(form: NgForm) : void {
         let variables: EnvironmentVariable[] = [];
