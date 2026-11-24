@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { plainToClass } from 'class-transformer';
 import { UtilitiesService } from './utilities.service';
 import { timer } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, last } from 'rxjs/operators';
 import { Role } from './models/role';
 
 @Injectable({
@@ -118,6 +118,6 @@ export class PermissionService {
     }
 
     waitUntilReady() {
-        return timer(0, 100).pipe(takeWhile(_ => !this.permissionsLoaded, true)).last().toPromise();
+        return timer(0, 100).pipe(takeWhile(_ => !this.permissionsLoaded, true), last()).toPromise();
     }
 }

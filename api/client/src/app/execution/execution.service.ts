@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/toPromise';
 import { plainToClass, classToPlain } from 'class-transformer';
 import { HttpClient } from '@angular/common/http';
 

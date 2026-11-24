@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { UUID } from 'angular2-uuid';
 import { Observable, interval, timer } from 'rxjs';
-import 'rxjs/Rx';
 import { plainToClass, classToClass } from 'class-transformer';
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
@@ -54,6 +53,7 @@ import { VariableModalComponent } from '../globals/variable.modal.component';
 import { ResultsModalComponent } from '../execution/results.modal.component';
 import { JsonModalComponent } from '../execution/json.modal.component';
 import * as io from 'socket.io-client';
+import { debounceTime, distinctUntilChanged, takeWhile, tap, last } from 'rxjs/operators';
 
 
 @Component({
@@ -159,7 +159,7 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		/**
 		 * Filter app list by application and action names
 		 */
-		this.actionFilterControl.valueChanges.debounceTime(100).distinctUntilChanged().subscribe(query => {
+		this.actionFilterControl.valueChanges.pipe(debounceTime(100), distinctUntilChanged()).subscribe(query => {
 			this.actionFilter = query.trim();
 			setTimeout(() => {
 				($('.action-panel') as any)
@@ -1634,12 +1634,14 @@ export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDest
 		// const options = { zoom: this.cy.zoom(), pan: this.cy.pan() }
 		// setTimeout(() => this.setupGraph(options), 255);
 		let height, width;
-		timer(0, 50).takeWhile(_ => height != this.cyRef.nativeElement.offsetHeight || width != this.cyRef.nativeElement.offsetWidth)
-		.do(_ => {
+		timer(0, 50).pipe(
+			takeWhile(_ => height != this.cyRef.nativeElement.offsetHeight || width != this.cyRef.nativeElement.offsetWidth),
+			tap(_ => {
 			height = this.cyRef.nativeElement.offsetHeight
 			width = this.cyRef.nativeElement.offsetWidth
-		})
-		.last()
+			}),
+			last(),
+		)
 		.subscribe(_ => window.dispatchEvent(new Event('resize')))	
 	}
 }

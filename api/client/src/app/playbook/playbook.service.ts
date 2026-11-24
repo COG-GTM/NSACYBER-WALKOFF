@@ -18,10 +18,9 @@ import { UtilitiesService } from '../utilities.service';
 
 import { UUID } from 'angular2-uuid';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
 import { Subscriber } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ActionType } from '../models/api/actionApi';
 
 @Injectable({
@@ -108,7 +107,7 @@ export class PlaybookService {
 	 */
 	exportPlaybook(playbookId: string): Observable<Blob> {
 		return this.http.get(`api/playbooks/${playbookId}?mode=export`, { responseType: 'blob' })
-			.catch(this.utils.handleResponseError);
+			.pipe(catchError(this.utils.handleResponseError));
 	}
 
 	/**

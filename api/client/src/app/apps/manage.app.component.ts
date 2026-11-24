@@ -1,5 +1,4 @@
 import { Component, ViewEncapsulation, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import 'rxjs/Rx';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';

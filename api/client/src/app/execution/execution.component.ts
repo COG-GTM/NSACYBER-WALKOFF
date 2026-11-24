@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData } from '../select2/select2.component';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { interval } from 'rxjs';
-import 'rxjs/add/operator/debounceTime';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -24,6 +23,7 @@ import { EnvironmentVariable } from '../models/playbook/environmentVariable';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ResultsModalComponent } from './results.modal.component';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
 	selector: 'execution-component',
@@ -90,7 +90,7 @@ export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterWorkflowStatuses());
 
 		this.recalculateTableCallback = (e: any) => {

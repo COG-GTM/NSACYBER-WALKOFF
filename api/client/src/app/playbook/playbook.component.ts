@@ -1,5 +1,4 @@
 import { Component, ViewEncapsulation, OnInit, OnDestroy} from '@angular/core';
-import 'rxjs/Rx';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
@@ -17,6 +16,7 @@ import { Workflow } from '../models/playbook/workflow';
 import { WorkflowStatuses, WorkflowStatus } from '../models/execution/workflowStatus';
 import { MetadataModalComponent } from './metadata.modal.component';
 import { ImportModalComponent } from './import.modal.component';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
 	selector: 'playbook-component',
@@ -48,7 +48,7 @@ export class PlaybookComponent implements OnInit, OnDestroy {
 		this.getPlaybooksWithWorkflows();
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(() => this.filterWorkflows());
 	}
 

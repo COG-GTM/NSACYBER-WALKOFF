@@ -2,7 +2,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import 'rxjs/add/operator/debounceTime';
 
 import { SettingsService } from './settings.service';
 import { UtilitiesService } from '../utilities.service';
@@ -12,6 +11,7 @@ import { SettingsRoleModalComponent } from './settings.roles.modal.component';
 import { Role } from '../models/role';
 import { AvailableResourceAction } from '../models/availableResourceAction';
 import { GenericObject } from '../models/genericObject';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
 	selector: 'settings-roles-component',
@@ -39,7 +39,7 @@ export class SettingsRolesComponent {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterRoles());
 	}
 

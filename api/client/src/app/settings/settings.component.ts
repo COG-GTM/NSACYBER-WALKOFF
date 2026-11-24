@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import 'rxjs/add/operator/debounceTime';
 
 import { SettingsService } from './settings.service';
 
@@ -14,6 +13,7 @@ import { WorkingUser } from '../models/workingUser';
 import { Role } from '../models/role';
 import { SettingsTimeoutModalComponent } from './settings.timeout.modal.component';
 import { UtilitiesService } from '../utilities.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
 	selector: 'settings-component',
@@ -44,7 +44,7 @@ export class SettingsComponent {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterUsers());
 	}
 

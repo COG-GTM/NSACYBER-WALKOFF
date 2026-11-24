@@ -10,6 +10,7 @@ import { MessagesModalComponent } from './messages.modal.component';
 
 import { GenericObject } from '../models/genericObject';
 import { MessageListing } from '../models/message/messageListing';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
 	selector: 'messages-component',
@@ -44,7 +45,7 @@ export class MessagesComponent implements OnInit {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterMessages());
 	}
 

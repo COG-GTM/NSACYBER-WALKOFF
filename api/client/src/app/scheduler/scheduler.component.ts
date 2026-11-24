@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData } from '../select2/select2.component';
-import 'rxjs/add/operator/debounceTime';
 
 import { SchedulerModalComponent } from './scheduler.modal.component';
 
@@ -11,6 +10,7 @@ import { SchedulerService } from './scheduler.service';
 import { UtilitiesService } from '../utilities.service';
 
 import { ScheduledTask } from '../models/scheduler/scheduledTask';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
 	selector: 'scheduler-component',
@@ -49,7 +49,7 @@ export class SchedulerComponent implements OnInit {
 
 		this.filterQuery
 			.valueChanges
-			.debounceTime(500)
+			.pipe(debounceTime(500))
 			.subscribe(event => this.filterScheduledTasks());
 	}
 
