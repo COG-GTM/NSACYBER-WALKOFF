@@ -1,12 +1,12 @@
 import { Component, Input, ViewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'import-modal-component',
     templateUrl: './import.modal.html',
-    standalone: false
+    imports: [FormsModule]
 })
 export class ImportModalComponent {
     @ViewChild('myForm', { static: true })

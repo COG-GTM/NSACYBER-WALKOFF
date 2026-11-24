@@ -76,7 +76,36 @@ import { HasPermissionDirective } from './permission.directive';
 
 @NgModule({ declarations: [
         //Main component
-        MainComponent,
+        MainComponent], bootstrap: [MainComponent], imports: [FormsModule,
+        BrowserModule,
+        ReactiveFormsModule,
+        JwtModule.forRoot({
+            // config: {
+            // 	tokenGetter: jwtTokenGetter,
+            // 	disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
+            // },
+            jwtOptionsProvider: {
+                provide: JWT_OPTIONS,
+                useFactory: jwtOptionsFactory,
+                deps: [AuthService]
+            }
+        }),
+        NgbModule,
+        RoutingModule,
+        Select2Module,
+        ClipboardModule,
+        NgxDatatableModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        DndModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
+        Gridster,
+        GridsterItem,
+        BaseChartDirective,
+        CodemirrorModule,
+        NgJsonEditorModule,
+        MomentModule, 
         //Router module components
         PlaybookComponent,
         WorkflowEditorComponent,
@@ -118,38 +147,7 @@ import { HasPermissionDirective } from './permission.directive';
         SafeEmbedPipe,
         WidgetModalComponent,
         // Directives
-        HasPermissionDirective
-    ],
-    bootstrap: [MainComponent], imports: [FormsModule,
-        BrowserModule,
-        ReactiveFormsModule,
-        JwtModule.forRoot({
-            // config: {
-            // 	tokenGetter: jwtTokenGetter,
-            // 	disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
-            // },
-            jwtOptionsProvider: {
-                provide: JWT_OPTIONS,
-                useFactory: jwtOptionsFactory,
-                deps: [AuthService]
-            }
-        }),
-        NgbModule,
-        RoutingModule,
-        Select2Module,
-        ClipboardModule,
-        NgxDatatableModule,
-        OwlDateTimeModule,
-        OwlNativeDateTimeModule,
-        DndModule,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
-        Gridster,
-        GridsterItem,
-        BaseChartDirective,
-        CodemirrorModule,
-        NgJsonEditorModule,
-        MomentModule], providers: [
+        HasPermissionDirective], providers: [
         UtilitiesService,
         CookieService,
         AuthService,

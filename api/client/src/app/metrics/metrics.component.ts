@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from '../select2/select2.component';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
+import { DatatableComponent, DataTableColumnDirective } from '@swimlane/ngx-datatable';
 
 import { MetricsService } from './metrics.service';
 import { UtilitiesService } from '../utilities.service';
@@ -17,7 +17,7 @@ import { WorkflowMetric } from '../models/metric/workflowMetric';
         './metrics.scss',
     ],
     providers: [MetricsService],
-    standalone: false
+    imports: [DatatableComponent, DataTableColumnDirective, Select2Component]
 })
 
 export class MetricsComponent implements OnInit {

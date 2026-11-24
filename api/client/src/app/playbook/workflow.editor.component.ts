@@ -1,12 +1,12 @@
 import { Component, ViewEncapsulation, ViewChild, ElementRef, ChangeDetectorRef, OnInit,
 	AfterViewChecked, OnDestroy} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 import { UUID } from 'angular2-uuid';
 import { Observable, interval, timer } from 'rxjs';
 import { plainToClass, classToClass } from 'class-transformer';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import * as cytoscape from 'cytoscape';
@@ -41,7 +41,7 @@ import { ConsoleLog } from '../models/execution/consoleLog';
 import { EnvironmentVariable } from '../models/playbook/environmentVariable';
 import { PlaybookEnvironmentVariableModalComponent } from './playbook.environment.variable.modal.component';
 import { WorkflowStatus } from '../models/execution/workflowStatus';
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { CodemirrorComponent, CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { ActivatedRoute } from '@angular/router';
 import { Variable } from '../models/variable';
 import { MetadataModalComponent } from './metadata.modal.component';
@@ -54,6 +54,16 @@ import { ResultsModalComponent } from '../execution/results.modal.component';
 import { JsonModalComponent } from '../execution/json.modal.component';
 import * as io from 'socket.io-client';
 import { debounceTime, distinctUntilChanged, takeWhile, tap, last } from 'rxjs/operators';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { DraggableDirective, DroppableDirective } from '../dnd/dnd.module';
+import { PlaybookArgumentComponent } from './playbook.argument.component';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap/popover';
+import { NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap/nav';
+import { PlaybookConditionalExpressionComponent } from './playbook.conditional.expression.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { HasPermissionDirective } from '../permission.directive';
+import { JsonPipe } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
 
 
 @Component({
@@ -66,7 +76,7 @@ import { debounceTime, distinctUntilChanged, takeWhile, tap, last } from 'rxjs/o
     ],
     encapsulation: ViewEncapsulation.None,
     providers: [AuthService, GlobalsService, SettingsService],
-    standalone: false
+    imports: [NgbTooltip, FormsModule, ReactiveFormsModule, DraggableDirective, DroppableDirective, PlaybookArgumentComponent, NgbPopover, CodemirrorModule, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet, PlaybookConditionalExpressionComponent, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, ClipboardModule, HasPermissionDirective, JsonPipe, MomentModule]
 })
 export class WorkflowEditorComponent implements OnInit, AfterViewChecked, OnDestroy {
 	@ViewChild('cyRef', { static: true }) cyRef: ElementRef;

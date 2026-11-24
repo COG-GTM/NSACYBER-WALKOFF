@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GridsterConfig, GridType, CompactType } from 'angular-gridster2';
+import { GridsterConfig, GridType, CompactType, Gridster, GridsterItem } from 'angular-gridster2';
 import { ReportWidget, BarChartWidget, PieChartWidget, LineChartWidget, TextWidget, KibanaWidget, TableWidget } from '../models/report/reportWidget';
 import { Report } from '../models/report/report';
 import { ReportService } from './report.service';
@@ -8,12 +8,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WidgetModalComponent } from './widget.modal.component';
 import { UtilitiesService } from '../utilities.service';
+import { FormsModule } from '@angular/forms';
+import { DraggableDirective, DroppableDirective } from '../dnd/dnd.module';
+import { BaseChartDirective } from 'ng2-charts';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { SafeEmbedPipe } from '../pipes/safeEmbed.pipe';
 
 @Component({
     selector: 'manage-reports-component',
     templateUrl: './manage.reports.component.html',
     styleUrls: ['./manage.reports.component.scss'],
-    standalone: false
+    imports: [FormsModule, DraggableDirective, Gridster, DroppableDirective, GridsterItem, BaseChartDirective, DatatableComponent, SafeEmbedPipe]
 })
 export class ManageReportsComponent implements OnInit {
 

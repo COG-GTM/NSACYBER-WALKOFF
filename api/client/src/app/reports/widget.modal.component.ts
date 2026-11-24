@@ -6,12 +6,13 @@ import { ExecutionService } from '../execution/execution.service';
 import { PlaybookService } from '../playbook/playbook.service';
 import { WorkflowStatuses } from '../models/execution/workflowStatus';
 import { UtilitiesService } from '../utilities.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'widget-modal-component',
     templateUrl: './widget.modal.component.html',
     styleUrls: ['./widget.modal.component.scss'],
-    standalone: false
+    imports: [FormsModule]
 })
 export class WidgetModalComponent implements OnInit {
 

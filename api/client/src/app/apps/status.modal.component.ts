@@ -4,7 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from './app.service';
 import { AuthService } from '../auth/auth.service';
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { CodemirrorComponent, CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { Observable, Observer, zip, interval, Subscription } from 'rxjs';
 import { takeWhile, finalize } from 'rxjs/operators';
 
@@ -18,7 +18,7 @@ import { UtilitiesService } from '../utilities.service';
         './status.modal.scss',
     ],
     encapsulation: ViewEncapsulation.None,
-    standalone: false
+    imports: [CodemirrorModule]
 })
 export class StatusModalComponent implements OnInit, OnDestroy {
     @ViewChild('consoleArea') consoleArea: CodemirrorComponent;

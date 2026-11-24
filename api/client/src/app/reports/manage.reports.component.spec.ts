@@ -16,9 +16,8 @@ describe('ManageReportsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [ManageReportsComponent, SafeEmbedPipe],
     schemas: [NO_ERRORS_SCHEMA],
-    imports: [FormsModule, RouterTestingModule, NgbModule, ToastrModule.forRoot()],
+    imports: [FormsModule, RouterTestingModule, NgbModule, ToastrModule.forRoot(), ManageReportsComponent, SafeEmbedPipe],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

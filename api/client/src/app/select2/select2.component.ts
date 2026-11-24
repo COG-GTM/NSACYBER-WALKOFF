@@ -19,8 +19,7 @@ export interface Select2OptionData {
  */
 @Component({
     selector: 'select2',
-    template: `<select #selector><ng-content select="option, optgroup"></ng-content></select>`,
-    standalone: false
+    template: `<select #selector><ng-content select="option, optgroup"></ng-content></select>`
 })
 export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 	@ViewChild('selector', { static: true }) selector: ElementRef<HTMLSelectElement>;
@@ -95,5 +94,5 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy {
 	}
 }
 
-@NgModule({ declarations: [Select2Component], exports: [Select2Component] })
+@NgModule({ imports: [Select2Component], exports: [Select2Component] })
 export class Select2Module {}

@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Select2OptionData } from '../select2/select2.component';
@@ -11,6 +11,8 @@ import { UtilitiesService } from '../utilities.service';
 
 import { ScheduledTask } from '../models/scheduler/scheduledTask';
 import { debounceTime } from 'rxjs/operators';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 
 @Component({
     selector: 'scheduler-component',
@@ -21,7 +23,7 @@ import { debounceTime } from 'rxjs/operators';
     ],
     encapsulation: ViewEncapsulation.None,
     providers: [SchedulerService],
-    standalone: false
+    imports: [NgbTooltip, FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective]
 })
 export class SchedulerComponent implements OnInit {
 	schedulerStatus: string;

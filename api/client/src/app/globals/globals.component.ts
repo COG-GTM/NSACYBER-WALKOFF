@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { VariableModalComponent } from './variable.modal.component';
@@ -8,6 +8,9 @@ import { Variable } from '../models/variable';
 
 import { classToClass } from 'class-transformer';
 import { UtilitiesService } from '../utilities.service';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'globals-component',
@@ -16,7 +19,7 @@ import { UtilitiesService } from '../utilities.service';
         './globals.scss',
     ],
     encapsulation: ViewEncapsulation.None,
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, JsonPipe]
 })
 export class GlobalsComponent implements OnInit {
 	//Global Data Table params

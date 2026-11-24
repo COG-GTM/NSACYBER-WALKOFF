@@ -4,6 +4,8 @@ import { AppApi } from '../models/api/appApi';
 import { ConditionalExpression } from '../models/playbook/conditionalExpression';
 import { Workflow } from '../models/playbook/workflow';
 import { Argument } from '../models/playbook/argument';
+import { FormsModule } from '@angular/forms';
+import { PlaybookConditionsComponent } from './playbook.conditions.component';
 
 @Component({
     selector: 'playbook-conditional-expression-component',
@@ -11,7 +13,7 @@ import { Argument } from '../models/playbook/argument';
     styleUrls: [],
     encapsulation: ViewEncapsulation.None,
     providers: [],
-    standalone: false
+    imports: [FormsModule, PlaybookConditionsComponent]
 })
 export class PlaybookConditionalExpressionComponent implements OnInit {
 	@Input() selectedAppName: string;

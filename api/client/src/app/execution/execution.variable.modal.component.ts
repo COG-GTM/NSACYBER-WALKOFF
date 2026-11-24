@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormsModule } from '@angular/forms';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Workflow } from '../models/playbook/workflow';
@@ -8,7 +8,7 @@ import { EnvironmentVariable } from '../models/playbook/environmentVariable';
 @Component({
     selector: 'execution-variable-modal-component',
     templateUrl: './execution.variable.modal.html',
-    standalone: false
+    imports: [FormsModule]
 })
 export class ExecutionVariableModalComponent {
     @Input() workflow: Workflow;

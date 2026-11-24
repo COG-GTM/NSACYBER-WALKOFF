@@ -4,10 +4,13 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth/auth.service';
 import { UtilitiesService } from '../utilities.service';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 import { WorkflowStatus } from '../models/execution/workflowStatus';
 import { NodeStatuses } from '../models/execution/nodeStatus';
 import { JsonModalComponent } from './json.modal.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { MomentModule } from 'ngx-moment';
 
 @Component({
     selector: 'results-modal-component',
@@ -16,7 +19,7 @@ import { JsonModalComponent } from './json.modal.component';
         './results.modal.scss',
     ],
     encapsulation: ViewEncapsulation.None,
-    standalone: false
+    imports: [DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, ClipboardModule, NgbTooltip, MomentModule]
 })
 export class ResultsModalComponent implements OnInit, OnDestroy {
     @Input() loadedWorkflowStatus: WorkflowStatus;

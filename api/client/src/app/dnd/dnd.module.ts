@@ -12,10 +12,7 @@ export class DragDropService {
 	dragData: any;
 }
 
-@Directive({
-    selector: '[dnd-draggable]',
-    standalone: false
-})
+@Directive({ selector: '[dnd-draggable]' })
 export class DraggableDirective {
 	@Input() dragData: any;
 	@Input() set dragEnabled(enabled: boolean) { this.el.nativeElement.draggable = !!enabled; }
@@ -46,10 +43,7 @@ export class DraggableDirective {
 	}
 }
 
-@Directive({
-    selector: '[dnd-droppable]',
-    standalone: false
-})
+@Directive({ selector: '[dnd-droppable]' })
 export class DroppableDirective {
 	@Input() dropEnabled = true;
 	@Output() onDropSuccess = new EventEmitter<DragDropData>();
@@ -85,7 +79,7 @@ export class DroppableDirective {
 }
 
 @NgModule({
-	declarations: [DraggableDirective, DroppableDirective],
-	exports: [DraggableDirective, DroppableDirective],
+    imports: [DraggableDirective, DroppableDirective],
+    exports: [DraggableDirective, DroppableDirective],
 })
 export class DndModule {}

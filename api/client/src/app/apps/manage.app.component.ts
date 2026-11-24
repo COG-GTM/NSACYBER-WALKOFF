@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule } from '@angular/forms';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../auth/auth.service';
@@ -24,9 +24,10 @@ import * as CodeMirror from 'codemirror'
 import { createTree } from 'jquery.fancytree';
 import 'jquery.fancytree/dist/modules/jquery.fancytree.edit';
 import 'jquery.fancytree/dist/modules/jquery.fancytree.filter';
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { CodemirrorComponent, CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { StatusModalComponent } from './status.modal.component';
 import { FileModalComponent } from './file.modal.component';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 
 @Component({
     selector: 'manage-app-component',
@@ -36,7 +37,7 @@ import { FileModalComponent } from './file.modal.component';
     ],
     encapsulation: ViewEncapsulation.None,
     providers: [AuthService, GlobalsService, SettingsService],
-    standalone: false
+    imports: [NgbTooltip, CodemirrorModule, FormsModule]
 })
 export class ManageAppComponent implements OnInit, OnDestroy {
     @ViewChild('editorArea') editorArea: CodemirrorComponent;

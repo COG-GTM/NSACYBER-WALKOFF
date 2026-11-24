@@ -18,10 +18,10 @@ describe('PlaybookArgumentComponent', () => {
 	 */
 	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-			declarations: [PlaybookArgumentComponent, KeysPipe],
-			schemas: [NO_ERRORS_SCHEMA],
-			providers: [],
-		})
+    imports: [PlaybookArgumentComponent, KeysPipe],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [],
+})
 			.compileComponents();
 	}));
 

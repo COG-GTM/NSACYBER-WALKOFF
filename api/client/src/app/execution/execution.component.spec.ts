@@ -111,12 +111,13 @@ describe('ExecutionComponent', () => {
 	 */
 	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-    declarations: [ExecutionComponent],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [
         // NgbModule,
         NgxDatatableModule,
-        ToastrModule.forRoot({ positionClass: 'toast-bottom-right' })],
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
+        ExecutionComponent
+    ],
     providers: [ExecutionService, JwtInterceptor,
         // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
         {

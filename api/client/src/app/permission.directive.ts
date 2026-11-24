@@ -14,10 +14,7 @@ import { PermissionService } from './permission.service';
 *  Setting all to true performs an AND operation on passed permissions requiring them all
 *  IE: <div *hasPermission="['viewReports', 'editReports'] all:true"> {{ Protected  }}</div>
 */
-@Directive({
-    selector: '[hasPermission]',
-    standalone: false
-})
+@Directive({ selector: '[hasPermission]' })
 export class HasPermissionDirective implements OnInit {
     private permissions = [];
     private matchAll = false;

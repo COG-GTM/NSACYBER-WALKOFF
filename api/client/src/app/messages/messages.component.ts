@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,6 +11,7 @@ import { MessagesModalComponent } from './messages.modal.component';
 import { GenericObject } from '../models/genericObject';
 import { MessageListing } from '../models/message/messageListing';
 import { debounceTime } from 'rxjs/operators';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 
 @Component({
     selector: 'messages-component',
@@ -19,7 +20,7 @@ import { debounceTime } from 'rxjs/operators';
         './messages.scss',
     ],
     providers: [MessagesService],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective]
 })
 export class MessagesComponent implements OnInit {
 	//Device Data Table params

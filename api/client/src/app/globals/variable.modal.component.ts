@@ -5,13 +5,15 @@ import { Variable, VariablePermission } from "../models/variable";
 import { SettingsService } from "../settings/settings.service";
 import { Role } from "../models/role";
 import { ToastrService } from "ngx-toastr";
-import { JsonEditorComponent } from "ang-jsoneditor";
+import { JsonEditorComponent, NgJsonEditorModule } from "ang-jsoneditor";
+import { FormsModule } from "@angular/forms";
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap/tooltip";
 
 @Component({
     selector: "variable-modal-component",
     templateUrl: "./variable.modal.html",
     styleUrls: ["./variable.modal.scss"],
-    standalone: false
+    imports: [FormsModule, NgJsonEditorModule, NgbTooltip]
 })
 export class VariableModalComponent implements OnInit {
   @Input() variable: Variable = new Variable();

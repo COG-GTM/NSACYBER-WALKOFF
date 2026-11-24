@@ -8,6 +8,7 @@ import { UtilitiesService } from '../utilities.service';
 import { WorkingUser } from '../models/workingUser';
 import { User } from '../models/user';
 import { AuthService } from '../auth/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'main-profile',
@@ -16,7 +17,7 @@ import { AuthService } from '../auth/auth.service';
         './main.scss',
     ],
     providers: [MainService, UtilitiesService],
-    standalone: false
+    imports: [FormsModule]
 })
 
 export class MainProfileModalComponent {

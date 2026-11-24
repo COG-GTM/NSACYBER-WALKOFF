@@ -5,7 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth/auth.service';
 
 import { UtilitiesService } from '../utilities.service';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { JsonEditorComponent, NgJsonEditorModule } from 'ang-jsoneditor';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @Component({
     selector: 'json-modal-component',
@@ -14,7 +15,7 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
         './json.modal.scss',
     ],
     encapsulation: ViewEncapsulation.None,
-    standalone: false
+    imports: [NgJsonEditorModule, ClipboardModule]
 })
 export class JsonModalComponent implements OnInit, OnDestroy {
     @Input() results: string;

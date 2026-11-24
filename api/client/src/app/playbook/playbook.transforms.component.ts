@@ -6,6 +6,8 @@ import { TransformApi } from '../models/api/transformApi';
 import { ParameterApi } from '../models/api/parameterApi';
 import { Argument } from '../models/playbook/argument';
 import { Transform } from '../models/playbook/transform';
+import { FormsModule } from '@angular/forms';
+import { PlaybookArgumentComponent } from './playbook.argument.component';
 
 @Component({
     selector: 'playbook-transforms-component',
@@ -13,7 +15,7 @@ import { Transform } from '../models/playbook/transform';
     styleUrls: [],
     encapsulation: ViewEncapsulation.None,
     providers: [],
-    standalone: false
+    imports: [FormsModule, PlaybookArgumentComponent]
 })
 export class PlaybookTransformsComponent implements OnInit {
 	@Input() selectedAppName: string;

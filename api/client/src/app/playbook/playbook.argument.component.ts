@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnChanges, ElementRef, ViewChild } from '@angular/core';
-import { Select2OptionData } from '../select2/select2.component';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
 
 import { Workflow } from '../models/playbook/workflow';
 import { Action } from '../models/playbook/action';
@@ -11,7 +11,9 @@ import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Global } from '../models/global';
 import { WorkflowNode } from '../models/playbook/WorkflowNode';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { JsonEditorComponent, NgJsonEditorModule } from 'ang-jsoneditor';
+import { FormsModule } from '@angular/forms';
+import { KeysPipe } from '../pipes/keys.pipe';
 
 const AVAILABLE_TYPES = ['string', 'number', 'boolean'];
 
@@ -21,7 +23,7 @@ const AVAILABLE_TYPES = ['string', 'number', 'boolean'];
     styleUrls: [],
     encapsulation: ViewEncapsulation.None,
     providers: [],
-    standalone: false
+    imports: [FormsModule, Select2Component, NgJsonEditorModule, KeysPipe]
 })
 export class PlaybookArgumentComponent implements OnChanges {
 	@Input() id: number;

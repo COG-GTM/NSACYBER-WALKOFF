@@ -6,6 +6,9 @@ import { ParameterApi } from '../models/api/parameterApi';
 import { Workflow } from '../models/playbook/workflow';
 import { Argument } from '../models/playbook/argument';
 import { Condition } from '../models/playbook/condition';
+import { FormsModule } from '@angular/forms';
+import { PlaybookArgumentComponent } from './playbook.argument.component';
+import { PlaybookTransformsComponent } from './playbook.transforms.component';
 
 
 @Component({
@@ -14,7 +17,7 @@ import { Condition } from '../models/playbook/condition';
     styleUrls: [],
     encapsulation: ViewEncapsulation.None,
     providers: [],
-    standalone: false
+    imports: [FormsModule, PlaybookArgumentComponent, PlaybookTransformsComponent]
 })
 export class PlaybookConditionsComponent implements OnInit {
 	@Input() selectedAppName: string;

@@ -2,12 +2,13 @@ import {Component, Input, ViewChild} from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentVariable } from '../models/playbook/environmentVariable';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { JsonEditorComponent, NgJsonEditorModule } from 'ang-jsoneditor';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'playbook-environment-variable-modal-component',
     templateUrl: './playbook.environment.variable.modal.html',
-    standalone: false
+    imports: [FormsModule, NgJsonEditorModule]
 })
 export class PlaybookEnvironmentVariableModalComponent {
   @Input() variable: EnvironmentVariable = new EnvironmentVariable();

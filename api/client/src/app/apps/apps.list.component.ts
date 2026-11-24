@@ -24,8 +24,7 @@ import { StatusModalComponent } from './status.modal.component';
         './apps.list.scss',
     ],
     encapsulation: ViewEncapsulation.None,
-    providers: [AuthService, GlobalsService, SettingsService],
-    standalone: false
+    providers: [AuthService, GlobalsService, SettingsService]
 })
 export class AppsListComponent implements OnInit, OnDestroy {
 	workflowsLoaded: boolean = false;

@@ -84,7 +84,6 @@ describe('GlobalsComponent', () => {
 	 */
 	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-    declarations: [GlobalsComponent],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [NgbModule,
         NgxDatatableModule,
@@ -97,7 +96,7 @@ describe('GlobalsComponent', () => {
         ToastrModule.forRoot({ positionClass: 'toast-bottom-right' })
         // FormsModule,
         // ReactiveFormsModule,
-    ],
+        , GlobalsComponent],
     providers: [GlobalsService, JwtInterceptor,
         // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
         {

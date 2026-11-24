@@ -7,6 +7,7 @@ import { UtilitiesService } from '../utilities.service';
 
 import { WorkingUser } from '../models/workingUser';
 import { Configuration } from '../models/configuration';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'timeout-modal',
@@ -15,7 +16,7 @@ import { Configuration } from '../models/configuration';
         './settings.scss',
     ],
     providers: [SettingsService, UtilitiesService],
-    standalone: false
+    imports: [FormsModule]
 })
 export class SettingsTimeoutModalComponent {
 	@Input() configuration: Configuration;

@@ -7,7 +7,8 @@ import { UtilitiesService } from '../utilities.service';
 
 import { WorkingUser } from '../models/workingUser';
 import { Role } from '../models/role';
-import { Select2OptionData } from '../select2/select2.component';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'user-modal',
@@ -16,7 +17,7 @@ import { Select2OptionData } from '../select2/select2.component';
         './settings.scss',
     ],
     providers: [SettingsService, UtilitiesService],
-    standalone: false
+    imports: [FormsModule, Select2Component]
 })
 export class SettingsUserModalComponent {
 	@Input() workingUser: WorkingUser;

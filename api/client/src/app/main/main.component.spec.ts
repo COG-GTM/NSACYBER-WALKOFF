@@ -81,15 +81,16 @@ describe('App', () => {
 	 */
 	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-			imports: [
-				//HttpModule,
-				NgbModule,
-				ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
-			],
-			declarations: [MainComponent, HasPermissionDirective],
-			schemas: [NO_ERRORS_SCHEMA],
-			providers: [MainService],
-		})
+    imports: [
+        //HttpModule,
+        NgbModule,
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
+        HasPermissionDirective,
+    ],
+    declarations: [MainComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [MainService],
+})
 			.compileComponents();
 	}));
 

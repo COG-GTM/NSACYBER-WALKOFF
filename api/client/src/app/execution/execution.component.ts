@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ViewChild,
 	ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from '../select2/select2.component';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
 import { interval } from 'rxjs';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -24,6 +24,9 @@ import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ResultsModalComponent } from './results.modal.component';
 import { debounceTime } from 'rxjs/operators';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { ClipboardModule } from 'ngx-clipboard';
+import { MomentModule } from 'ngx-moment';
 
 @Component({
     selector: 'execution-component',
@@ -33,7 +36,7 @@ import { debounceTime } from 'rxjs/operators';
     ],
     encapsulation: ViewEncapsulation.None,
     providers: [AuthService],
-    standalone: false
+    imports: [Select2Component, FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, ClipboardModule, MomentModule]
 })
 export class ExecutionComponent implements OnInit, AfterViewChecked, OnDestroy {
 	@ViewChild('nodeStatusContainer') nodeStatusContainer: ElementRef;

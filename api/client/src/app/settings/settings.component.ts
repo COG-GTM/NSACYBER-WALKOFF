@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,6 +14,9 @@ import { Role } from '../models/role';
 import { SettingsTimeoutModalComponent } from './settings.timeout.modal.component';
 import { UtilitiesService } from '../utilities.service';
 import { debounceTime } from 'rxjs/operators';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+import { SettingsRolesComponent } from './settings.roles.component';
 
 @Component({
     selector: 'settings-component',
@@ -22,7 +25,7 @@ import { debounceTime } from 'rxjs/operators';
         './settings.scss',
     ],
     providers: [SettingsService],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip, SettingsRolesComponent]
 })
 export class SettingsComponent {
 	configuration: Configuration = new Configuration();

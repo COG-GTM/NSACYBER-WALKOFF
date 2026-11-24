@@ -2,11 +2,13 @@ import { Component, Input, ViewChild } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Workflow, WorkflowPermission } from '../models/playbook/workflow';
-import { NgForm, NgModel } from '@angular/forms';
+import { NgForm, NgModel, FormsModule } from '@angular/forms';
 import { Role } from '../models/role';
 import { SettingsService } from '../settings/settings.service';
 import { ToastrService } from 'ngx-toastr';
 import { PlaybookService } from './playbook.service';
+import { Select2Component } from '../select2/select2.component';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 
 @Component({
     selector: 'metadata-modal-component',
@@ -14,7 +16,7 @@ import { PlaybookService } from './playbook.service';
     styleUrls: [
         './metadata.modal.scss',
     ],
-    standalone: false
+    imports: [FormsModule, Select2Component, NgbTooltip]
 })
 export class MetadataModalComponent {
     @Input() workflow: Workflow = new Workflow();

@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -12,6 +12,8 @@ import { Role } from '../models/role';
 import { AvailableResourceAction } from '../models/availableResourceAction';
 import { GenericObject } from '../models/genericObject';
 import { debounceTime } from 'rxjs/operators';
+import { DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective } from '@swimlane/ngx-datatable';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 
 @Component({
     selector: 'settings-roles-component',
@@ -21,7 +23,7 @@ import { debounceTime } from 'rxjs/operators';
     ],
     encapsulation: ViewEncapsulation.None,
     providers: [SettingsService],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, DatatableComponent, DataTableColumnDirective, DataTableColumnCellDirective, NgbTooltip]
 })
 export class SettingsRolesComponent {
 	availableResourceActions: AvailableResourceAction[] = [];

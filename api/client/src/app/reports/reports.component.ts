@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 //import * as jsPDF from 'jspdf';
@@ -8,15 +8,20 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { ReportService } from './report.service';
-import { GridsterConfig, GridType, CompactType } from 'angular-gridster2';
+import { GridsterConfig, GridType, CompactType, Gridster, GridsterItem } from 'angular-gridster2';
 import { Report } from '../models/report/report';
+import { NgClass } from '@angular/common';
+import { HasPermissionDirective } from '../permission.directive';
+import { BaseChartDirective } from 'ng2-charts';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { SafeEmbedPipe } from '../pipes/safeEmbed.pipe';
 
 @Component({
     selector: 'reports-component',
     templateUrl: './reports.html',
     styleUrls: ['./reports.scss'],
     providers: [AuthService],
-    standalone: false
+    imports: [NgClass, HasPermissionDirective, RouterLink, Gridster, GridsterItem, BaseChartDirective, DatatableComponent, SafeEmbedPipe]
 })
 export class ReportsComponent implements OnInit {
 	@ViewChild('reportsMain', { static: true }) main: ElementRef;

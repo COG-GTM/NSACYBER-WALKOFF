@@ -2,9 +2,9 @@ import { Component, ViewEncapsulation, OnInit, OnDestroy} from '@angular/core';
 import * as Fuse from 'fuse.js';
 import { saveAs } from 'file-saver';
 import { UUID } from 'angular2-uuid';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { plainToClass } from 'class-transformer';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../auth/auth.service';
@@ -17,6 +17,8 @@ import { WorkflowStatuses, WorkflowStatus } from '../models/execution/workflowSt
 import { MetadataModalComponent } from './metadata.modal.component';
 import { ImportModalComponent } from './import.modal.component';
 import { debounceTime } from 'rxjs/operators';
+import { HasPermissionDirective } from '../permission.directive';
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap/dropdown';
 
 @Component({
     selector: 'playbook-component',
@@ -24,7 +26,7 @@ import { debounceTime } from 'rxjs/operators';
     styleUrls: ['./playbook.scss'],
     encapsulation: ViewEncapsulation.None,
     providers: [AuthService, GlobalsService, SettingsService],
-    standalone: false
+    imports: [HasPermissionDirective, RouterLink, FormsModule, ReactiveFormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu]
 })
 export class PlaybookComponent implements OnInit, OnDestroy {
 	workflowStatusSocket: SocketIOClient.Socket;

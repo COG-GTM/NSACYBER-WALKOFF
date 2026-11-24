@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from '../select2/select2.component';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
 
 import { SettingsService } from './settings.service';
 import { UtilitiesService } from '../utilities.service';
@@ -9,6 +9,7 @@ import { UtilitiesService } from '../utilities.service';
 import { Role } from '../models/role';
 import { AvailableResourceAction } from '../models/availableResourceAction';
 import { Resource } from '../models/resource';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'settings-role-modal',
@@ -17,7 +18,7 @@ import { Resource } from '../models/resource';
         './settings.scss',
     ],
     providers: [SettingsService, UtilitiesService],
-    standalone: false
+    imports: [FormsModule, Select2Component]
 })
 export class SettingsRoleModalComponent {
 	@Input() workingRole: Role;

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Select2OptionData } from '../select2/select2.component';
+import { Select2OptionData, Select2Component } from '../select2/select2.component';
 import * as moment from 'moment';
 
 import { SchedulerService } from './scheduler.service';
@@ -12,6 +12,9 @@ import { ScheduledTaskCron } from '../models/scheduler/scheduledTaskCron';
 import { ScheduledTaskInterval } from '../models/scheduler/scheduledTaskInterval';
 import { ScheduledTaskDate } from '../models/scheduler/scheduledTaskDate';
 import { GenericObject } from '../models/genericObject';
+import { FormsModule } from '@angular/forms';
+import { OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'scheduler-modal',
@@ -20,7 +23,7 @@ import { GenericObject } from '../models/genericObject';
         './scheduler.scss',
     ],
     providers: [SchedulerService, UtilitiesService],
-    standalone: false
+    imports: [Select2Component, FormsModule, OwlDateTimeModule, DatePipe]
 })
 export class SchedulerModalComponent implements OnInit {
 	@Input() workingScheduledTask: ScheduledTask = new ScheduledTask();

@@ -10,6 +10,7 @@ import { AppApi } from '../models/api/appApi';
 import { DeviceApi } from '../models/api/deviceApi';
 import { ParameterSchema } from '../models/api/parameterSchema';
 import { GenericObject } from '../models/genericObject';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'global-modal',
@@ -18,7 +19,7 @@ import { GenericObject } from '../models/genericObject';
         './globals.scss',
     ],
     providers: [GlobalsService, UtilitiesService],
-    standalone: false
+    imports: [FormsModule]
 })
 export class GlobalsModalComponent implements OnInit, AfterViewInit {
 	@Input() workingGlobal: WorkingGlobal = new WorkingGlobal();
