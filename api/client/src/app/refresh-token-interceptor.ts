@@ -9,7 +9,7 @@ import { JwtInterceptor } from '@auth0/angular-jwt';
 export function jwtOptionsFactory(authService: AuthService)  {
     return {
         tokenGetter: () => authService.getAccessToken(),
-		blacklistedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
+		disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
     }
 }
 
@@ -23,7 +23,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     constructor (private authService: AuthService, private jwtInterceptor: JwtInterceptor) {}
 
     intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (this.jwtInterceptor.isWhitelistedDomain(req) && !this.jwtInterceptor.isBlacklistedRoute(req) && this.authService.isAccessTokenExpired()) {
+        if (this.jwtInterceptor.isAllowedDomain(req) && !this.jwtInterceptor.isDisallowedRoute(req) && this.authService.isAccessTokenExpired()) {
             return from(this.authService.getAccessTokenRefreshed())
                     .pipe(mergeMap(() => this.jwtInterceptor.intercept(req, next)));
         } 

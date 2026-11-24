@@ -15,7 +15,7 @@ import { DndModule } from './dnd/dnd.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { GridsterModule } from 'angular-gridster2';
-import { ChartsModule } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 import { NgJsonEditorModule } from 'ang-jsoneditor'
 import { MomentModule } from 'ngx-moment';
 
@@ -83,7 +83,7 @@ import { HasPermissionDirective } from './permission.directive';
         JwtModule.forRoot({
             // config: {
             // 	tokenGetter: jwtTokenGetter,
-            // 	blacklistedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
+            // 	disallowedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
             // },
             jwtOptionsProvider: {
                 provide: JWT_OPTIONS,
@@ -102,7 +102,7 @@ import { HasPermissionDirective } from './permission.directive';
         BrowserAnimationsModule,
         ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
         GridsterModule,
-        ChartsModule,
+        NgChartsModule,
         CodemirrorModule,
         NgJsonEditorModule,
         MomentModule
