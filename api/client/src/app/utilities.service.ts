@@ -105,7 +105,7 @@ export class UtilitiesService {
 				message,
 				backdrop: true,
 				className: "mt-5 pt-5",
-				callback: () => { resolve() } 
+				callback: () => { resolve(undefined) } 
 			}
 			bootbox.alert(Object.assign({}, defaults, options));
 		})
