@@ -111,7 +111,7 @@ export class SchedulerModalComponent implements OnInit {
 			const startDate = +args.start_date;
 			const endDate = +args.end_date;
 
-			if (startDate > endDate) { return 'The end date cannot be before the start date.'; }
+			if (args.end_date && startDate > endDate) { return 'The end date cannot be before the start date.'; }
 		}
 
 		if (this.workingScheduledTask.task_trigger.type === 'interval') {

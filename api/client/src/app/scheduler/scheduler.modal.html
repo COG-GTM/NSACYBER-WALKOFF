@@ -61,7 +61,7 @@
             <div class="form-group">
               <label for="name">End Datetime</label>
               <input class="form-control" [value]="workingScheduledTask.task_trigger.args.end_date | date: 'short'" [(ngModel)]="workingScheduledTask.task_trigger.args.end_date"
-                name="end_date" [owlDateTime]="dtPicker3" [owlDateTimeTrigger]="dtPicker3" [min]="minDate"None/>
+                name="end_date" [owlDateTime]="dtPicker3" [owlDateTimeTrigger]="dtPicker3" [min]="minDate"/>
               <owl-date-time #dtPicker3></owl-date-time>
             </div>
           </div>
@@ -121,7 +121,7 @@
             <div class="form-group">
               <label for="name">End Datetime</label>
               <input class="form-control" [value]="workingScheduledTask.task_trigger.args.end_date | date: 'short'" [(ngModel)]="workingScheduledTask.task_trigger.args.end_date"
-                name="end_date" [owlDateTime]="dtPicker5" [owlDateTimeTrigger]="dtPicker5" [min]="minDate"None/>
+                name="end_date" [owlDateTime]="dtPicker5" [owlDateTimeTrigger]="dtPicker5" [min]="minDate"/>
               <owl-date-time #dtPicker5></owl-date-time>
             </div>
           </div>
