@@ -75,119 +75,100 @@ import { ManageAppComponent } from './apps/manage.app.component';
 import { HasPermissionDirective } from './permission.directive';
 
 @NgModule({
-	imports: [
-		FormsModule,
-		BrowserModule,
-		HttpClientModule,
-		ReactiveFormsModule,
-		JwtModule.forRoot({
-			// config: {
-			// 	tokenGetter: jwtTokenGetter,
-			// 	blacklistedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
-			// },
-			jwtOptionsProvider: {
-				provide: JWT_OPTIONS,
-				useFactory: jwtOptionsFactory,
-				deps: [AuthService]
-			}
-		}),
-		NgbModule,
-		RoutingModule,
-		Select2Module,
-		ClipboardModule,
-		NgxDatatableModule,
-		OwlDateTimeModule,
-		OwlNativeDateTimeModule,
-		DndModule,
-	    BrowserAnimationsModule,
-		ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
-		GridsterModule,
-		ChartsModule,
-		CodemirrorModule,
-		NgJsonEditorModule,
-		MomentModule
-	],
-	declarations: [
-		//Main component
-		MainComponent,
-		//Router module components
-		PlaybookComponent,
-		WorkflowEditorComponent,
-		SchedulerComponent,
-		GlobalsComponent,
-		MessagesComponent,
-		MetricsComponent,
-		SettingsComponent,
-		ReportsComponent,
-		ExecutionComponent,
-		AppsListComponent,
-		ManageAppComponent,
-		//Modals
-		SchedulerModalComponent,
-		GlobalsModalComponent,
-		VariableModalComponent,
-		MainProfileModalComponent,
-		SettingsUserModalComponent,
-		SettingsRoleModalComponent,
-		SettingsTimeoutModalComponent,
-		MessagesModalComponent,
-		PlaybookEnvironmentVariableModalComponent,
-		MetadataModalComponent,
-		ImportModalComponent,
-		ExecutionVariableModalComponent,
-		StatusModalComponent,
-		FileModalComponent,
-		ResultsModalComponent,
-		JsonModalComponent,
-		// Other subcomponents
-		PlaybookArgumentComponent,
-		PlaybookConditionsComponent,
-		PlaybookTransformsComponent,
-		PlaybookConditionalExpressionComponent,
-		SettingsRolesComponent,
-		// Pipes
-		KeysPipe,
-		ManageReportsComponent,
-		SafeEmbedPipe,
-		WidgetModalComponent,
-		// Directives
-		HasPermissionDirective
-	],
-	providers: [
-		UtilitiesService,
-		CookieService,
-		AuthService,
-		JwtInterceptor, // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
-		{
-			provide: HTTP_INTERCEPTORS,
-			useExisting: JwtInterceptor,
-			multi: true
-		},
-		{
-			provide: HTTP_INTERCEPTORS,
-			useClass: RefreshTokenInterceptor,
-			multi: true
-		}
-	],
-	entryComponents: [
-		SchedulerModalComponent,
-		GlobalsModalComponent,
-		VariableModalComponent,
-		MainProfileModalComponent,
-		SettingsUserModalComponent,
-		SettingsRoleModalComponent,
-		SettingsTimeoutModalComponent,
-		MessagesModalComponent,
-		ExecutionVariableModalComponent,
-		PlaybookEnvironmentVariableModalComponent,
-		ImportModalComponent,
-		MetadataModalComponent,
-		StatusModalComponent,
-		WidgetModalComponent,
-		FileModalComponent,
-		ResultsModalComponent,
-		JsonModalComponent
-	],
-	bootstrap: [MainComponent],
+    imports: [
+        FormsModule,
+        BrowserModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        JwtModule.forRoot({
+            // config: {
+            // 	tokenGetter: jwtTokenGetter,
+            // 	blacklistedRoutes: ['login', 'api/auth', 'api/auth/logout', 'api/auth/refresh']
+            // },
+            jwtOptionsProvider: {
+                provide: JWT_OPTIONS,
+                useFactory: jwtOptionsFactory,
+                deps: [AuthService]
+            }
+        }),
+        NgbModule,
+        RoutingModule,
+        Select2Module,
+        ClipboardModule,
+        NgxDatatableModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        DndModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot({ positionClass: 'toast-bottom-right', enableHtml: true, onActivateTick: true }),
+        GridsterModule,
+        ChartsModule,
+        CodemirrorModule,
+        NgJsonEditorModule,
+        MomentModule
+    ],
+    declarations: [
+        //Main component
+        MainComponent,
+        //Router module components
+        PlaybookComponent,
+        WorkflowEditorComponent,
+        SchedulerComponent,
+        GlobalsComponent,
+        MessagesComponent,
+        MetricsComponent,
+        SettingsComponent,
+        ReportsComponent,
+        ExecutionComponent,
+        AppsListComponent,
+        ManageAppComponent,
+        //Modals
+        SchedulerModalComponent,
+        GlobalsModalComponent,
+        VariableModalComponent,
+        MainProfileModalComponent,
+        SettingsUserModalComponent,
+        SettingsRoleModalComponent,
+        SettingsTimeoutModalComponent,
+        MessagesModalComponent,
+        PlaybookEnvironmentVariableModalComponent,
+        MetadataModalComponent,
+        ImportModalComponent,
+        ExecutionVariableModalComponent,
+        StatusModalComponent,
+        FileModalComponent,
+        ResultsModalComponent,
+        JsonModalComponent,
+        // Other subcomponents
+        PlaybookArgumentComponent,
+        PlaybookConditionsComponent,
+        PlaybookTransformsComponent,
+        PlaybookConditionalExpressionComponent,
+        SettingsRolesComponent,
+        // Pipes
+        KeysPipe,
+        ManageReportsComponent,
+        SafeEmbedPipe,
+        WidgetModalComponent,
+        // Directives
+        HasPermissionDirective
+    ],
+    providers: [
+        UtilitiesService,
+        CookieService,
+        AuthService,
+        JwtInterceptor,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: JwtInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: RefreshTokenInterceptor,
+            multi: true
+        }
+    ],
+    bootstrap: [MainComponent]
 })
 export class MainModule {}

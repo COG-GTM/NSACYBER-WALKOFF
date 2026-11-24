@@ -164,7 +164,7 @@ export class UtilitiesService {
 			if (this.reconnect_failed) return;
 			const options = {backdrop: undefined, closeButton: false, buttons: { ok: { label: 'Reload Page' }}}
 			this.alert('The server stopped responding. Reload the page to try again.', options)
-				.then(() => location.reload(true))
+				.then(() => location.reload())
 			this.reconnect_failed = true;
 		})
 		return socket;
